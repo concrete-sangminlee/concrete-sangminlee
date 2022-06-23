@@ -2,7 +2,18 @@
 My name is Sang Min Lee, and I'm a graduate student at Seoul National University.
 
 ### Research Interest
-will be added in the future
+## Non-Destructive Testing and Evaluation of Exisiting Structures
+impact echo <br />
+machine learning application <br />
+
+## Wind Engineering
+3d printing based smart wind tunnel testing <br />
+machine learning application <br />
+
+## Concrete Engineering
+compressive strength prediction <br />
+surface crack detection <br />
+machine learning application <br />
 
 ### Education
 2021.03. - 2023.02. (expected) M.S. in Dept. of Architecture and Architectural Engineering (Major in Structural Engineering), Seoul National University, Seoul, Korea <br />
