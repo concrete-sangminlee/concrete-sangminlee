@@ -11,6 +11,16 @@ C / C++ / Java / Python / MATLAB <br />
 2017-2020 B.S. in Electrical and Computer Engineering (Double Major), Seoul National University <br />
 2021-2022 M.S. in Architectural Engineering, Seoul National University <br />
 
+# Experiences
+
+2021 Spring Semester - Teaching Assistant in 'Introduction to IoT, AI, and Big Data' and 'Computation in Architectural Engineering' <br />
+2021 Fall Semester - Teaching Assistant in 'Mechanics of Materials for Architectural EngineeringⅠ', 'Prestressed Concrete',  'Creative Engineering Design', 'IoT and Creative Engineering Design', and 'Introduction to IoT, AI, and Big Data' <br />
+2022 Spring Semester - Teaching Assistant in 'Introduction to IoT, AI, and Big Data', 'Creative Engineering Design', 'IoT and Creative Engineering Design', 'Architecture and AI', and 'Structural Experiment and Material' <br />
+
+# Honors and Awards
+
+2022 Korea Concrete Institute Conference Outstanding Paper Award <br />
+
 # Publications
 
 ## Domestic Journal Papers
