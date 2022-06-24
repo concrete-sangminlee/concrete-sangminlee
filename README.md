@@ -2,6 +2,7 @@
 
 My name is Sang Min Lee, and I'm a graduate student at Seoul National University. <br />
 Problem-solving in the real world with a computer is something that I enjoy doing. Programming is one of my favorite hobbies. <br />
+C / C++ / Java / Python / MATLAB <br />
 
 # Education
 
