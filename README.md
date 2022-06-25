@@ -19,7 +19,8 @@ C / C++ / Java / Python / MATLAB <br />
 
 # Honors and Awards
 
-[1] 2022 Korea Concrete Institute Conference Outstanding Paper Award <br />
+[1] 2021 SNU DAAE Scholarship funded by SEN Engineering Group <br />
+[2] 2022 Korea Concrete Institute Conference Outstanding Paper Award <br />
 
 # Publications
 
