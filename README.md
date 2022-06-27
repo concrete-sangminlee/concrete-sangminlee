@@ -14,7 +14,7 @@ C / C++ / Java / Python / MATLAB <br />
 # Experiences
 
 [1] 2021 Spring Semester - Teaching Assistant in 'Introduction to IoT, AI, and Big Data' and 'Computation in Architectural Engineering' <br />
-[2] 2021 Fall Semester - Teaching Assistant in 'Mechanics of Materials for Architectural EngineeringⅠ', 'Prestressed Concrete',  'Creative Engineering Design', 'IoT and Creative Engineering Design', and 'Introduction to IoT, AI, and Big Data' <br />
+[2] 2021 Fall Semester - Teaching Assistant in 'Mechanics of Materials for Architectural Engineering', 'Prestressed Concrete',  'Creative Engineering Design', 'IoT and Creative Engineering Design', and 'Introduction to IoT, AI, and Big Data' <br />
 [3] 2022 Spring Semester - Teaching Assistant in 'Introduction to IoT, AI, and Big Data', 'Creative Engineering Design', 'IoT and Creative Engineering Design', 'Architecture and AI', and 'Structural Experiment and Material' <br />
 
 # Honors and Awards
