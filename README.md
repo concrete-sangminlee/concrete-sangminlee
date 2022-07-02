@@ -6,16 +6,17 @@ C / C++ / Java / Python / MATLAB <br />
 
 # Education
 
-2013-2015 Korea Science Academy of KAIST <br />
-2016-2020 B.S. in Architectural Engineering, Seoul National University <br />
-2017-2020 B.S. in Electrical and Computer Engineering (Double Major), Seoul National University <br />
-2021-2022 M.S. in Architectural Engineering, Seoul National University <br />
+2016.02. Korea Science Academy of KAIST <br />
+2021.02. B.S. in Architectural Engineering, Seoul National University <br />
+2021.02. B.S. in Electrical and Computer Engineering (Double Major), Seoul National University <br />
+2023.02. M.S. in Architectural Engineering, Seoul National University <br />
 
 # Experiences
 
 [1] 2021 Spring Semester - Teaching Assistant in 'Introduction to IoT, AI, and Big Data' and 'Computation in Architectural Engineering' <br />
 [2] 2021 Fall Semester - Teaching Assistant in 'Mechanics of Materials for Architectural Engineering', 'Prestressed Concrete',  'Creative Engineering Design', 'IoT and Creative Engineering Design', and 'Introduction to IoT, AI, and Big Data' <br />
 [3] 2022 Spring Semester - Teaching Assistant in 'Introduction to IoT, AI, and Big Data', 'Creative Engineering Design', 'IoT and Creative Engineering Design', 'Architecture and AI', and 'Structural Experiment and Material' <br />
+[4] 2022 Fall Semester - Head Teaching Assistant in 'Introduction to IoT, AI, and Big Data', 'Creative Engineering Design', and 'IoT and Creative Engineering Design'
 
 # Honors and Awards
 
