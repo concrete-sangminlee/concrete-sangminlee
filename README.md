@@ -29,7 +29,7 @@ C / C++ / Java / Python / MATLAB <br />
 [1] Lee, S. M. and Kang, T. H.-K. (Year) 'Title,' Journal Name, (in progress). <br />
 
 ## Domestic Journal Papers
-[1] Lee, S. M. and Kang, T. H.-K. (Year) 'Title,' Journal Name, (in progress). <br />
+[1] Lee, S. M., Sung, H. S., and Kang, T. H.-K. (2022) 'Comparison of performance for predicting compressive strength of concrete using machine learning,' Journal of the Korea Concrete Institute, (in publish progress). <br />
 
 ## International Conference Proceedings
 
