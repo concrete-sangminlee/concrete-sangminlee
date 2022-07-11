@@ -41,3 +41,7 @@ C / C++ / Java / Python / MATLAB <br />
 [1] Lee, S. M., Sung, H. S., and Kang, T. H.-K. (2022) 'Prediction of concrete compressive strength using machine learning,' Korea Concrete Institute Conference Proceedings, 34(1), pp.179-180. 11-13 May 2022, Jeju, Korea. <br />
 [2] Lee, S. M. and Kang, T. H.-K. (2021) 'Prediction of wind pressure coefficient for concrete building wall using LSTM RNN,' Korea Concrete Institute Conference Proceedings, 33(2), pp.155-156. 3-5 November, Gyeongju, Korea. <br />
 [3] Lee, S. M. and Kang, T. H.-K. (2021) 'Prediction of wind pressure coefficients of concrete building walls using LSTM network,' Korea Concrete Institute Conference Proceedings, 33(1), pp.189-190. 12-14 May, Yeosu, Korea. <br />
+
+## Patents
+[1] Lee, S. M. and Kang, T. H.-K. (2022) 'Wind load estimation system based on artificial intelligence', Korea Patent, 10-2022-0060319 <br />
+[2] Lee, S. M. and Kang, T. H.-K. (2021) 'Defect detection system inside concrete members using bi-directional LSTM', Korea Patent, 10-2021-0130192 <br />
