@@ -6,9 +6,9 @@ C / C++ / Java / Python / MATLAB <br />
 
 # Education
 
-2023.02. M.S. in Architectural Engineering, Seoul National University <br />
+2023.02. M.S. in Architecture and Architectural Engineering, Seoul National University <br />
 2021.02. B.S. in Electrical and Computer Engineering (Double Major), Seoul National University <br />
-2021.02. B.S. in Architectural Engineering, Seoul National University <br />
+2021.02. B.S. in Architecture and Architectural Engineering, Seoul National University <br />
 2016.02. Korea Science Academy of KAIST <br />
 
 # Experiences
