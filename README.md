@@ -22,3 +22,11 @@ Here are some ideas to get you started:
 ## 💻 Most Used Languages
 
 ![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=concrete-sangminlee&layout=compact&theme=radical)
+
+## 🏆 GitHub Trophies
+
+![trophy](https://github-profile-trophy.vercel.app/?username=concrete-sangminlee&theme=onedark)
+
+## 🌐 Visitor Counter
+
+![Visitor Count](https://profile-counter.glitch.me/{concrete-sangminlee}/count.svg)
