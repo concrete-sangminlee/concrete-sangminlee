@@ -7,7 +7,6 @@
 
 - 📫 How to reach me **201612445@snu.ac.kr**
 
-<h3 align="left">Connect with me:</h3>
 <p align="left">
 </p>
 
