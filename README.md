@@ -5,7 +5,7 @@
 
 <p align="left"> <a href="https://github.com/ryo-ma/github-profile-trophy"><img src="https://github-profile-trophy.vercel.app/?username=concrete-sangminlee" alt="concrete-sangminlee" /></a> </p>
 
-- 📫 How to reach me **201612445@snu.ac.kr**
+- 📫 How to reach me: **201612445@snu.ac.kr**
 
 <p align="left">
 </p>
