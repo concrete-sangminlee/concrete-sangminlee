@@ -1,20 +1,66 @@
-<h1 align="center">Hi 👋, I'm Sang Min Lee</h1>
-<h3 align="center">A passionate machine learning researcher from Korea</h3>
+# 👋 Sang Min Lee | ML Researcher
 
-<p align="left"> <img src="https://komarev.com/ghpvc/?username=concrete-sangminlee&label=Profile%20views&color=0e75b6&style=flat" alt="concrete-sangminlee" /> </p>
+> 머신러닝/딥러닝 연구를 중심으로, 실제 서비스로 이어지는 **재현 가능한 실험 파이프라인**과 **자동화된 배포(CI/CD)** 를 지향합니다.
 
-<p align="left"> <a href="https://github.com/ryo-ma/github-profile-trophy"><img src="https://github-profile-trophy.vercel.app/?username=concrete-sangminlee" alt="concrete-sangminlee" /></a> </p>
+[![Deploy README Site](https://github.com/concrete-sangminlee/concrete-sangminlee/actions/workflows/deploy-readme-site.yml/badge.svg)](https://github.com/concrete-sangminlee/concrete-sangminlee/actions/workflows/deploy-readme-site.yml)
+[![Profile Views](https://komarev.com/ghpvc/?username=concrete-sangminlee&label=Profile%20views&color=0e75b6&style=flat)](https://github.com/concrete-sangminlee)
 
-- 📫 How to reach me: **201612445@snu.ac.kr**
+---
 
-<p align="left">
+## 🔎 About Me
+- 🎓 Machine Learning Researcher (Korea)
+- 🧠 관심 분야: Representation Learning, Computer Vision, MLOps
+- ⚙️ 연구 코드 품질 개선(실험 재현성, 자동화, 배포 파이프라인)에 집중
+- 📫 Contact: **201612445@snu.ac.kr**
+
+## 🧰 Tech Stack
+- **Languages**: Python, C/C++, JavaScript, Bash
+- **ML/DL**: PyTorch, TensorFlow, scikit-learn, OpenCV, Pandas
+- **Infra/Tools**: Docker, Linux, Git, GitHub Actions, Jekyll
+
+## 📌 Current Focus
+- 실험 결과 추적 자동화
+- 모델 성능 벤치마크 템플릿화
+- 배포 파이프라인 표준화 (build → test → deploy)
+
+---
+
+## 🚀 자동 배포(Deployment) 구성
+이 저장소는 README 변경 사항을 **GitHub Actions로 자동 배포**합니다.
+
+### 배포 대상
+- `docs/index.html`: README를 웹에서 보기 쉽게 렌더링한 페이지
+- GitHub Pages: `main` 브랜치 push 시 자동 업데이트
+
+### 동작 방식
+1. `main` 브랜치에 push
+2. `deploy-readme-site.yml` 워크플로우 실행
+3. `docs/` 디렉토리를 GitHub Pages 아티팩트로 업로드
+4. Pages에 자동 배포
+
+### GitHub 저장소 설정(최초 1회)
+1. **Settings → Pages** 이동
+2. **Build and deployment → Source**를 `GitHub Actions`로 선택
+3. 저장 후 main 브랜치에 push
+
+---
+
+## 📊 GitHub Stats
+<p>
+  <img height="160" src="https://github-readme-stats.vercel.app/api?username=concrete-sangminlee&show_icons=true&locale=en" alt="GitHub stats" />
+  <img height="160" src="https://github-readme-stats.vercel.app/api/top-langs?username=concrete-sangminlee&show_icons=true&locale=en&layout=compact" alt="Top Langs" />
 </p>
 
-<h3 align="left">Languages and Tools:</h3>
-<p align="left"> <a href="https://www.arduino.cc/" target="_blank" rel="noreferrer"> <img src="https://cdn.worldvectorlogo.com/logos/arduino-1.svg" alt="arduino" width="40" height="40"/> </a> <a href="https://www.gnu.org/software/bash/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/gnu_bash/gnu_bash-icon.svg" alt="bash" width="40" height="40"/> </a> <a href="https://www.cprogramming.com/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-original.svg" alt="c" width="40" height="40"/> </a> <a href="https://www.w3schools.com/cpp/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-original.svg" alt="cplusplus" width="40" height="40"/> </a> <a href="https://www.w3schools.com/css/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" alt="css3" width="40" height="40"/> </a> <a href="https://www.docker.com/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original-wordmark.svg" alt="docker" width="40" height="40"/> </a> <a href="https://git-scm.com/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/git-scm/git-scm-icon.svg" alt="git" width="40" height="40"/> </a> <a href="https://www.w3.org/html/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="html5" width="40" height="40"/> </a> <a href="https://www.java.com" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg" alt="java" width="40" height="40"/> </a> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/> </a> <a href="https://jekyllrb.com/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/jekyllrb/jekyllrb-icon.svg" alt="jekyll" width="40" height="40"/> </a> <a href="https://www.linux.org/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg" alt="linux" width="40" height="40"/> </a> <a href="https://www.mathworks.com/" target="_blank" rel="noreferrer"> <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Matlab_Logo.png" alt="matlab" width="40" height="40"/> </a> <a href="https://opencv.org/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/opencv/opencv-icon.svg" alt="opencv" width="40" height="40"/> </a> <a href="https://pandas.pydata.org/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/2ae2a900d2f041da66e950e4d48052658d850630/icons/pandas/pandas-original.svg" alt="pandas" width="40" height="40"/> </a> <a href="https://www.python.org" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="python" width="40" height="40"/> </a> <a href="https://pytorch.org/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/pytorch/pytorch-icon.svg" alt="pytorch" width="40" height="40"/> </a> <a href="https://scikit-learn.org/" target="_blank" rel="noreferrer"> <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Scikit_learn_logo_small.svg" alt="scikit_learn" width="40" height="40"/> </a> <a href="https://seaborn.pydata.org/" target="_blank" rel="noreferrer"> <img src="https://seaborn.pydata.org/_images/logo-mark-lightbg.svg" alt="seaborn" width="40" height="40"/> </a> <a href="https://www.tensorflow.org" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/tensorflow/tensorflow-icon.svg" alt="tensorflow" width="40" height="40"/> </a> </p>
+<p>
+  <img height="160" src="https://github-readme-streak-stats.herokuapp.com/?user=concrete-sangminlee" alt="GitHub streak" />
+</p>
 
-<p><img align="left" src="https://github-readme-stats.vercel.app/api/top-langs?username=concrete-sangminlee&show_icons=true&locale=en&layout=compact" alt="concrete-sangminlee" /></p>
+---
 
-<p>&nbsp;<img align="center" src="https://github-readme-stats.vercel.app/api?username=concrete-sangminlee&show_icons=true&locale=en" alt="concrete-sangminlee" /></p>
+## 🏆 Trophies
+[![trophy](https://github-profile-trophy.vercel.app/?username=concrete-sangminlee&theme=flat&no-frame=true&row=1)](https://github.com/ryo-ma/github-profile-trophy)
 
-<p><img align="center" src="https://github-readme-streak-stats.herokuapp.com/?user=concrete-sangminlee&" alt="concrete-sangminlee" /></p>
+---
+
+## 📄 License
+This repository is maintained as a profile/documentation repository.

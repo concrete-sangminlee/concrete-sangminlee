@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sang Min Lee | README</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.8.1/github-markdown.min.css" />
+    <style>
+      body {
+        box-sizing: border-box;
+        min-width: 200px;
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 24px;
+        background: #f6f8fa;
+      }
+      .markdown-body {
+        padding: 32px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+      }
+      .meta {
+        margin-bottom: 16px;
+        color: #57606a;
+        font-size: 14px;
+      }
+      @media (max-width: 767px) {
+        body { padding: 12px; }
+        .markdown-body { padding: 16px; }
+      }
+    </style>
+  </head>
+  <body>
+    <article class="markdown-body">
+      <div class="meta">Auto-published from repository README.md</div>
+      <div id="content">Loading README...</div>
+    </article>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+      async function renderReadme() {
+        try {
+          const response = await fetch('./README.md');
+          const markdown = await response.text();
+          document.getElementById('content').innerHTML = marked.parse(markdown);
+        } catch (error) {
+          document.getElementById('content').textContent = 'README를 불러오지 못했습니다.';
+          console.error(error);
+        }
+      }
+      renderReadme();
+    </script>
+  </body>
+</html>
