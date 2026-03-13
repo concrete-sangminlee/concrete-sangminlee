@@ -1,4 +1,18 @@
-<!doctype html>
+#!/usr/bin/env python3
+
+from __future__ import annotations
+
+import json
+from datetime import UTC, datetime
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parent.parent
+README_PATH = ROOT / "README.md"
+OUTPUT_PATH = ROOT / "docs" / "index.html"
+
+
+HTML_TEMPLATE = """<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -229,7 +243,7 @@
       <section class="shell">
         <div class="meta">
           <span>Auto-published from README.md</span>
-          <span>Updated 2026-03-13 06:58 UTC</span>
+          <span>Updated __GENERATED_AT__</span>
         </div>
         <article class="markdown-body" id="content">
           <div class="fallback">Loading profile...</div>
@@ -239,7 +253,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
-      const markdownSource = "# Sang Min Lee\n\nMachine learning researcher in Korea.\nI work on representation learning, computer vision, and the engineering required to make experiments reproducible.\n\n[![Profile Views](https://komarev.com/ghpvc/?username=concrete-sangminlee&label=Profile%20views&color=0e75b6&style=flat)](https://github.com/concrete-sangminlee)\n[![GitHub Pages](https://img.shields.io/badge/Profile%20Site-GitHub%20Pages-0f172a?logo=github)](https://concrete-sangminlee.github.io/concrete-sangminlee/)\n\n## About\n- Research interest: representation learning, vision, and ML systems\n- Focus: reproducible training pipelines, cleaner research code, reliable evaluation\n- Contact: **201612445@snu.ac.kr**\n\n## Stack\n- Languages: Python, C/C++, JavaScript, Bash\n- ML/DL: PyTorch, TensorFlow, scikit-learn, OpenCV, Pandas\n- Tools: Docker, Linux, Git, GitHub Actions\n\n## Current Work\n- Tightening experiment tracking and result comparison workflows\n- Turning recurring benchmark setups into reusable templates\n- Reducing friction between research code and deployment-ready code\n\n## GitHub Stats\n<p>\n  <img height=\"160\" src=\"https://github-readme-stats.vercel.app/api?username=concrete-sangminlee&show_icons=true&locale=en\" alt=\"GitHub stats\" />\n  <img height=\"160\" src=\"https://github-readme-stats.vercel.app/api/top-langs?username=concrete-sangminlee&show_icons=true&locale=en&layout=compact\" alt=\"Top languages\" />\n</p>\n\n<p>\n  <img height=\"160\" src=\"https://github-readme-streak-stats.herokuapp.com/?user=concrete-sangminlee\" alt=\"GitHub streak\" />\n</p>\n\n## Trophies\n[![trophy](https://github-profile-trophy.vercel.app/?username=concrete-sangminlee&theme=flat&no-frame=true&row=1)](https://github.com/ryo-ma/github-profile-trophy)\n";
+      const markdownSource = __MARKDOWN_JSON__;
       const content = document.getElementById("content");
 
       if (window.marked?.parse) {
@@ -253,3 +267,18 @@
     </script>
   </body>
 </html>
+"""
+
+
+def build() -> None:
+    markdown = README_PATH.read_text(encoding="utf-8")
+    generated_at = datetime.now(UTC).strftime("%Y-%m-%d %H:%M UTC")
+    html = HTML_TEMPLATE.replace("__GENERATED_AT__", generated_at).replace(
+        "__MARKDOWN_JSON__", json.dumps(markdown)
+    )
+    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    OUTPUT_PATH.write_text(html, encoding="utf-8")
+
+
+if __name__ == "__main__":
+    build()

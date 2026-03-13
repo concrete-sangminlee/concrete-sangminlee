@@ -25,8 +25,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Prepare docs assets
-        run: cp README.md docs/README.md
+      - name: Build profile page
+        run: python3 scripts/build_readme_page.py
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
