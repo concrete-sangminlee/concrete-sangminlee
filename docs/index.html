@@ -7,20 +7,18 @@
     <meta name="description" content="Sang Min Lee's GitHub profile and research focus." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.8.1/github-markdown.min.css" />
     <style>
       :root {
         color-scheme: light;
-        --bg: #f3efe6;
-        --bg-accent: rgba(194, 65, 12, 0.16);
-        --surface: rgba(255, 252, 245, 0.88);
-        --surface-border: rgba(28, 25, 23, 0.12);
+        --bg: #f5f5f4;
+        --surface: #ffffff;
+        --surface-border: #e7e5e4;
         --ink: #1c1917;
-        --muted: #57534e;
-        --accent: #c2410c;
-        --accent-soft: #ffedd5;
-        --shadow: 0 30px 80px rgba(28, 25, 23, 0.14);
+        --muted: #78716c;
+        --accent: #0f766e;
+        --shadow: 0 18px 50px rgba(28, 25, 23, 0.08);
       }
 
       * {
@@ -30,121 +28,55 @@
       body {
         margin: 0;
         min-height: 100vh;
-        font-family: "Space Grotesk", sans-serif;
+        font-family: "IBM Plex Sans", sans-serif;
         color: var(--ink);
-        background:
-          radial-gradient(circle at top left, var(--bg-accent), transparent 36%),
-          linear-gradient(180deg, #fff8ef 0%, var(--bg) 55%, #efe7dc 100%);
+        background: var(--bg);
       }
 
       .page {
-        width: min(1080px, calc(100vw - 32px));
+        width: min(760px, calc(100vw - 32px));
         margin: 0 auto;
-        padding: 32px 0 56px;
+        padding: 48px 0 56px;
       }
 
-      .hero {
-        position: relative;
-        overflow: hidden;
-        margin-bottom: 20px;
+      h1 {
+        margin: 0;
+        font-size: clamp(2rem, 5vw, 3rem);
+        line-height: 1;
+        letter-spacing: -0.04em;
+      }
+
+      .shell {
         padding: 28px;
         border: 1px solid var(--surface-border);
-        border-radius: 28px;
-        background:
-          linear-gradient(140deg, rgba(255, 255, 255, 0.9), rgba(255, 247, 237, 0.88)),
-          linear-gradient(135deg, rgba(194, 65, 12, 0.08), transparent 60%);
+        border-radius: 20px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), #ffffff);
         box-shadow: var(--shadow);
       }
 
-      .hero::after {
-        content: "";
-        position: absolute;
-        right: -48px;
-        top: -48px;
-        width: 180px;
-        height: 180px;
-        border-radius: 36px;
-        background: linear-gradient(135deg, rgba(194, 65, 12, 0.22), rgba(251, 146, 60, 0.08));
-        transform: rotate(18deg);
+      .header {
+        margin-bottom: 24px;
       }
 
-      .eyebrow {
-        position: relative;
-        z-index: 1;
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        margin: 0 0 14px;
-        padding: 8px 12px;
-        border-radius: 999px;
-        background: rgba(255, 237, 213, 0.8);
+      .kicker {
+        margin: 0 0 10px;
         color: var(--accent);
         font: 500 12px/1.2 "IBM Plex Mono", monospace;
         letter-spacing: 0.08em;
         text-transform: uppercase;
       }
 
-      h1 {
-        position: relative;
-        z-index: 1;
-        margin: 0;
-        max-width: 640px;
-        font-size: clamp(2.2rem, 6vw, 4.6rem);
-        line-height: 0.95;
-        letter-spacing: -0.05em;
-      }
-
       .subtitle {
-        position: relative;
-        z-index: 1;
-        max-width: 620px;
-        margin: 16px 0 0;
+        margin: 12px 0 0;
         color: var(--muted);
-        font-size: clamp(1rem, 2.4vw, 1.15rem);
+        font-size: 1rem;
         line-height: 1.7;
-      }
-
-      .hero-links {
-        position: relative;
-        z-index: 1;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-top: 22px;
-      }
-
-      .hero-links a {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        padding: 12px 16px;
-        border: 1px solid rgba(194, 65, 12, 0.18);
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.7);
-        color: var(--ink);
-        text-decoration: none;
-        transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
-      }
-
-      .hero-links a:hover {
-        transform: translateY(-1px);
-        border-color: rgba(194, 65, 12, 0.45);
-        background: rgba(255, 255, 255, 0.95);
-      }
-
-      .shell {
-        padding: 22px;
-        border: 1px solid var(--surface-border);
-        border-radius: 28px;
-        background: var(--surface);
-        box-shadow: var(--shadow);
-        backdrop-filter: blur(16px);
       }
 
       .meta {
         display: flex;
         flex-wrap: wrap;
-        gap: 10px;
+        gap: 8px;
         margin: 0 0 18px;
         color: var(--muted);
         font: 500 12px/1.2 "IBM Plex Mono", monospace;
@@ -155,16 +87,15 @@
       .meta span {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        padding: 8px 10px;
+        padding: 7px 10px;
         border-radius: 999px;
-        background: rgba(28, 25, 23, 0.045);
+        background: #f5f5f4;
       }
 
       .markdown-body {
         color: var(--ink);
         background: transparent;
-        font-family: "Space Grotesk", sans-serif;
+        font-family: "IBM Plex Sans", sans-serif;
       }
 
       .markdown-body h1,
@@ -188,10 +119,6 @@
         color: var(--accent);
       }
 
-      .markdown-body img {
-        border-radius: 14px;
-      }
-
       .fallback {
         white-space: pre-wrap;
         font: 400 0.95rem/1.7 "IBM Plex Mono", monospace;
@@ -199,37 +126,29 @@
 
       @media (max-width: 720px) {
         .page {
-          width: min(100vw - 20px, 1080px);
+          width: min(100vw - 20px, 760px);
           padding: 18px 0 32px;
         }
 
-        .hero,
         .shell {
           padding: 18px;
-          border-radius: 22px;
         }
       }
     </style>
   </head>
   <body>
     <main class="page">
-      <section class="hero">
-        <p class="eyebrow">GitHub Profile / README</p>
-        <h1>Sang Min Lee</h1>
-        <p class="subtitle">
-          Machine learning research, cleaner experiment pipelines, and shipping work
-          that survives outside a notebook.
-        </p>
-        <div class="hero-links">
-          <a href="https://github.com/concrete-sangminlee">GitHub</a>
-          <a href="https://github.com/concrete-sangminlee/concrete-sangminlee/blob/main/README.md">README Source</a>
-        </div>
-      </section>
-
       <section class="shell">
+        <header class="header">
+          <p class="kicker">GitHub Profile</p>
+          <h1>Sang Min Lee</h1>
+          <p class="subtitle">
+            Minimal profile page generated from the repository README.
+          </p>
+        </header>
         <div class="meta">
           <span>Auto-published from README.md</span>
-          <span>Updated 2026-03-13 06:58 UTC</span>
+          <span>Updated 2026-03-13 07:07 UTC</span>
         </div>
         <article class="markdown-body" id="content">
           <div class="fallback">Loading profile...</div>
@@ -239,7 +158,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
-      const markdownSource = "# Sang Min Lee\n\nMachine learning researcher in Korea.\nI work on representation learning, computer vision, and the engineering required to make experiments reproducible.\n\n[![Profile Views](https://komarev.com/ghpvc/?username=concrete-sangminlee&label=Profile%20views&color=0e75b6&style=flat)](https://github.com/concrete-sangminlee)\n[![GitHub Pages](https://img.shields.io/badge/Profile%20Site-GitHub%20Pages-0f172a?logo=github)](https://concrete-sangminlee.github.io/concrete-sangminlee/)\n\n## About\n- Research interest: representation learning, vision, and ML systems\n- Focus: reproducible training pipelines, cleaner research code, reliable evaluation\n- Contact: **201612445@snu.ac.kr**\n\n## Stack\n- Languages: Python, C/C++, JavaScript, Bash\n- ML/DL: PyTorch, TensorFlow, scikit-learn, OpenCV, Pandas\n- Tools: Docker, Linux, Git, GitHub Actions\n\n## Current Work\n- Tightening experiment tracking and result comparison workflows\n- Turning recurring benchmark setups into reusable templates\n- Reducing friction between research code and deployment-ready code\n\n## GitHub Stats\n<p>\n  <img height=\"160\" src=\"https://github-readme-stats.vercel.app/api?username=concrete-sangminlee&show_icons=true&locale=en\" alt=\"GitHub stats\" />\n  <img height=\"160\" src=\"https://github-readme-stats.vercel.app/api/top-langs?username=concrete-sangminlee&show_icons=true&locale=en&layout=compact\" alt=\"Top languages\" />\n</p>\n\n<p>\n  <img height=\"160\" src=\"https://github-readme-streak-stats.herokuapp.com/?user=concrete-sangminlee\" alt=\"GitHub streak\" />\n</p>\n\n## Trophies\n[![trophy](https://github-profile-trophy.vercel.app/?username=concrete-sangminlee&theme=flat&no-frame=true&row=1)](https://github.com/ryo-ma/github-profile-trophy)\n";
+      const markdownSource = "# Sang Min Lee\n\nMachine learning researcher in Korea.\nInterested in representation learning, computer vision, and reproducible ML workflows.\n\n## Focus\n- Reproducible experiments\n- Clean research code\n- Reliable evaluation pipelines\n\n## Links\n- GitHub: https://github.com/concrete-sangminlee\n- Profile site: https://concrete-sangminlee.github.io/concrete-sangminlee/\n- Email: 201612445@snu.ac.kr\n";
       const content = document.getElementById("content");
 
       if (window.marked?.parse) {

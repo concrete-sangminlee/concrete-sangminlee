@@ -21,20 +21,18 @@ HTML_TEMPLATE = """<!doctype html>
     <meta name="description" content="Sang Min Lee's GitHub profile and research focus." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.8.1/github-markdown.min.css" />
     <style>
       :root {
         color-scheme: light;
-        --bg: #f3efe6;
-        --bg-accent: rgba(194, 65, 12, 0.16);
-        --surface: rgba(255, 252, 245, 0.88);
-        --surface-border: rgba(28, 25, 23, 0.12);
+        --bg: #f5f5f4;
+        --surface: #ffffff;
+        --surface-border: #e7e5e4;
         --ink: #1c1917;
-        --muted: #57534e;
-        --accent: #c2410c;
-        --accent-soft: #ffedd5;
-        --shadow: 0 30px 80px rgba(28, 25, 23, 0.14);
+        --muted: #78716c;
+        --accent: #0f766e;
+        --shadow: 0 18px 50px rgba(28, 25, 23, 0.08);
       }
 
       * {
@@ -44,121 +42,55 @@ HTML_TEMPLATE = """<!doctype html>
       body {
         margin: 0;
         min-height: 100vh;
-        font-family: "Space Grotesk", sans-serif;
+        font-family: "IBM Plex Sans", sans-serif;
         color: var(--ink);
-        background:
-          radial-gradient(circle at top left, var(--bg-accent), transparent 36%),
-          linear-gradient(180deg, #fff8ef 0%, var(--bg) 55%, #efe7dc 100%);
+        background: var(--bg);
       }
 
       .page {
-        width: min(1080px, calc(100vw - 32px));
+        width: min(760px, calc(100vw - 32px));
         margin: 0 auto;
-        padding: 32px 0 56px;
+        padding: 48px 0 56px;
       }
 
-      .hero {
-        position: relative;
-        overflow: hidden;
-        margin-bottom: 20px;
+      h1 {
+        margin: 0;
+        font-size: clamp(2rem, 5vw, 3rem);
+        line-height: 1;
+        letter-spacing: -0.04em;
+      }
+
+      .shell {
         padding: 28px;
         border: 1px solid var(--surface-border);
-        border-radius: 28px;
-        background:
-          linear-gradient(140deg, rgba(255, 255, 255, 0.9), rgba(255, 247, 237, 0.88)),
-          linear-gradient(135deg, rgba(194, 65, 12, 0.08), transparent 60%);
+        border-radius: 20px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), #ffffff);
         box-shadow: var(--shadow);
       }
 
-      .hero::after {
-        content: "";
-        position: absolute;
-        right: -48px;
-        top: -48px;
-        width: 180px;
-        height: 180px;
-        border-radius: 36px;
-        background: linear-gradient(135deg, rgba(194, 65, 12, 0.22), rgba(251, 146, 60, 0.08));
-        transform: rotate(18deg);
+      .header {
+        margin-bottom: 24px;
       }
 
-      .eyebrow {
-        position: relative;
-        z-index: 1;
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        margin: 0 0 14px;
-        padding: 8px 12px;
-        border-radius: 999px;
-        background: rgba(255, 237, 213, 0.8);
+      .kicker {
+        margin: 0 0 10px;
         color: var(--accent);
         font: 500 12px/1.2 "IBM Plex Mono", monospace;
         letter-spacing: 0.08em;
         text-transform: uppercase;
       }
 
-      h1 {
-        position: relative;
-        z-index: 1;
-        margin: 0;
-        max-width: 640px;
-        font-size: clamp(2.2rem, 6vw, 4.6rem);
-        line-height: 0.95;
-        letter-spacing: -0.05em;
-      }
-
       .subtitle {
-        position: relative;
-        z-index: 1;
-        max-width: 620px;
-        margin: 16px 0 0;
+        margin: 12px 0 0;
         color: var(--muted);
-        font-size: clamp(1rem, 2.4vw, 1.15rem);
+        font-size: 1rem;
         line-height: 1.7;
-      }
-
-      .hero-links {
-        position: relative;
-        z-index: 1;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-top: 22px;
-      }
-
-      .hero-links a {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        padding: 12px 16px;
-        border: 1px solid rgba(194, 65, 12, 0.18);
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.7);
-        color: var(--ink);
-        text-decoration: none;
-        transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
-      }
-
-      .hero-links a:hover {
-        transform: translateY(-1px);
-        border-color: rgba(194, 65, 12, 0.45);
-        background: rgba(255, 255, 255, 0.95);
-      }
-
-      .shell {
-        padding: 22px;
-        border: 1px solid var(--surface-border);
-        border-radius: 28px;
-        background: var(--surface);
-        box-shadow: var(--shadow);
-        backdrop-filter: blur(16px);
       }
 
       .meta {
         display: flex;
         flex-wrap: wrap;
-        gap: 10px;
+        gap: 8px;
         margin: 0 0 18px;
         color: var(--muted);
         font: 500 12px/1.2 "IBM Plex Mono", monospace;
@@ -169,16 +101,15 @@ HTML_TEMPLATE = """<!doctype html>
       .meta span {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        padding: 8px 10px;
+        padding: 7px 10px;
         border-radius: 999px;
-        background: rgba(28, 25, 23, 0.045);
+        background: #f5f5f4;
       }
 
       .markdown-body {
         color: var(--ink);
         background: transparent;
-        font-family: "Space Grotesk", sans-serif;
+        font-family: "IBM Plex Sans", sans-serif;
       }
 
       .markdown-body h1,
@@ -202,10 +133,6 @@ HTML_TEMPLATE = """<!doctype html>
         color: var(--accent);
       }
 
-      .markdown-body img {
-        border-radius: 14px;
-      }
-
       .fallback {
         white-space: pre-wrap;
         font: 400 0.95rem/1.7 "IBM Plex Mono", monospace;
@@ -213,34 +140,26 @@ HTML_TEMPLATE = """<!doctype html>
 
       @media (max-width: 720px) {
         .page {
-          width: min(100vw - 20px, 1080px);
+          width: min(100vw - 20px, 760px);
           padding: 18px 0 32px;
         }
 
-        .hero,
         .shell {
           padding: 18px;
-          border-radius: 22px;
         }
       }
     </style>
   </head>
   <body>
     <main class="page">
-      <section class="hero">
-        <p class="eyebrow">GitHub Profile / README</p>
-        <h1>Sang Min Lee</h1>
-        <p class="subtitle">
-          Machine learning research, cleaner experiment pipelines, and shipping work
-          that survives outside a notebook.
-        </p>
-        <div class="hero-links">
-          <a href="https://github.com/concrete-sangminlee">GitHub</a>
-          <a href="https://github.com/concrete-sangminlee/concrete-sangminlee/blob/main/README.md">README Source</a>
-        </div>
-      </section>
-
       <section class="shell">
+        <header class="header">
+          <p class="kicker">GitHub Profile</p>
+          <h1>Sang Min Lee</h1>
+          <p class="subtitle">
+            Minimal profile page generated from the repository README.
+          </p>
+        </header>
         <div class="meta">
           <span>Auto-published from README.md</span>
           <span>Updated __GENERATED_AT__</span>
