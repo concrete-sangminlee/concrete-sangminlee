@@ -10,5 +10,5 @@ Interested in representation learning, computer vision, and reproducible ML work
 
 ## Links
 - GitHub: https://github.com/concrete-sangminlee
-- Profile site: https://concrete-sangminlee.github.io/concrete-sangminlee/
+- Profile site: https://concrete-sangminlee.github.io/
 - Email: 201612445@snu.ac.kr
