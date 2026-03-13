@@ -1,12 +1,12 @@
 # Sang Min Lee
 
 Machine learning researcher in Korea.
-Interested in representation learning, computer vision, and reproducible ML workflows.
+Interested in deep learning and its engineering applications.
 
 ## Focus
-- Reproducible experiments
-- Clean research code
-- Reliable evaluation pipelines
+- Structural Wind Engineering
+- Non-Destructive Testing and Evaluation
+- Structural Health Monitoring
 
 ## Links
 - GitHub: https://github.com/concrete-sangminlee
