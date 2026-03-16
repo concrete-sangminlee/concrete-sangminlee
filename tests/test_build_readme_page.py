@@ -89,6 +89,14 @@ class BuildReadmePageTests(unittest.TestCase):
         self.assertIn("Sitemap: https://example.com/sitemap.xml", artifacts.robots)
         self.assertEqual(artifacts.nojekyll, "")
 
+    def test_render_site_artifacts_are_deterministic_without_timestamp(self) -> None:
+        artifacts = MODULE.render_site_artifacts(SAMPLE_MARKDOWN)
+
+        self.assertIn("README snapshot", artifacts.html)
+        self.assertNotIn("article:modified_time", artifacts.html)
+        self.assertNotIn("<lastmod>", artifacts.sitemap)
+        self.assertIn('"ProfilePage"', artifacts.html)
+
     def test_render_site_hides_empty_section_scaffolding_for_minimal_readme(self) -> None:
         output = MODULE.render_site(MINIMAL_MARKDOWN, generated_at=FIXED_AT)
 

@@ -112,7 +112,7 @@ HTML_TEMPLATE = """<!doctype html>
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="__OG_IMAGE_ALT__" />
-    <meta property="article:modified_time" content="__MODIFIED_AT__" />
+__MODIFIED_META__
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="__PAGE_TITLE__" />
     <meta name="twitter:description" content="__DESCRIPTION__" />
@@ -1653,7 +1653,7 @@ def build_structured_data(
     og_image_url: str,
     links: list[Link],
     tags: list[str],
-    generated_at: datetime,
+    generated_at: datetime | None,
 ) -> str:
     page_id = f"{canonical_url}#webpage"
     person_id = f"{canonical_url}#person"
@@ -1687,7 +1687,6 @@ def build_structured_data(
             "isPartOf": {"@id": website_id},
             "about": {"@id": person_id},
             "primaryImageOfPage": {"@id": image_id},
-            "dateModified": generated_at.date().isoformat(),
         },
         {
             "@type": "ImageObject",
@@ -1715,19 +1714,23 @@ def build_structured_data(
         person["email"] = email
     if knows_about:
         person["knowsAbout"] = knows_about
+    if generated_at is not None:
+        graph[1]["dateModified"] = generated_at.date().isoformat()
 
     return json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False)
 
 
-def build_sitemap(canonical_url: str, og_image_url: str, profile: Profile, generated_at: datetime) -> str:
-    last_modified = generated_at.date().isoformat()
+def build_sitemap(canonical_url: str, og_image_url: str, profile: Profile, generated_at: datetime | None) -> str:
+    last_modified = ""
+    if generated_at is not None:
+        last_modified = f"\n    <lastmod>{generated_at.date().isoformat()}</lastmod>"
     return textwrap.dedent(
         f"""\
         <?xml version="1.0" encoding="UTF-8"?>
         <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
           <url>
             <loc>{html.escape(canonical_url)}</loc>
-            <lastmod>{last_modified}</lastmod>
+{last_modified}
             <image:image>
               <image:loc>{html.escape(og_image_url)}</image:loc>
               <image:title>{html.escape(profile.title)}</image:title>
@@ -1751,7 +1754,7 @@ def build_robots(canonical_url: str) -> str:
 
 
 def render_site_artifacts(markdown: str, generated_at: datetime | None = None) -> SiteArtifacts:
-    built_at = generated_at.astimezone(UTC) if generated_at is not None else datetime.now(UTC)
+    built_at = generated_at.astimezone(UTC) if generated_at is not None else None
     profile = parse_profile(markdown)
     links = sorted(extract_links(profile), key=lambda link: build_cta_priority(link.label))
     tags = extract_tags(profile)
@@ -1761,7 +1764,7 @@ def render_site_artifacts(markdown: str, generated_at: datetime | None = None) -
     og_image_url = urljoin(canonical_url, OG_IMAGE_FILENAME)
     og_image_alt = build_og_image_alt(profile, tags)
     keywords = build_keywords(profile, tags)
-    generated_label = built_at.strftime("%Y-%m-%d %H:%M UTC")
+    generated_label = built_at.strftime("%Y-%m-%d %H:%M UTC") if built_at is not None else "README snapshot"
     metrics = build_metric_cards(profile, links, tags)
     previews = build_preview_cards(profile)
 
@@ -1846,7 +1849,11 @@ def render_site_artifacts(markdown: str, generated_at: datetime | None = None) -
         "__OG_IMAGE_URL__": html.escape(og_image_url, quote=True),
         "__OG_IMAGE_ALT__": html.escape(og_image_alt, quote=True),
         "__SITEMAP_URL__": html.escape(urljoin(canonical_url, SITEMAP_FILENAME), quote=True),
-        "__MODIFIED_AT__": built_at.replace(microsecond=0).isoformat().replace("+00:00", "Z"),
+        "__MODIFIED_META__": (
+            f'    <meta property="article:modified_time" content="{built_at.replace(microsecond=0).isoformat().replace("+00:00", "Z")}" />'
+            if built_at is not None
+            else ""
+        ),
         "__STRUCTURED_DATA__": structured_data,
         "__INTRO_HTML__": intro_html,
         "__TAG_HTML__": tag_html,
