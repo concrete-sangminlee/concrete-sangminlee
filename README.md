@@ -6,8 +6,6 @@ I work on machine learning for resilient infrastructure, with emphasis on struct
 
 Recent work appears in *Journal of Nondestructive Evaluation*, *ACI Structural Journal*, and *Journal of Structural Engineering*.
 
-I am seeking postdoctoral opportunities in the United States.
-
 ## Research Focus
 - Structural health monitoring and non-destructive testing
 - Wind engineering and sensing-informed modeling
@@ -20,10 +18,10 @@ I am seeking postdoctoral opportunities in the United States.
 - Wind pressure modeling and sensor reduction
 - AI assistants for engineering codes and design workflows
 
-## Looking For
-- U.S. postdoctoral positions
-- Labs combining AI/ML with civil, structural, sensing, or infrastructure systems
-- Collaboration on reliable ML, monitoring, inspection, and engineering automation
+## Current Interests
+- AI/ML for civil, structural, sensing, and infrastructure systems
+- Reliable ML for monitoring, inspection, and engineering automation
+- Interdisciplinary work connecting machine learning with real engineering decisions
 
 ## Links
 - Profile site: https://concrete-sangminlee.github.io/
