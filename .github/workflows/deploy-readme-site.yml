@@ -25,8 +25,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build profile page
-        run: python3 scripts/build_readme_page.py
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Validate and build profile site
+        run: make check
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

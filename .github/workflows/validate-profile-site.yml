@@ -17,13 +17,17 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.13"
 
-      - name: Rebuild static profile page
-        run: python3 scripts/build_readme_page.py
-
-      - name: Run unit tests
-        run: python3 -m unittest discover -s tests -p 'test_*.py'
+      - name: Validate and build profile site
+        run: make check
 
       - name: Verify generated docs are committed
-        run: git diff --exit-code -- docs/index.html
+        run: git diff --exit-code -- docs/index.html docs/og-preview.svg docs/sitemap.xml docs/robots.txt docs/.nojekyll
+
+      - name: Upload site artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: profile-site-preview
+          path: docs
