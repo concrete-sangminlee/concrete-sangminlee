@@ -42,6 +42,13 @@ This section includes a [portfolio](https://example.com/portfolio) link and `cod
 - Email: jane@example.com
 """
 
+MINIMAL_MARKDOWN = """# Jane Doe
+
+Applied machine learning researcher.
+
+Infrastructure-focused machine learning.
+"""
+
 
 class BuildReadmePageTests(unittest.TestCase):
     def test_parse_profile_extracts_richer_blocks(self) -> None:
@@ -81,6 +88,14 @@ class BuildReadmePageTests(unittest.TestCase):
         self.assertIn("og-preview.svg", artifacts.sitemap)
         self.assertIn("Sitemap: https://example.com/sitemap.xml", artifacts.robots)
         self.assertEqual(artifacts.nojekyll, "")
+
+    def test_render_site_hides_empty_section_scaffolding_for_minimal_readme(self) -> None:
+        output = MODULE.render_site(MINIMAL_MARKDOWN, generated_at=FIXED_AT)
+
+        self.assertNotIn('<section class="preview-wrap">', output)
+        self.assertNotIn('<div class="nav-wrap">', output)
+        self.assertNotIn('<section class="content-grid">', output)
+        self.assertIn("Jane Doe | Research Profile", output)
 
     def test_build_writes_expected_output_bundle(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:

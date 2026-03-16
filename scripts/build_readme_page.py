@@ -859,21 +859,11 @@ HTML_TEMPLATE = """<!doctype html>
         </aside>
       </section>
 
-      <section class="preview-wrap">
-        <div class="section-intro">
-          <p>Profile Map</p>
-          <h2 class="section-title">Key narrative tracks extracted from the README.</h2>
-        </div>
-        <div class="preview-grid">__PREVIEW_HTML__</div>
-      </section>
+__PREVIEW_SECTION__
 
-      <div class="nav-wrap">
-        <nav class="nav" aria-label="Section navigation">__NAV_HTML__</nav>
-      </div>
+__NAV_SECTION__
 
-      <section class="content-grid">
-__SECTION_HTML__
-      </section>
+__CONTENT_SECTION__
 
       <footer class="footer">
         <span>Generated from <a href="__REPO_URL__">the repository</a> and published as static output.</span>
@@ -1499,16 +1489,7 @@ def render_metric_cards(metrics: list[MetricCard]) -> str:
 
 def render_preview_cards(previews: list[PreviewCard]) -> str:
     if not previews:
-        return textwrap.dedent(
-            """
-            <article class="preview-card">
-              <p class="preview-kicker">Profile Map</p>
-              <strong>README-driven content</strong>
-              <p>Sections will appear here as the README grows into a fuller profile narrative.</p>
-              <span class="preview-meta">Waiting for top-level sections</span>
-            </article>
-            """
-        ).strip()
+        return ""
 
     return "".join(
         textwrap.dedent(
@@ -1815,6 +1796,31 @@ def render_site_artifacts(markdown: str, generated_at: datetime | None = None) -
         ),
         "        ",
     )
+
+    preview_section_html = ""
+    nav_section_html = ""
+    content_section_html = ""
+    if profile.sections:
+        preview_section_html = textwrap.dedent(
+            f"""
+            <section class="preview-wrap">
+              <div class="section-intro">
+                <p>Profile Map</p>
+                <h2 class="section-title">Key narrative tracks extracted from the README.</h2>
+              </div>
+              <div class="preview-grid">{preview_html}</div>
+            </section>
+            """
+        ).strip()
+        nav_section_html = f'<div class="nav-wrap"><nav class="nav" aria-label="Section navigation">{nav_html}</nav></div>'
+        content_section_html = textwrap.dedent(
+            f"""
+            <section class="content-grid">
+{section_html}
+            </section>
+            """
+        ).strip()
+
     sitemap = build_sitemap(canonical_url, og_image_url, profile, built_at)
     robots = build_robots(canonical_url)
     og_image = render_og_image(profile, description, tags, metrics, canonical_url)
@@ -1846,9 +1852,9 @@ def render_site_artifacts(markdown: str, generated_at: datetime | None = None) -
         "__TAG_HTML__": tag_html,
         "__CTA_HTML__": cta_html,
         "__METRIC_HTML__": metric_html,
-        "__PREVIEW_HTML__": preview_html,
-        "__NAV_HTML__": nav_html,
-        "__SECTION_HTML__": section_html,
+        "__PREVIEW_SECTION__": preview_section_html,
+        "__NAV_SECTION__": nav_section_html,
+        "__CONTENT_SECTION__": content_section_html,
         "__GENERATED_AT__": generated_label,
         "__REPO_URL__": html.escape(REPO_URL, quote=True),
     }
