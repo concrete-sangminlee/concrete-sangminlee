@@ -42,6 +42,18 @@ This section includes a [portfolio](https://example.com/portfolio) link and `cod
 - Email: jane@example.com
 """
 
+MEDIA_MARKDOWN = """# Jane Doe
+
+[![Profile Site](https://img.shields.io/badge/Profile_Site-0f766e?style=for-the-badge)](https://example.com)
+[![GitHub Stats](https://github-readme-stats.vercel.app/api?username=janedoe)](https://github.com/janedoe)
+
+Applied machine learning researcher.
+
+## GitHub Activity
+[![Streak Stats](https://streak-stats.demolab.com?user=janedoe)](https://git.io/streak-stats)
+![Contribution Snake](https://raw.githubusercontent.com/janedoe/janedoe/output/github-snake.svg)
+"""
+
 MINIMAL_MARKDOWN = """# Jane Doe
 
 Applied machine learning researcher.
@@ -104,6 +116,15 @@ class BuildReadmePageTests(unittest.TestCase):
         self.assertNotIn('<div class="nav-wrap">', output)
         self.assertNotIn('<section class="content-grid">', output)
         self.assertIn("Jane Doe | Research Profile", output)
+
+    def test_render_site_supports_badges_and_images(self) -> None:
+        output = MODULE.render_site(MEDIA_MARKDOWN, generated_at=FIXED_AT)
+
+        self.assertIn("markdown-image-badge", output)
+        self.assertIn("markdown-image-stats", output)
+        self.assertIn("media-group-stats", output)
+        self.assertIn("markdown-image-snake", output)
+        self.assertNotIn("img.shields.io", MODULE.summarize_description(MODULE.parse_profile(MEDIA_MARKDOWN), []))
 
     def test_build_writes_expected_output_bundle(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:

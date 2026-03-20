@@ -28,9 +28,11 @@ OG_IMAGE_WIDTH = 1200
 OG_IMAGE_HEIGHT = 630
 
 AUTOLINK_RE = re.compile(r"https?://\S+|[\w.+-]+@[\w.-]+\.\w+")
+LINKED_IMAGE_RE = re.compile(r"\[!\[([^\]]*)\]\(([^)]+)\)\]\(([^)]+)\)")
+IMAGE_RE = re.compile(r"!\[([^\]]*)\]\(([^)]+)\)")
 INLINE_LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
 INLINE_TOKEN_RE = re.compile(
-    r"(\[[^\]]+\]\([^)]+\)|`[^`]+`|\*\*.+?\*\*|__.+?__|\*[^*\n]+\*|_[^_\n]+_)",
+    r"(\[!\[[^\]]*\]\([^)]+\)\]\([^)]+\)|!\[[^\]]*\]\([^)]+\)|\[[^\]]+\]\([^)]+\)|`[^`]+`|\*\*.+?\*\*|__.+?__|\*[^*\n]+\*|_[^_\n]+_)",
     re.DOTALL,
 )
 LINK_ITEM_RE = re.compile(r"^(?P<label>[^:]+):\s*(?P<target>\S.+)$")
@@ -54,6 +56,7 @@ class Section:
 class Profile:
     title: str
     intro: list[str]
+    intro_blocks: list[Block]
     sections: list[Section]
 
 
@@ -187,6 +190,11 @@ __MODIFIED_META__
         font-size: 0.92em;
       }
 
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+
       .page {
         position: relative;
         width: min(1160px, calc(100vw - 32px));
@@ -302,6 +310,59 @@ __MODIFIED_META__
         color: var(--muted);
         font-size: 1.03rem;
         line-height: 1.85;
+      }
+
+      .media-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+        margin: 0 0 16px;
+      }
+
+      .media-group-badges {
+        gap: 10px;
+      }
+
+      .media-group-stats {
+        align-items: stretch;
+      }
+
+      .media-group-banner,
+      .media-group-snake {
+        display: grid;
+      }
+
+      .image-link,
+      .image-link:hover,
+      .image-link:focus-visible {
+        display: inline-flex;
+        text-decoration: none;
+        transform: none;
+      }
+
+      .markdown-image {
+        display: block;
+        border-radius: 18px;
+        border: 1px solid rgba(16, 37, 34, 0.08);
+        background: rgba(255, 255, 255, 0.9);
+      }
+
+      .markdown-image-badge {
+        border: none;
+        border-radius: 999px;
+        background: transparent;
+      }
+
+      .markdown-image-stats {
+        width: min(100%, 420px);
+        box-shadow: var(--shadow-md);
+      }
+
+      .markdown-image-banner,
+      .markdown-image-snake {
+        width: 100%;
+        box-shadow: var(--shadow-md);
       }
 
       .tag-list,
@@ -587,6 +648,11 @@ __MODIFIED_META__
 
       .section-body p {
         margin: 0 0 12px;
+      }
+
+      .section-body .media-group:last-child,
+      .hero-intro .media-group:last-child {
+        margin-bottom: 0;
       }
 
       .subheading {
@@ -881,12 +947,65 @@ def slugify(text: str) -> str:
 
 
 def strip_markdown(text: str) -> str:
-    output = INLINE_LINK_RE.sub(lambda match: match.group(1), text)
+    output = LINKED_IMAGE_RE.sub(lambda match: match.group(1), text)
+    output = IMAGE_RE.sub(lambda match: match.group(1), output)
+    output = INLINE_LINK_RE.sub(lambda match: match.group(1), output)
     output = re.sub(r"`([^`]+)`", r"\1", output)
     output = re.sub(r"(\*\*|__)(.+?)\1", r"\2", output)
     output = re.sub(r"(?<!\*)\*([^*\n]+)\*(?!\*)", r"\1", output)
     output = re.sub(r"(?<!_)_([^_\n]+)_(?!_)", r"\1", output)
     return " ".join(output.split())
+
+
+def is_media_only_text(text: str) -> bool:
+    stripped = LINKED_IMAGE_RE.sub("", text)
+    stripped = IMAGE_RE.sub("", stripped)
+    return not stripped.strip()
+
+
+def classify_image_kind(src: str, alt: str) -> str:
+    lower_src = src.lower()
+    lower_alt = alt.lower()
+    if "shields.io" in lower_src:
+        return "badge"
+    if "github-readme-stats" in lower_src or "streak-stats" in lower_src:
+        return "stats"
+    if "snake" in lower_src or "snake" in lower_alt:
+        return "snake"
+    if "banner" in lower_src or "banner" in lower_alt:
+        return "banner"
+    return "content"
+
+
+def collect_media_kinds(text: str) -> list[str]:
+    kinds: list[str] = []
+
+    def collect_linked(match: re.Match[str]) -> str:
+        kinds.append(classify_image_kind(match.group(2), match.group(1)))
+        return " "
+
+    intermediate = LINKED_IMAGE_RE.sub(collect_linked, text)
+
+    def collect_image(match: re.Match[str]) -> str:
+        kinds.append(classify_image_kind(match.group(2), match.group(1)))
+        return " "
+
+    IMAGE_RE.sub(collect_image, intermediate)
+    return kinds
+
+
+def media_group_class(text: str) -> str:
+    kinds = collect_media_kinds(text)
+    classes = ["media-group"]
+    if kinds and all(kind == "badge" for kind in kinds):
+        classes.append("media-group-badges")
+    elif "stats" in kinds:
+        classes.append("media-group-stats")
+    elif "banner" in kinds:
+        classes.append("media-group-banner")
+    elif "snake" in kinds:
+        classes.append("media-group-snake")
+    return " ".join(classes)
 
 
 def truncate(text: str, limit: int) -> str:
@@ -1023,8 +1142,12 @@ def parse_profile(markdown: str) -> Profile:
     flush()
 
     intro_blocks = parse_blocks(intro_lines)
-    intro = [block.items[0] for block in intro_blocks if block.kind == "paragraph"]
-    return Profile(title=title, intro=intro, sections=sections)
+    intro = [
+        block.items[0]
+        for block in intro_blocks
+        if block.kind == "paragraph" and not is_media_only_text(block.items[0])
+    ]
+    return Profile(title=title, intro=intro, intro_blocks=intro_blocks, sections=sections)
 
 
 def normalize_href(target: str) -> str:
@@ -1220,7 +1343,16 @@ def section_variant(section: Section) -> str:
     return "story"
 
 
+def section_has_media(section: Section) -> bool:
+    return any(
+        block.kind == "paragraph" and any(is_media_only_text(item) for item in block.items)
+        for block in section.blocks
+    )
+
+
 def section_span(section: Section) -> str:
+    if section_has_media(section):
+        return "section-span-12"
     variant = section_variant(section)
     if variant in {"links", "timeline"}:
         return "section-span-12"
@@ -1235,6 +1367,10 @@ def section_span(section: Section) -> str:
 
 def section_label(index: int, section: Section) -> str:
     heading = section.heading.lower()
+    if "github" in heading:
+        return "GitHub Profile"
+    if any(token in heading for token in ("contribution", "activity")):
+        return "Activity"
     if any(token in heading for token in ("research agenda", "research interests", "current directions", "focus", "theme")):
         return "Research Agenda"
     if any(token in heading for token in ("highlight", "news", "update")):
@@ -1269,7 +1405,11 @@ def summarize_section(section: Section, limit: int = 150) -> str:
     fragments: list[str] = []
     for block in section.blocks:
         if block.kind in {"paragraph", "quote"}:
-            fragments.extend(strip_markdown(item) for item in block.items)
+            fragments.extend(
+                strip_markdown(item)
+                for item in block.items
+                if not is_media_only_text(item)
+            )
         elif block.kind in {"list", "ordered_list"}:
             fragments.extend(strip_markdown(item) for item in block.items[:2])
         if fragments:
@@ -1373,6 +1513,16 @@ def autolink_plain_text(text: str) -> str:
     return "".join(parts)
 
 
+def render_image(src: str, alt: str) -> str:
+    kind = classify_image_kind(src, alt)
+    safe_src = html.escape(src.strip(), quote=True)
+    safe_alt = html.escape((alt or "image").strip(), quote=True)
+    return (
+        f'<img class="markdown-image markdown-image-{kind}" src="{safe_src}" '
+        f'alt="{safe_alt}" loading="lazy" decoding="async" />'
+    )
+
+
 def render_inline(text: str) -> str:
     parts: list[str] = []
     last_index = 0
@@ -1380,7 +1530,18 @@ def render_inline(text: str) -> str:
     for match in INLINE_TOKEN_RE.finditer(text):
         parts.append(autolink_plain_text(text[last_index:match.start()]))
         token = match.group(0)
-        if token.startswith("["):
+        linked_image_match = LINKED_IMAGE_RE.fullmatch(token)
+        image_match = IMAGE_RE.fullmatch(token)
+        if linked_image_match:
+            alt, src, href = linked_image_match.groups()
+            safe_href = html.escape(normalize_href(href), quote=True)
+            attrs = ' target="_blank" rel="noreferrer"' if href.startswith("http") else ""
+            kind = classify_image_kind(src, alt)
+            parts.append(f'<a class="image-link image-link-{kind}" href="{safe_href}"{attrs}>{render_image(src, alt)}</a>')
+        elif image_match:
+            alt, src = image_match.groups()
+            parts.append(render_image(src, alt))
+        elif token.startswith("["):
             label, target = INLINE_LINK_RE.fullmatch(token).groups()
             parts.append(render_anchor(normalize_href(target), label))
         elif token.startswith("`"):
@@ -1437,7 +1598,10 @@ def render_blocks(blocks: list[Block]) -> str:
     parts: list[str] = []
     for block in blocks:
         if block.kind == "paragraph":
-            parts.append(f"<p>{render_inline(block.items[0])}</p>")
+            if is_media_only_text(block.items[0]):
+                parts.append(f'<div class="{media_group_class(block.items[0])}">{render_inline(block.items[0])}</div>')
+            else:
+                parts.append(f"<p>{render_inline(block.items[0])}</p>")
         elif block.kind == "subheading":
             parts.append(f'<p class="subheading">{html.escape(block.items[0])}</p>')
         elif block.kind == "quote":
@@ -1815,7 +1979,7 @@ def render_site_artifacts(markdown: str, generated_at: datetime | None = None) -
     metrics = build_metric_cards(profile, links, tags)
     previews = build_preview_cards(profile)
 
-    intro_html = "".join(f"<p>{render_inline(paragraph)}</p>" for paragraph in profile.intro)
+    intro_html = render_blocks(profile.intro_blocks)
     if not intro_html:
         intro_html = "<p>Profile content is maintained in README.md.</p>"
 

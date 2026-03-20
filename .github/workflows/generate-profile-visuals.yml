@@ -1,0 +1,46 @@
+name: Generate profile visuals
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 18 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  snake:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Generate contribution snake
+        uses: Platane/snk/svg-only@v3
+        with:
+          github_user_name: concrete-sangminlee
+          outputs: |
+            dist/github-contribution-grid-snake.svg?palette=github-light&color_snake=%23ca5a3f
+            dist/github-contribution-grid-snake-dark.svg?palette=github-dark&color_snake=%23d1a654
+
+      - name: Publish visuals to output branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd dist
+          touch .nojekyll
+          git init
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b output
+          git add .
+          if git diff --cached --quiet; then
+            echo "No visual changes to publish."
+            exit 0
+          fi
+          git commit -m "Update profile visuals"
+          git push --force "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" output

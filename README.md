@@ -1,5 +1,14 @@
 # Sang Min Lee
 
+[![Profile Site](https://img.shields.io/badge/Profile_Site-102522?style=for-the-badge&logo=googlechrome&logoColor=white)](https://concrete-sangminlee.github.io/)
+[![Google Scholar](https://img.shields.io/badge/Google_Scholar-4285F4?style=for-the-badge&logo=googlescholar&logoColor=white)](https://scholar.google.com/citations?user=ogvd_LsAAAAJ&hl=en)
+[![ORCID](https://img.shields.io/badge/ORCID-A6CE39?style=for-the-badge&logo=orcid&logoColor=white)](https://orcid.org/0000-0002-6822-5252)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/sang-min-lee-3a2568174/)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/concrete-sangminlee)
+[![Email](https://img.shields.io/badge/Email-CA5A3F?style=for-the-badge&logo=gmail&logoColor=white)](mailto:201612445@snu.ac.kr)
+
+![Research banner](https://concrete-sangminlee.github.io/og-preview.svg)
+
 Ph.D. candidate in Artificial Intelligence at **Seoul National University**.
 
 Academic researcher working on **AI for resilient infrastructure**, especially structural health monitoring, wind engineering, automated non-destructive testing, and engineering-focused LLM systems.
@@ -67,6 +76,20 @@ Interested in research collaboration, interdisciplinary AI + structural engineer
 - Engineering RAG assistants for structural design codes
 - Practical AI systems for concrete inspection and NDT automation
 - Research pipelines that balance accuracy, interpretability, and deployment constraints
+
+---
+
+## GitHub Snapshot
+
+[![GitHub Stats](https://github-readme-stats.vercel.app/api?username=concrete-sangminlee&show_icons=true&hide_border=true&title_color=102522&icon_color=ca5a3f&text_color=556762&bg_color=00000000)](https://github.com/anuraghazra/github-readme-stats)
+[![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=concrete-sangminlee&layout=compact&hide_border=true&title_color=102522&text_color=556762&bg_color=00000000)](https://github.com/anuraghazra/github-readme-stats)
+[![GitHub Streak](https://streak-stats.demolab.com?user=concrete-sangminlee&hide_border=true&background=FFFFFF00&ring=ca5a3f&fire=ca5a3f&currStreakNum=102522&sideNums=102522&currStreakLabel=102522&sideLabels=102522&dates=556762&stroke=556762)](https://git.io/streak-stats)
+
+---
+
+## Contribution Activity
+
+[![Contribution Snake](https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/output/github-contribution-grid-snake.svg)](https://github.com/concrete-sangminlee)
 
 ---
 
