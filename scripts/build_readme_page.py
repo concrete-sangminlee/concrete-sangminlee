@@ -1115,8 +1115,9 @@ def describe_link(href: str) -> str:
 
 def collect_focus_items(profile: Profile, limit: int = 6) -> list[str]:
     keyword_groups = (
-        ("research", "focus", "theme", "interest", "expertise"),
+        ("research area", "research areas", "focus", "theme", "interest", "expertise"),
         ("collaboration", "approach", "services"),
+        ("research",),
     )
 
     for keywords in keyword_groups:
