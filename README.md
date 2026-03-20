@@ -4,10 +4,7 @@
 [![Google Scholar](https://img.shields.io/badge/Google_Scholar-4285F4?style=for-the-badge&logo=googlescholar&logoColor=white)](https://scholar.google.com/citations?user=ogvd_LsAAAAJ&hl=en)
 [![ORCID](https://img.shields.io/badge/ORCID-A6CE39?style=for-the-badge&logo=orcid&logoColor=white)](https://orcid.org/0000-0002-6822-5252)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/sang-min-lee-3a2568174/)
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/concrete-sangminlee)
 [![Email](https://img.shields.io/badge/Email-CA5A3F?style=for-the-badge&logo=gmail&logoColor=white)](mailto:201612445@snu.ac.kr)
-
-Ph.D. candidate in Artificial Intelligence at **Seoul National University**.
 
 Academic researcher working on **AI for resilient infrastructure**, especially structural health monitoring, wind engineering, automated non-destructive testing, and engineering-focused LLM systems.
 
@@ -20,18 +17,15 @@ Interested in research collaboration, interdisciplinary AI + structural engineer
 ### Structural Health Monitoring
 
 - **Multiclass deep support vector data description for structural health monitoring.** *Journal of Structural Engineering*, 2025.
-- **Multi-sphere deep SVDD for system identification of building structure.** *The 2024 World Congress on Advances in Civil, Environmental, and Materials Research (ACEM24)*, 2024.
+- **Lightweight alternative machine learning model for automating concrete crack image classification.** *ACI Structural Journal*, 2025.
 
-### Concrete Inspection & Automated NDT
+### Automated NDT
 
 - **Machine learning assisted method for automated impact-echo testing of concrete structures.** *Journal of Nondestructive Evaluation*, 2025.
-- **Lightweight alternative machine learning model for automating concrete crack image classification.** *ACI Structural Journal*, 2025.
-- **Representation learning for classification of concrete crack images.** *Structures Congress*, 2024.
 
-### Wind Engineering & Code Intelligence
+### Wind Engineering
 
 - **Retrieval augmented generation for assistance of using wind load design codes.** *The 10th Asia-Pacific Conference on Wind Engineering (APCWE10)*, 2025.
-- Research on wind pressure clustering, wind load estimation, and AI-assisted interpretation of structural design codes.
 
 ---
 
@@ -97,8 +91,6 @@ Interested in research collaboration, interdisciplinary AI + structural engineer
 2. **Lightweight alternative machine learning model for automating concrete crack image classification.** *ACI Structural Journal*, 2025.
 3. **Multiclass deep support vector data description for structural health monitoring.** *Journal of Structural Engineering*, 2025.
 4. **Retrieval augmented generation for assistance of using wind load design codes.** *The 10th Asia-Pacific Conference on Wind Engineering (APCWE10)*, 2025.
-5. **Multi-sphere deep SVDD for system identification of building structure.** *The 2024 World Congress on Advances in Civil, Environmental, and Materials Research (ACEM24)*, 2024.
-6. **Representation learning for classification of concrete crack images.** *The 2024 Structures Congress*, 2024.
 
 ---
 
@@ -116,13 +108,12 @@ Interested in research collaboration, interdisciplinary AI + structural engineer
 ### Education
 
 - **Ph.D. in Artificial Intelligence**, Seoul National University, 2023.03-2027.02 (expected)
-- **M.S. in Architecture and Architectural Engineering**, Seoul National University, 2021.03-2023.02
-- **B.S. in Architecture and Architectural Engineering**, Seoul National University, 2016.03-2021.02
-- Double major in Electrical and Computer Engineering
+- **M.S. in Structural Engineering**, Seoul National University, 2021.03-2023.02
+- **B.S. in Architecture and Architectural Engineering (Double major in Electrical and Computer Engineering)**, Seoul National University, 2016.03-2021.02
 
 ### Recognition
 
-- SNU AI Fellowship (2025)
+- SNU AI Fellowship (2025, 2026)
 - SNU AI Paper Competition Excellence Award (2025)
 - SNU AI Graduate School Scholarship (2023, 2024)
 - SNU Outstanding Teaching Assistant Award (2022)
@@ -137,8 +128,8 @@ Interested in research collaboration, interdisciplinary AI + structural engineer
 
 ## Patents
 
-- **AI-based defect detection system inside concrete members.** KR Patent, 2023.
-- **Wind load estimation system based on artificial intelligence.** KR Patent, 2022.
+- **AI-based defect detection system inside concrete members**, KR Patent, 2023.
+- **Wind load estimation system based on artificial intelligence**, KR Patent, 2022.
 
 ---
 
@@ -148,7 +139,6 @@ Interested in research collaboration, interdisciplinary AI + structural engineer
 - Google Scholar: https://scholar.google.com/citations?user=ogvd_LsAAAAJ&hl=en
 - ORCID: https://orcid.org/0000-0002-6822-5252
 - LinkedIn: https://www.linkedin.com/in/sang-min-lee-3a2568174/
-- GitHub: https://github.com/concrete-sangminlee
 
 ---
 
