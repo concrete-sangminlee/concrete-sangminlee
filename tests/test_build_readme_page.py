@@ -72,7 +72,7 @@ class BuildReadmePageTests(unittest.TestCase):
         self.assertIn("og-preview.svg", output)
         self.assertIn('"ProfilePage"', output)
         self.assertIn("preview-grid", output)
-        self.assertIn("Focus Areas", output)
+        self.assertIn("Research Themes", output)
         self.assertIn("Featured Work", output)
         self.assertIn("2026-03-15 09:00 UTC", output)
         self.assertNotIn("marked.min.js", output)
@@ -92,7 +92,7 @@ class BuildReadmePageTests(unittest.TestCase):
     def test_render_site_artifacts_are_deterministic_without_timestamp(self) -> None:
         artifacts = MODULE.render_site_artifacts(SAMPLE_MARKDOWN)
 
-        self.assertIn("README snapshot", artifacts.html)
+        self.assertIn("Profile snapshot", artifacts.html)
         self.assertNotIn("article:modified_time", artifacts.html)
         self.assertNotIn("<lastmod>", artifacts.sitemap)
         self.assertIn('"ProfilePage"', artifacts.html)
@@ -125,7 +125,7 @@ class BuildReadmePageTests(unittest.TestCase):
             self.assertTrue((output_path.parent / "sitemap.xml").exists())
             self.assertTrue((output_path.parent / "robots.txt").exists())
             self.assertTrue((output_path.parent / ".nojekyll").exists())
-            self.assertIn("README-DRIVEN PROFILE", (output_path.parent / "og-preview.svg").read_text(encoding="utf-8"))
+            self.assertIn("ACADEMIC RESEARCH PROFILE", (output_path.parent / "og-preview.svg").read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

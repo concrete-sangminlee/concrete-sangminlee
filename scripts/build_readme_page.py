@@ -841,7 +841,7 @@ __MODIFIED_META__
       <section class="hero">
         <div class="hero-main">
           <div class="hero-copy">
-            <p class="eyebrow">README-Driven Profile</p>
+            <p class="eyebrow">Academic Researcher</p>
             <h1 class="hero-title">__TITLE__</h1>
             <div class="hero-intro">__INTRO_HTML__</div>
             <div class="tag-list">__TAG_HTML__</div>
@@ -849,11 +849,11 @@ __MODIFIED_META__
           </div>
         </div>
         <aside class="hero-side">
-          <p class="eyebrow">Structured, Searchable, Static</p>
-          <h2>A stronger profile page generated directly from README.md.</h2>
+          <p class="eyebrow">Research Profile</p>
+          <h2>Selected outputs, active directions, and direct paths for collaboration.</h2>
           <p>
-            The page keeps the repository README as the content source of truth, while adding a
-            richer information layout, stronger metadata, and a deploy-ready static output.
+            The page turns the repository profile into a research-facing overview with focus areas,
+            recent highlights, publications, projects, and verifiable links for deeper context.
           </p>
           <div class="metric-grid">__METRIC_HTML__</div>
         </aside>
@@ -866,7 +866,7 @@ __NAV_SECTION__
 __CONTENT_SECTION__
 
       <footer class="footer">
-        <span>Generated from <a href="__REPO_URL__">the repository</a> and published as static output.</span>
+        <span>Maintained in <a href="__REPO_URL__">the profile repository</a> and published as static output.</span>
         <span><span class="footer-note">Build stamp</span> __GENERATED_AT__</span>
       </footer>
     </main>
@@ -1140,12 +1140,33 @@ def collect_focus_items(profile: Profile, limit: int = 6) -> list[str]:
     return []
 
 
+def compact_tag(text: str, limit: int = 44) -> str:
+    cleaned = strip_markdown(text).strip().rstrip(".")
+    if len(cleaned) <= limit:
+        return cleaned
+
+    for delimiter in (";", ",", ":", " with ", " under ", " using ", " tailored to "):
+        if delimiter not in cleaned:
+            continue
+        candidate = cleaned.split(delimiter, 1)[0].strip()
+        if 12 <= len(candidate) <= limit:
+            return candidate
+
+    words = cleaned.split()
+    for word_limit in (7, 6, 5):
+        candidate = " ".join(words[:word_limit]).strip()
+        if len(candidate) >= 18:
+            return truncate(candidate, limit)
+
+    return truncate(cleaned, limit)
+
+
 def extract_tags(profile: Profile, limit: int = 5) -> list[str]:
     tags: list[str] = []
     for item in collect_focus_items(profile, limit=limit + 2):
-        stripped = strip_markdown(item).strip()
-        if stripped and stripped not in tags:
-            tags.append(stripped)
+        compacted = compact_tag(item)
+        if compacted and compacted not in tags:
+            tags.append(compacted)
         if len(tags) >= limit:
             break
     return tags
@@ -1212,10 +1233,26 @@ def section_span(section: Section) -> str:
 
 
 def section_label(index: int, section: Section) -> str:
+    heading = section.heading.lower()
+    if any(token in heading for token in ("research agenda", "research interests", "current directions", "focus", "theme")):
+        return "Research Agenda"
+    if any(token in heading for token in ("highlight", "news", "update")):
+        return "Recent Signals"
+    if any(token in heading for token in ("publication", "paper", "output")):
+        return "Research Outputs"
+    if any(token in heading for token in ("project", "funding", "grant")):
+        return "Projects & Funding"
+    if any(token in heading for token in ("education", "training")):
+        return "Training"
+    if any(token in heading for token in ("recognition", "award", "service", "membership")):
+        return "Recognition"
+    if any(token in heading for token in ("patent", "intellectual property", "ip")):
+        return "Patents"
+
     labels = {
         "links": "Connect",
         "timeline": "Selected Track",
-        "focus": "Focus Map",
+        "focus": "Research Agenda",
         "collaboration": "Working Style",
         "stack": f"Section {index:02d}",
         "story": f"Section {index:02d}",
@@ -1241,25 +1278,34 @@ def summarize_section(section: Section, limit: int = 150) -> str:
     return truncate(" / ".join(fragment for fragment in fragments if fragment), limit)
 
 
+def count_items_for_sections(profile: Profile, keywords: tuple[str, ...]) -> int:
+    count = 0
+    for section in profile.sections:
+        heading = section.heading.lower()
+        if any(token in heading for token in keywords):
+            count += section_item_count(section)
+    return count
+
+
 def build_metric_cards(profile: Profile, links: list[Link], tags: list[str]) -> list[MetricCard]:
-    non_link_sections = [section for section in profile.sections if not is_link_section(section)]
+    selected_outputs = count_items_for_sections(profile, ("publication", "paper", "patent", "output"))
     external_links = sum(1 for link in links if link.href.startswith("http"))
 
     return [
         MetricCard(
             value=str(max(len(tags), 1)),
-            label="Focus Areas",
-            detail="Primary signals extracted from the README narrative.",
+            label="Research Themes",
+            detail="Primary directions surfaced from the profile narrative.",
         ),
         MetricCard(
-            value=str(max(len(non_link_sections), 1)),
-            label="Core Sections",
-            detail="Top-level content blocks kept aligned with the profile README.",
+            value=str(max(selected_outputs, 1)),
+            label="Selected Outputs",
+            detail="Highlighted publications and patents visible on the page.",
         ),
         MetricCard(
             value=str(max(external_links or len(links), 1)),
-            label="Outbound Links",
-            detail="Direct paths for deeper context, verification, and contact.",
+            label="Public Links",
+            detail="Homepage, scholar, ORCID, GitHub, and direct contact endpoints.",
         ),
     ]
 
@@ -1526,7 +1572,7 @@ def render_svg_text_block(lines: list[str], x: int, y: int, line_height: int, cl
 def render_og_image(profile: Profile, description: str, tags: list[str], metrics: list[MetricCard], canonical_url: str) -> str:
     title_lines = wrap_svg_lines(profile.title, width=12, max_lines=2)
     description_lines = wrap_svg_lines(description, width=42, max_lines=3)
-    chips = tags[:4] or ["README-driven profile"]
+    chips = tags[:4] or ["academic profile"]
 
     chip_markup: list[str] = []
     x = 72
@@ -1625,7 +1671,7 @@ def render_og_image(profile: Profile, description: str, tags: list[str], metrics
           <rect width="{OG_IMAGE_WIDTH}" height="{OG_IMAGE_HEIGHT}" rx="0" fill="url(#coral)" />
           <rect width="{OG_IMAGE_WIDTH}" height="{OG_IMAGE_HEIGHT}" rx="0" fill="url(#teal)" />
           <rect x="36" y="36" width="1128" height="558" rx="36" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.09)" />
-          <text class="eyebrow" x="72" y="88">README-DRIVEN PROFILE</text>
+          <text class="eyebrow" x="72" y="88">ACADEMIC RESEARCH PROFILE</text>
           {render_svg_text_block(title_lines, 72, 182, 92, "title")}
           {render_svg_text_block(description_lines, 72, 322, 40, "body")}
           {''.join(chip_markup)}
@@ -1764,7 +1810,7 @@ def render_site_artifacts(markdown: str, generated_at: datetime | None = None) -
     og_image_url = urljoin(canonical_url, OG_IMAGE_FILENAME)
     og_image_alt = build_og_image_alt(profile, tags)
     keywords = build_keywords(profile, tags)
-    generated_label = built_at.strftime("%Y-%m-%d %H:%M UTC") if built_at is not None else "README snapshot"
+    generated_label = built_at.strftime("%Y-%m-%d %H:%M UTC") if built_at is not None else "Profile snapshot"
     metrics = build_metric_cards(profile, links, tags)
     previews = build_preview_cards(profile)
 
@@ -1808,8 +1854,8 @@ def render_site_artifacts(markdown: str, generated_at: datetime | None = None) -
             f"""
             <section class="preview-wrap">
               <div class="section-intro">
-                <p>Profile Map</p>
-                <h2 class="section-title">Key narrative tracks extracted from the README.</h2>
+                <p>Research Overview</p>
+                <h2 class="section-title">Research directions, outputs, and activity signals at a glance.</h2>
               </div>
               <div class="preview-grid">{preview_html}</div>
             </section>

@@ -1,6 +1,6 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
           <title id="title">Sang Min Lee profile preview</title>
-          <desc id="desc">Ph.D. candidate in Artificial Intelligence at Seoul National University. Machine learning for resilient infrastructure, especially structural health monitoring, wind engineering...</desc>
+          <desc id="desc">Ph.D. candidate in Artificial Intelligence at Seoul National University, advised by Prof. Thomas H.-K. Kang. I build machine learning systems for resilient infrastructure, with...</desc>
           <defs>
             <linearGradient id="bg" x1="0%" x2="100%" y1="0%" y2="100%">
               <stop offset="0%" stop-color="#132824" />
@@ -59,28 +59,37 @@
           <rect width="1200" height="630" rx="0" fill="url(#coral)" />
           <rect width="1200" height="630" rx="0" fill="url(#teal)" />
           <rect x="36" y="36" width="1128" height="558" rx="36" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.09)" />
-          <text class="eyebrow" x="72" y="88">README-DRIVEN PROFILE</text>
+          <text class="eyebrow" x="72" y="88">ACADEMIC RESEARCH PROFILE</text>
           <text class="title" x="72" y="182"><tspan x="72" dy="0">Sang Min Lee</tspan></text>
-          <text class="body" x="72" y="322"><tspan x="72" dy="0">Ph.D. candidate in Artificial Intelligence</tspan><tspan x="72" dy="40">at Seoul National University. Machine</tspan><tspan x="72" dy="40">learning for resilient infrastructure,</tspan></text>
+          <text class="body" x="72" y="322"><tspan x="72" dy="0">Ph.D. candidate in Artificial Intelligence</tspan><tspan x="72" dy="40">at Seoul National University, advised by</tspan><tspan x="72" dy="40">Prof. Thomas H.-K. Kang. I build machine</tspan></text>
           <g transform="translate(72 452)">
-  <rect width="212" height="42" rx="21" fill="rgba(255,255,255,0.16)" stroke="rgba(255,255,255,0.18)" />
-  <text class="chip" x="18" y="27">README-driven profile</text>
+  <rect width="268" height="42" rx="21" fill="rgba(255,255,255,0.16)" stroke="rgba(255,255,255,0.18)" />
+  <text class="chip" x="18" y="27">Structural health monitoring</text>
+</g><g transform="translate(354 452)">
+  <rect width="270" height="42" rx="21" fill="rgba(255,255,255,0.16)" stroke="rgba(255,255,255,0.18)" />
+  <text class="chip" x="18" y="27">Wind engineering and code-a...</text>
+</g><g transform="translate(72 508)">
+  <rect width="270" height="42" rx="21" fill="rgba(255,255,255,0.16)" stroke="rgba(255,255,255,0.18)" />
+  <text class="chip" x="18" y="27">Automated NDT for concrete...</text>
+</g><g transform="translate(356 508)">
+  <rect width="270" height="42" rx="21" fill="rgba(255,255,255,0.16)" stroke="rgba(255,255,255,0.18)" />
+  <text class="chip" x="18" y="27">On-device models for engine...</text>
 </g>
           <g transform="translate(840 126)">
   <rect width="288" height="112" rx="28" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.1)" />
-  <text class="metric-value" x="28" y="48">1</text>
-  <text class="metric-label" x="28" y="74">FOCUS AREAS</text>
-  <text class="metric-detail" x="28" y="94">Primary signals extracted from the README narrative.</text>
+  <text class="metric-value" x="28" y="48">5</text>
+  <text class="metric-label" x="28" y="74">RESEARCH THEMES</text>
+  <text class="metric-detail" x="28" y="94">Primary directions surfaced from the profile narrative.</text>
 </g><g transform="translate(840 264)">
   <rect width="288" height="112" rx="28" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.1)" />
-  <text class="metric-value" x="28" y="48">1</text>
-  <text class="metric-label" x="28" y="74">CORE SECTIONS</text>
-  <text class="metric-detail" x="28" y="94">Top-level content blocks kept aligned with the profile README.</text>
+  <text class="metric-value" x="28" y="48">8</text>
+  <text class="metric-label" x="28" y="74">SELECTED OUTPUTS</text>
+  <text class="metric-detail" x="28" y="94">Highlighted publications and patents visible on the page.</text>
 </g><g transform="translate(840 402)">
   <rect width="288" height="112" rx="28" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.1)" />
-  <text class="metric-value" x="28" y="48">1</text>
-  <text class="metric-label" x="28" y="74">OUTBOUND LINKS</text>
-  <text class="metric-detail" x="28" y="94">Direct paths for deeper context, verification, and contact.</text>
+  <text class="metric-value" x="28" y="48">5</text>
+  <text class="metric-label" x="28" y="74">PUBLIC LINKS</text>
+  <text class="metric-detail" x="28" y="94">Homepage, scholar, ORCID, GitHub, and direct contact endpoints.</text>
 </g>
           <text class="url" x="72" y="582">https://concrete-sangminlee.github.io/</text>
         </svg>
