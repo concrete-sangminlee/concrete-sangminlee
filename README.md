@@ -7,8 +7,6 @@
 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/concrete-sangminlee)
 [![Email](https://img.shields.io/badge/Email-CA5A3F?style=for-the-badge&logo=gmail&logoColor=white)](mailto:201612445@snu.ac.kr)
 
-![Research banner](https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/main/docs/profile-banner.png)
-
 Ph.D. candidate in Artificial Intelligence at **Seoul National University**.
 
 Academic researcher working on **AI for resilient infrastructure**, especially structural health monitoring, wind engineering, automated non-destructive testing, and engineering-focused LLM systems.
