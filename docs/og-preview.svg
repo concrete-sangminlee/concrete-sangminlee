@@ -1,6 +1,6 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
           <title id="title">Sang Min Lee profile preview</title>
-          <desc id="desc">Ph.D. candidate in Artificial Intelligence at Seoul National University, advised by Prof. Thomas H.-K. Kang. Academic researcher working on AI for resilient infrastructure, espe...</desc>
+          <desc id="desc">Ph.D. candidate in Artificial Intelligence at Seoul National University. Academic researcher working on AI for resilient infrastructure, especially structural health monitoring,...</desc>
           <defs>
             <linearGradient id="bg" x1="0%" x2="100%" y1="0%" y2="100%">
               <stop offset="0%" stop-color="#132824" />
@@ -61,7 +61,7 @@
           <rect x="36" y="36" width="1128" height="558" rx="36" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.09)" />
           <text class="eyebrow" x="72" y="88">ACADEMIC RESEARCH PROFILE</text>
           <text class="title" x="72" y="182"><tspan x="72" dy="0">Sang Min Lee</tspan></text>
-          <text class="body" x="72" y="322"><tspan x="72" dy="0">Ph.D. candidate in Artificial Intelligence</tspan><tspan x="72" dy="40">at Seoul National University, advised by</tspan><tspan x="72" dy="40">Prof. Thomas H.-K. Kang. Academic</tspan></text>
+          <text class="body" x="72" y="322"><tspan x="72" dy="0">Ph.D. candidate in Artificial Intelligence</tspan><tspan x="72" dy="40">at Seoul National University. Academic</tspan><tspan x="72" dy="40">researcher working on AI for resilient</tspan></text>
           <g transform="translate(72 452)">
   <rect width="268" height="42" rx="21" fill="rgba(255,255,255,0.16)" stroke="rgba(255,255,255,0.18)" />
   <text class="chip" x="18" y="27">Structural health monitoring</text>

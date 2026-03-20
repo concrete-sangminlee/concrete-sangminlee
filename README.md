@@ -1,6 +1,6 @@
 # Sang Min Lee
 
-Ph.D. candidate in Artificial Intelligence at **Seoul National University**, advised by **Prof. Thomas H.-K. Kang**.
+Ph.D. candidate in Artificial Intelligence at **Seoul National University**.
 
 Academic researcher working on **AI for resilient infrastructure**, especially structural health monitoring, wind engineering, automated non-destructive testing, and engineering-focused LLM systems.
 
