@@ -71,14 +71,6 @@ Interested in research collaboration, interdisciplinary AI + structural engineer
 
 ---
 
-## GitHub Snapshot
-
-[![GitHub Stats](https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/output/github-stats.svg)](https://github.com/concrete-sangminlee)
-[![Top Languages](https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/output/top-langs.svg)](https://github.com/concrete-sangminlee)
-[![GitHub Streak](https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/output/streak-stats.svg)](https://github.com/concrete-sangminlee)
-
----
-
 ## Contribution Activity
 
 [![Contribution Snake](https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/output/github-contribution-grid-snake.svg)](https://github.com/concrete-sangminlee)
