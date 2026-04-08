@@ -7,6 +7,7 @@ All output is pure SVG built with Python stdlib — no external packages.
 from __future__ import annotations
 
 import argparse
+import html
 import math
 import os
 import textwrap
@@ -24,7 +25,8 @@ LIGHT = {
     "teal": "#0f766e",
     "gold": "#d1a654",
     "grid": "#d6cfc3",
-    "area_fill": "rgba(202,90,63,0.18)",
+    "area_fill": "#ca5a3f",
+    "area_fill_opacity": "0.18",
     "area_stroke": "#ca5a3f",
     "dot": "#ca5a3f",
 }
@@ -38,7 +40,8 @@ DARK = {
     "teal": "#0f766e",
     "gold": "#d1a654",
     "grid": "#2a4a45",
-    "area_fill": "rgba(209,166,84,0.22)",
+    "area_fill": "#d1a654",
+    "area_fill_opacity": "0.22",
     "area_stroke": "#d1a654",
     "dot": "#d1a654",
 }
@@ -120,7 +123,7 @@ def _render_tech_stack(palette: dict[str, str]) -> str:
             f'<text x="{CARD_PAD}" y="{y + 14}" '
             f'font-family="\'Segoe UI\', sans-serif" font-size="{CATEGORY_FONT}" '
             f'font-weight="600" fill="{palette["muted"]}" '
-            f'letter-spacing="0.5">{cat_label.upper()}</text>'
+            f'letter-spacing="0.5">{html.escape(cat_label.upper())}</text>'
         )
         y += 24
 
@@ -137,7 +140,7 @@ def _render_tech_stack(palette: dict[str, str]) -> str:
                 f'<text x="{x + pw / 2}" y="{y + PILL_H / 2 + 1}" '
                 f'font-family="\'Segoe UI\', sans-serif" font-size="{PILL_FONT}" '
                 f'font-weight="500" fill="#ffffff" text-anchor="middle" '
-                f'dominant-baseline="central">{name}</text>'
+                f'dominant-baseline="central">{html.escape(name)}</text>'
             )
             x += pw + PILL_GAP
         max_row_width = max(max_row_width, x)
@@ -217,7 +220,7 @@ def _render_radar(palette: dict[str, str]) -> str:
     )
     parts.append(
         f'<polygon points="{data_points}" '
-        f'fill="{palette["area_fill"]}" '
+        f'fill="{palette["area_fill"]}" fill-opacity="{palette["area_fill_opacity"]}" '
         f'stroke="{palette["area_stroke"]}" stroke-width="2" />'
     )
 
@@ -245,7 +248,7 @@ def _render_radar(palette: dict[str, str]) -> str:
                 f'font-family="\'Segoe UI\', sans-serif" font-size="12" '
                 f'font-weight="500" fill="{palette["ink"]}" '
                 f'text-anchor="{anchor}" dominant-baseline="central">'
-                f'{line}</text>'
+                f'{html.escape(line)}</text>'
             )
 
     return textwrap.dedent(f"""\
