@@ -89,8 +89,6 @@ Member of ASCE, ACI, KCI, AIK, KSMI | WEIK Organizing Committee (2025)
 
 <div align="center">
 
-**Seeking collaborators with structural sensor datasets for anomaly detection, and industry partners for RAG-based code compliance tools.**
-
 201612445@snu.ac.kr · [concrete-sangminlee.github.io](https://concrete-sangminlee.github.io/)
 
 </div>
