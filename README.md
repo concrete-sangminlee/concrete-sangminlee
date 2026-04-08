@@ -1,12 +1,8 @@
 <div align="center">
 
-<picture>
-<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/output/hero-banner-dark.svg" />
-<source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/output/hero-banner.svg" />
-<img alt="Sang Min Lee — AI for Resilient Infrastructure" src="https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/output/hero-banner.svg" width="100%" />
-</picture>
+# Sang Min Lee
 
-<br>
+**Ph.D. Candidate in AI | Seoul National University**
 
 [![Profile Site](https://img.shields.io/badge/Profile_Site-102522?style=for-the-badge&logo=googlechrome&logoColor=white)](https://concrete-sangminlee.github.io/)
 [![Google Scholar](https://img.shields.io/badge/Google_Scholar-4285F4?style=for-the-badge&logo=googlescholar&logoColor=white)](https://scholar.google.com/citations?user=ogvd_LsAAAAJ&hl=en)
@@ -17,8 +13,6 @@
 </div>
 
 My research develops machine learning methods for automated structural inspection and monitoring. I work on deep anomaly detection for structural health monitoring, AI-assisted non-destructive testing of concrete, and retrieval-augmented generation systems for engineering design codes. This work bridges AI and civil engineering to create practical, deployable tools for infrastructure safety.
-
-**Advisor:** [Prof. Thomas H.-K. Kang](https://scholar.google.com/citations?user=_gH9NNEAAAAJ&hl=en) (Fellow of ACI, PTI, KAST) | **Lab:** [HPSE Lab](http://hpse.snu.ac.kr/), Dept. of Architecture & Architectural Engineering, Seoul National University
 
 ---
 
