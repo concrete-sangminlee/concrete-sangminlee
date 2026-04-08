@@ -23,12 +23,6 @@ Interested in research collaboration, interdisciplinary AI + structural engineer
 ![OpenCV](https://img.shields.io/badge/OpenCV-0f766e?style=for-the-badge&logo=opencv&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-ca5a3f?style=for-the-badge&logo=docker&logoColor=white)
 
-<picture>
-<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/output/tech-stack-dark.svg" />
-<source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/output/tech-stack.svg" />
-<img alt="Tech Stack" src="https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/output/tech-stack.svg" width="100%" />
-</picture>
-
 ---
 
 ## Featured Research
@@ -56,12 +50,6 @@ Interested in research collaboration, interdisciplinary AI + structural engineer
 - AI for resilient infrastructure
 - LLM and RAG for engineering standards
 - Lightweight models for field deployment
-
-<picture>
-<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/output/research-areas-dark.svg" />
-<source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/output/research-areas.svg" />
-<img alt="Research Areas" src="https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/output/research-areas.svg" width="100%" />
-</picture>
 
 ---
 
