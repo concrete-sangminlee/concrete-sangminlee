@@ -12,25 +12,15 @@
 
 </div>
 
-Aging infrastructure worldwide demands inspection and monitoring methods that scale beyond manual effort. My research addresses this by developing machine learning systems that automate structural evaluation — from deep anomaly detection that identifies damage in health monitoring data, to computer vision pipelines that classify concrete cracks and automate impact-echo testing, to RAG systems that help engineers navigate complex design codes. Coming from a double major in architecture/engineering and electrical/computer engineering, I work at the intersection where domain knowledge meets ML methodology to build tools that are not just accurate, but deployable in real inspection workflows.
+ML for structural health monitoring, concrete inspection, and wind engineering. Building practical AI tools for infrastructure — from crack detection to design code assistants.
 
 ---
 
 ## Research
 
-| Area | Focus |
-|------|-------|
-| **Structural Health Monitoring** | Deep SVDD for damage detection and system identification under sparse/noisy sensing. Lightweight models for on-device deployment. |
-| **Automated NDT & Inspection** | ML pipelines for impact-echo testing automation and concrete crack classification. Practical systems that reduce manual effort. |
-| **AI for Engineering Standards** | RAG systems for wind load design codes. LLM workflows for domain-specific technical language and code requirements. |
-
----
-
-## Code & Tools
-
-- [**paperfactory**](https://github.com/concrete-sangminlee/paperfactory) — AI agent for civil engineering research papers: 15 journal scrapers, 18 analysis utilities, CLI + Web UI
-- [**WindTimeHistoryReconstruction**](https://github.com/concrete-sangminlee/WindTimeHistoryReconstruction) — LSTM-based reconstruction of full wind pressure fields from sparse tap arrays (related to Patent KR 10-2480382)
-- [**SNU_ArchitectureAndAI**](https://github.com/concrete-sangminlee/SNU_ArchitectureAndAI) — Course materials for "Architecture and AI" graduate course at SNU
+- **Structural Health Monitoring** — Anomaly detection and system identification using deep SVDD
+- **Concrete NDT** — Automated impact-echo testing and crack image classification
+- **Wind Engineering** — RAG for wind load design codes, wind pressure prediction
 
 ---
 
@@ -40,10 +30,10 @@ Aging infrastructure worldwide demands inspection and monitoring methods that sc
 
 | Year | Publication |
 |:----:|-------------|
-| 2025 | **S.M. Lee**, J. Hong, H. Choi, T.H.K. Kang. "Machine learning assisted method for automated impact-echo testing of concrete structures." *J. Nondestructive Evaluation* 44(4), 121. [[DOI](https://doi.org/10.1007/s10921-025-01260-3)] |
+| 2025 | **S.M. Lee**, J. Hong, H. Choi, T.H.K. Kang. "Machine learning assisted method for automated impact-echo testing of concrete structures." *J. Nondestructive Evaluation* 44(4). [[DOI](https://doi.org/10.1007/s10921-025-01260-3)] |
 | 2025 | **S.M. Lee**, H.S. Choi, C. Kim, T.H.K. Kang. "Lightweight alternative ML model for automating concrete crack image classification." *ACI Structural J.* 122(5). [[DOI](https://doi.org/10.14359/51746755)] |
 | 2025 | Y.I. Lee, **S.M. Lee**, T.H.K. Kang. "Multiclass deep SVDD for structural health monitoring." *J. Structural Engineering* 151(12). [[DOI](https://doi.org/10.1061/JSENDH.STENG-14823)] |
-| 2022 | **S.M. Lee**, H.S. Sung, T.H.K. Kang. "Comparison of performance for predicting compressive strength of concrete using ML." *J. Korea Concrete Inst.* 34(5), 505-513. [[DOI](https://doi.org/10.4334/jkci.2022.34.5.505)] |
+| 2022 | **S.M. Lee**, H.S. Sung, T.H.K. Kang. "Comparison of performance for predicting compressive strength of concrete using ML." *J. Korea Concrete Inst.* 34(5). [[DOI](https://doi.org/10.4334/jkci.2022.34.5.505)] |
 
 ### Selected Conference Papers
 
@@ -53,21 +43,32 @@ Aging infrastructure worldwide demands inspection and monitoring methods that sc
 | 2024 | **S.M. Lee**, Y.I. Lee, T. Kang. "Multi-sphere deep SVDD for system identification of building structure." *ACEM 2024*. |
 | 2024 | **S.M. Lee**, H.S. Choi, C. Kim, T. Kang. "Representation learning for classification of concrete crack images." *Structures Congress*, Seoul. |
 | 2022 | **S.M. Lee**, T. Kang. "Clustering wind pressure tap using dynamic time warping." *EACWE 2022*. |
-| 2021 | **S.M. Lee**, T. Kang. "Prediction of wind pressure coefficients on high-rise building facade using LSTM RNN model." *WCAASE 2021*. |
 
 [Full list on Google Scholar →](https://scholar.google.com/citations?user=ogvd_LsAAAAJ&hl=en)
 
 ---
 
-## Projects & Patents
+## Patents
 
-- **Hyper-converged Forensic Research Center for Infrastructure** (2021-2027) — NRF Korea, funded by MSIT
-- **Smart City Innovative Technology Demonstration** (2024-2025) — KAIA, funded by MOLIT
-- **AI for Construction Research** (2024) — Sejong Construction & Seoul National University
+![Granted](https://img.shields.io/badge/KR_10--2611457_B1-Granted_2023-0f766e?style=flat-square) **AI-based defect detection system inside concrete members** [[Google Patents](https://patents.google.com/patent/KR102611457B1/en)]
 
-![Granted](https://img.shields.io/badge/KR_10--2611457_B1-Granted_2023-0f766e?style=flat-square) **AI-based defect detection system inside concrete members** — Bidirectional LSTM for automated NDT. [[Google Patents](https://patents.google.com/patent/KR102611457B1/en)]
+![Granted](https://img.shields.io/badge/KR_10--2480382_B1-Granted_2022-0f766e?style=flat-square) **Wind load estimation system based on artificial intelligence** [[Google Patents](https://patents.google.com/patent/KR102480382B1/en)]
 
-![Granted](https://img.shields.io/badge/KR_10--2480382_B1-Granted_2022-0f766e?style=flat-square) **Wind load estimation system based on AI** — LSTM RNN for predicting unmeasured wind pressures. [[Google Patents](https://patents.google.com/patent/KR102480382B1/en)]
+---
+
+## Projects
+
+- **Hyper-converged Forensic Research Center for Infrastructure** (2021-2027) — NRF Korea
+- **Smart City Innovative Technology Demonstration** (2024-2025) — KAIA
+- **AI for Construction Research** (2024) — Sejong Construction & SNU
+
+---
+
+## Code
+
+- [**paperfactory**](https://github.com/concrete-sangminlee/paperfactory) — AI agent for civil engineering research papers (15 journals, 18 utilities, CLI + Web UI)
+- [**WindTimeHistoryReconstruction**](https://github.com/concrete-sangminlee/WindTimeHistoryReconstruction) — Wind time history reconstruction
+- [**SNU_ArchitectureAndAI**](https://github.com/concrete-sangminlee/SNU_ArchitectureAndAI) — "Architecture and AI" graduate course materials, SNU
 
 ---
 
