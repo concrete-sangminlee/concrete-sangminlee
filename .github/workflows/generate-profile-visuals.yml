@@ -27,6 +27,14 @@ jobs:
             dist/github-contribution-grid-snake.svg?palette=github-light&color_snake=%23ca5a3f
             dist/github-contribution-grid-snake-dark.svg?palette=github-dark&color_snake=%23d1a654
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Generate custom profile SVGs
+        run: python scripts/generate_visuals.py --output-dir dist
+
       - name: Publish visuals to output branch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

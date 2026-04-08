@@ -61,6 +61,29 @@ Applied machine learning researcher.
 Infrastructure-focused machine learning.
 """
 
+HTML_BLOCK_MARKDOWN = """# Jane Doe
+
+Applied machine learning researcher.
+
+## Gallery
+
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://example.com/dark.svg" />
+<source media="(prefers-color-scheme: light)" srcset="https://example.com/light.svg" />
+<img alt="Visual" src="https://example.com/light.svg" width="100%" />
+</picture>
+
+## Publications
+
+<details>
+<summary><strong>Selected Papers</strong></summary>
+
+- Paper one about structural monitoring.
+- Paper two about wind engineering.
+
+</details>
+"""
+
 
 class BuildReadmePageTests(unittest.TestCase):
     def test_parse_profile_extracts_richer_blocks(self) -> None:
@@ -125,6 +148,27 @@ class BuildReadmePageTests(unittest.TestCase):
         self.assertIn("media-group-stats", output)
         self.assertIn("markdown-image-snake", output)
         self.assertNotIn("img.shields.io", MODULE.summarize_description(MODULE.parse_profile(MEDIA_MARKDOWN), []))
+
+    def test_html_blocks_pass_through_unchanged(self) -> None:
+        profile = MODULE.parse_profile(HTML_BLOCK_MARKDOWN)
+
+        gallery = next(s for s in profile.sections if s.heading == "Gallery")
+        self.assertEqual(len(gallery.blocks), 1)
+        self.assertEqual(gallery.blocks[0].kind, "html")
+        self.assertIn("<picture>", gallery.blocks[0].items[0])
+        self.assertIn("</picture>", gallery.blocks[0].items[0])
+
+        pubs = next(s for s in profile.sections if s.heading == "Publications")
+        html_blocks = [b for b in pubs.blocks if b.kind == "html"]
+        list_blocks = [b for b in pubs.blocks if b.kind == "list"]
+        self.assertTrue(any("<details>" in b.items[0] for b in html_blocks))
+        self.assertTrue(any("</details>" in b.items[0] for b in html_blocks))
+        self.assertEqual(len(list_blocks), 1)
+
+        output = MODULE.render_site(HTML_BLOCK_MARKDOWN, generated_at=FIXED_AT)
+        self.assertIn("<picture>", output)
+        self.assertIn("<details>", output)
+        self.assertNotIn("&lt;picture&gt;", output)
 
     def test_build_writes_expected_output_bundle(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:

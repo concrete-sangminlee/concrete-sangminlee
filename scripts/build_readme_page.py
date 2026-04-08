@@ -1023,6 +1023,7 @@ def parse_blocks(lines: list[str]) -> list[Block]:
     bullets: list[str] = []
     ordered: list[str] = []
     quote: list[str] = []
+    html_block: list[str] = []
 
     def flush_paragraph() -> None:
         if paragraph:
@@ -1044,11 +1045,17 @@ def parse_blocks(lines: list[str]) -> list[Block]:
             blocks.append(Block(kind="quote", items=[" ".join(quote)]))
             quote.clear()
 
+    def flush_html() -> None:
+        if html_block:
+            blocks.append(Block(kind="html", items=["\n".join(html_block)]))
+            html_block.clear()
+
     def flush_all() -> None:
         flush_paragraph()
         flush_bullets()
         flush_ordered()
         flush_quote()
+        flush_html()
 
     for line in [*lines, ""]:
         stripped = line.strip()
@@ -1066,12 +1073,14 @@ def parse_blocks(lines: list[str]) -> list[Block]:
             flush_paragraph()
             flush_bullets()
             flush_ordered()
+            flush_html()
             quote.append(stripped[2:].strip())
             continue
         if stripped.startswith(("- ", "* ")):
             flush_paragraph()
             flush_ordered()
             flush_quote()
+            flush_html()
             bullets.append(stripped[2:].strip())
             continue
         ordered_match = ORDERED_ITEM_RE.match(stripped)
@@ -1079,12 +1088,22 @@ def parse_blocks(lines: list[str]) -> list[Block]:
             flush_paragraph()
             flush_bullets()
             flush_quote()
+            flush_html()
             ordered.append(ordered_match.group("item").strip())
+            continue
+
+        if stripped.startswith("<"):
+            flush_paragraph()
+            flush_bullets()
+            flush_ordered()
+            flush_quote()
+            html_block.append(stripped)
             continue
 
         flush_bullets()
         flush_ordered()
         flush_quote()
+        flush_html()
         paragraph.append(stripped)
 
     return blocks
@@ -1610,6 +1629,8 @@ def render_blocks(blocks: list[Block]) -> str:
             parts.append(render_detail_list(block.items))
         elif block.kind == "ordered_list":
             parts.append(render_timeline(block.items))
+        elif block.kind == "html":
+            parts.append(block.items[0])
     return "".join(parts)
 
 
