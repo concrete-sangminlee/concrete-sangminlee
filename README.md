@@ -56,10 +56,10 @@ Aging infrastructure worldwide demands inspection and monitoring methods that sc
 
 | Year | Publication |
 |:----:|-------------|
-| 2025 | **S.M. Lee**, J. Hong, H. Choi, T.H.K. Kang. "Machine learning assisted method for automated impact-echo testing of concrete structures." *J. Nondestructive Evaluation* 44(4), 121. |
-| 2025 | **S.M. Lee**, H.S. Choi, C. Kim, T.H.K. Kang. "Lightweight alternative ML model for automating concrete crack image classification." *ACI Structural J.* 122(5). |
-| 2025 | Y.I. Lee, **S.M. Lee**, T.H.K. Kang. "Multiclass deep SVDD for structural health monitoring." *J. Structural Engineering* 151(12). |
-| 2022 | **S.M. Lee**, H.S. Sung, T.H.K. Kang. "Comparison of performance for predicting compressive strength of concrete using ML." *J. Korea Concrete Inst.* 34(5), 505-513. |
+| 2025 | **S.M. Lee**, J. Hong, H. Choi, T.H.K. Kang. "Machine learning assisted method for automated impact-echo testing of concrete structures." *J. Nondestructive Evaluation* 44(4), 121. [[DOI](https://doi.org/10.1007/s10921-025-01260-3)] |
+| 2025 | **S.M. Lee**, H.S. Choi, C. Kim, T.H.K. Kang. "Lightweight alternative ML model for automating concrete crack image classification." *ACI Structural J.* 122(5). [[DOI](https://doi.org/10.14359/51746755)] |
+| 2025 | Y.I. Lee, **S.M. Lee**, T.H.K. Kang. "Multiclass deep SVDD for structural health monitoring." *J. Structural Engineering* 151(12). [[DOI](https://doi.org/10.1061/JSENDH.STENG-14823)] |
+| 2022 | **S.M. Lee**, H.S. Sung, T.H.K. Kang. "Comparison of performance for predicting compressive strength of concrete using ML." *J. Korea Concrete Inst.* 34(5), 505-513. [[DOI](https://doi.org/10.4334/jkci.2022.34.5.505)] |
 
 ### Selected Conference Papers
 
