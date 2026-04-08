@@ -12,15 +12,15 @@
 
 </div>
 
-ML for structural health monitoring, concrete inspection, and wind engineering. Building practical AI tools for infrastructure — from crack detection to design code assistants.
+ML for structural health monitoring, concrete inspection, and wind engineering. Building practical AI tools for infrastructure.
 
 ---
 
 ## Research
 
-- **Structural Health Monitoring** — Anomaly detection and system identification using deep SVDD
-- **Concrete NDT** — Automated impact-echo testing and crack image classification
-- **Wind Engineering** — RAG for wind load design codes, wind pressure prediction
+- **Structural Health Monitoring**: Anomaly detection and system identification using deep SVDD
+- **Concrete NDT**: Automated impact-echo testing and crack image classification
+- **Wind Engineering**: RAG for wind load design codes, wind pressure prediction
 
 ---
 
@@ -58,17 +58,17 @@ ML for structural health monitoring, concrete inspection, and wind engineering. 
 
 ## Projects
 
-- **Hyper-converged Forensic Research Center for Infrastructure** (2021-2027) — NRF Korea
-- **Smart City Innovative Technology Demonstration** (2024-2025) — KAIA
-- **AI for Construction Research** (2024) — Sejong Construction & SNU
+- **Hyper-converged Forensic Research Center for Infrastructure** (2021-2027): NRF Korea
+- **Smart City Innovative Technology Demonstration** (2024-2025): KAIA
+- **AI for Construction Research** (2024): Sejong Construction & SNU
 
 ---
 
 ## Code
 
-- [**paperfactory**](https://github.com/concrete-sangminlee/paperfactory) — AI agent for civil engineering research papers (15 journals, 18 utilities, CLI + Web UI)
-- [**WindTimeHistoryReconstruction**](https://github.com/concrete-sangminlee/WindTimeHistoryReconstruction) — Wind time history reconstruction
-- [**SNU_ArchitectureAndAI**](https://github.com/concrete-sangminlee/SNU_ArchitectureAndAI) — "Architecture and AI" graduate course materials, SNU
+- [**paperfactory**](https://github.com/concrete-sangminlee/paperfactory): AI agent for civil engineering research papers (15 journals, 18 utilities, CLI + Web UI)
+- [**WindTimeHistoryReconstruction**](https://github.com/concrete-sangminlee/WindTimeHistoryReconstruction): Wind time history reconstruction
+- [**SNU_ArchitectureAndAI**](https://github.com/concrete-sangminlee/SNU_ArchitectureAndAI): "Architecture and AI" graduate course materials, SNU
 
 ---
 
