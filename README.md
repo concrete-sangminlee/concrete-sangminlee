@@ -1,12 +1,8 @@
 <div align="center">
 
-<picture>
-<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/output/hero-banner-dark.svg" />
-<source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/output/hero-banner.svg" />
-<img alt="Sang Min Lee — Ph.D. Candidate in AI, Seoul National University" src="https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/output/hero-banner.svg" width="100%" />
-</picture>
+# Sang Min Lee
 
-<br>
+**Ph.D. Candidate in AI | Seoul National University**
 
 [![Profile Site](https://img.shields.io/badge/Profile_Site-CA5A3F?style=for-the-badge&logo=googlechrome&logoColor=white)](https://concrete-sangminlee.github.io/)
 [![Google Scholar](https://img.shields.io/badge/Scholar-102522?style=for-the-badge&logo=googlescholar&logoColor=white)](https://scholar.google.com/citations?user=ogvd_LsAAAAJ&hl=en)

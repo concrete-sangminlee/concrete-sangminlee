@@ -1,6 +1,6 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
-          <title id="title">Profile profile preview</title>
-          <desc id="desc">Aging infrastructure worldwide demands inspection and monitoring methods that scale beyond manual effort. My research addresses this by developing machine learning systems that...</desc>
+          <title id="title">Sang Min Lee profile preview</title>
+          <desc id="desc">Ph.D. Candidate in AI | Seoul National University Aging infrastructure worldwide demands inspection and monitoring methods that scale beyond manual effort. My research addresses...</desc>
           <defs>
             <linearGradient id="bg" x1="0%" x2="100%" y1="0%" y2="100%">
               <stop offset="0%" stop-color="#132824" />
@@ -60,8 +60,8 @@
           <rect width="1200" height="630" rx="0" fill="url(#teal)" />
           <rect x="36" y="36" width="1128" height="558" rx="36" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.09)" />
           <text class="eyebrow" x="72" y="88">ACADEMIC RESEARCH PROFILE</text>
-          <text class="title" x="72" y="182"><tspan x="72" dy="0">Profile</tspan></text>
-          <text class="body" x="72" y="322"><tspan x="72" dy="0">Aging infrastructure worldwide demands</tspan><tspan x="72" dy="40">inspection and monitoring methods that</tspan><tspan x="72" dy="40">scale beyond manual effort. My research</tspan></text>
+          <text class="title" x="72" y="182"><tspan x="72" dy="0">Sang Min Lee</tspan></text>
+          <text class="body" x="72" y="322"><tspan x="72" dy="0">Ph.D. Candidate in AI | Seoul National</tspan><tspan x="72" dy="40">University Aging infrastructure worldwide</tspan><tspan x="72" dy="40">demands inspection and monitoring methods</tspan></text>
           <g transform="translate(72 452)">
   <rect width="270" height="42" rx="21" fill="rgba(255,255,255,0.16)" stroke="rgba(255,255,255,0.18)" />
   <text class="chip" x="18" y="27">SNU_ArchitectureAndAI — Cou...</text>
