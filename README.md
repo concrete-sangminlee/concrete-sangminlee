@@ -1,8 +1,12 @@
 <div align="center">
 
-# Sang Min Lee
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/output/hero-banner-dark.svg" />
+<source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/output/hero-banner.svg" />
+<img alt="Sang Min Lee — Ph.D. Candidate in AI, Seoul National University" src="https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/output/hero-banner.svg" width="100%" />
+</picture>
 
-**Ph.D. Candidate in AI | Seoul National University**
+<br>
 
 [![Profile Site](https://img.shields.io/badge/Profile_Site-CA5A3F?style=for-the-badge&logo=googlechrome&logoColor=white)](https://concrete-sangminlee.github.io/)
 [![Google Scholar](https://img.shields.io/badge/Scholar-102522?style=for-the-badge&logo=googlescholar&logoColor=white)](https://scholar.google.com/citations?user=ogvd_LsAAAAJ&hl=en)
@@ -20,33 +24,34 @@ Aging infrastructure worldwide demands inspection and monitoring methods that sc
 
 ## Research
 
-**Structural Health Monitoring & Anomaly Detection** — Deep support vector data description for damage detection and system identification under sparse or noisy sensing conditions. Lightweight models designed for on-device deployment in field inspection scenarios.
-
-**Automated NDT & Concrete Inspection** — Machine learning pipelines for impact-echo testing automation and concrete crack image classification. Focus on practical systems that reduce manual effort while maintaining reliability.
-
-**AI for Engineering Standards** — Retrieval-augmented generation (RAG) systems for wind load design codes and engineering standards. Building LLM workflows that understand domain-specific technical language and code requirements.
+| Area | Focus |
+|------|-------|
+| **Structural Health Monitoring** | Deep SVDD for damage detection and system identification under sparse/noisy sensing. Lightweight models for on-device deployment. |
+| **Automated NDT & Inspection** | ML pipelines for impact-echo testing automation and concrete crack classification. Practical systems that reduce manual effort. |
+| **AI for Engineering Standards** | RAG systems for wind load design codes. LLM workflows for domain-specific technical language and code requirements. |
 
 ---
 
 ## Code & Tools
 
-- [**paperfactory**](https://github.com/concrete-sangminlee/paperfactory) — AI agent for civil engineering research papers: 15 journal scrapers, 18 analysis utilities, CLI + Web UI
-- [**WindTimeHistoryReconstruction**](https://github.com/concrete-sangminlee/WindTimeHistoryReconstruction) — LSTM-based reconstruction of full wind pressure fields from sparse tap arrays (related to Patent KR 10-2480382)
-- [**SNU_ArchitectureAndAI**](https://github.com/concrete-sangminlee/SNU_ArchitectureAndAI) — Course materials for "Architecture and AI" graduate course at SNU
+<div align="center">
 
-<details>
-<summary>Contribution activity</summary>
-<br>
-
-<a href="https://github.com/concrete-sangminlee">
+<a href="https://github.com/concrete-sangminlee/paperfactory">
 <picture>
-<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/output/github-contribution-grid-snake-dark.svg" />
-<source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/output/github-contribution-grid-snake.svg" />
-<img alt="Contribution Snake" src="https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/output/github-contribution-grid-snake.svg" width="100%" />
+<source media="(prefers-color-scheme: dark)" srcset="https://github-readme-stats.vercel.app/api/pin/?username=concrete-sangminlee&repo=paperfactory&bg_color=132522&title_color=d1a654&icon_color=ca5a3f&text_color=f8f2ea&border_color=2a4a45" />
+<img src="https://github-readme-stats.vercel.app/api/pin/?username=concrete-sangminlee&repo=paperfactory&bg_color=f6efe3&title_color=102522&icon_color=ca5a3f&text_color=556762&border_color=d6cfc3" alt="paperfactory" />
+</picture>
+</a>
+<a href="https://github.com/concrete-sangminlee/WindTimeHistoryReconstruction">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://github-readme-stats.vercel.app/api/pin/?username=concrete-sangminlee&repo=WindTimeHistoryReconstruction&bg_color=132522&title_color=d1a654&icon_color=ca5a3f&text_color=f8f2ea&border_color=2a4a45" />
+<img src="https://github-readme-stats.vercel.app/api/pin/?username=concrete-sangminlee&repo=WindTimeHistoryReconstruction&bg_color=f6efe3&title_color=102522&icon_color=ca5a3f&text_color=556762&border_color=d6cfc3" alt="WindTimeHistoryReconstruction" />
 </picture>
 </a>
 
-</details>
+</div>
+
+- [**SNU_ArchitectureAndAI**](https://github.com/concrete-sangminlee/SNU_ArchitectureAndAI) — Course materials for "Architecture and AI" graduate course at SNU
 
 ---
 
@@ -121,6 +126,7 @@ Aging infrastructure worldwide demands inspection and monitoring methods that sc
 - SNU AI Graduate School Scholarship (2023, 2024)
 - SNU Outstanding Teaching Assistant Award (2022)
 - Korea Concrete Institute Outstanding Presentation Award (2022)
+- Big Data Analysis Engineer Certification (2025)
 
 Member of ASCE, ACI, KCI, AIK, KSMI | WEIK Organizing Committee (2025)
 
@@ -130,6 +136,7 @@ Member of ASCE, ACI, KCI, AIK, KSMI | WEIK Organizing Committee (2025)
 
 **Seeking collaborators with structural sensor datasets for validating anomaly detection methods, and industry partners interested in piloting RAG-based code compliance tools.**
 
-201612445@snu.ac.kr | [concrete-sangminlee.github.io](https://concrete-sangminlee.github.io/)
+[![Email](https://img.shields.io/badge/201612445@snu.ac.kr-102522?style=flat-square&logo=gmail&logoColor=white)](mailto:201612445@snu.ac.kr)
+[![Site](https://img.shields.io/badge/concrete--sangminlee.github.io-CA5A3F?style=flat-square&logo=googlechrome&logoColor=white)](https://concrete-sangminlee.github.io/)
 
 </div>
