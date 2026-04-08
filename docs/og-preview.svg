@@ -1,6 +1,6 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
-          <title id="title">Sang Min Lee profile preview</title>
-          <desc id="desc">Academic researcher working on AI for resilient infrastructure, especially structural health monitoring, wind engineering, automated non-destructive testing, and engineering-foc...</desc>
+          <title id="title">Profile profile preview</title>
+          <desc id="desc">My research develops machine learning methods for automated structural inspection and monitoring. I work on deep anomaly detection for structural health monitoring, AI-assisted...</desc>
           <defs>
             <linearGradient id="bg" x1="0%" x2="100%" y1="0%" y2="100%">
               <stop offset="0%" stop-color="#132824" />
@@ -60,34 +60,34 @@
           <rect width="1200" height="630" rx="0" fill="url(#teal)" />
           <rect x="36" y="36" width="1128" height="558" rx="36" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.09)" />
           <text class="eyebrow" x="72" y="88">ACADEMIC RESEARCH PROFILE</text>
-          <text class="title" x="72" y="182"><tspan x="72" dy="0">Sang Min Lee</tspan></text>
-          <text class="body" x="72" y="322"><tspan x="72" dy="0">Academic researcher working on AI for</tspan><tspan x="72" dy="40">resilient infrastructure, especially</tspan><tspan x="72" dy="40">structural health monitoring, wind</tspan></text>
+          <text class="title" x="72" y="182"><tspan x="72" dy="0">Profile</tspan></text>
+          <text class="body" x="72" y="322"><tspan x="72" dy="0">My research develops machine learning</tspan><tspan x="72" dy="40">methods for automated structural</tspan><tspan x="72" dy="40">inspection and monitoring. I work on deep</tspan></text>
           <g transform="translate(72 452)">
-  <rect width="268" height="42" rx="21" fill="rgba(255,255,255,0.16)" stroke="rgba(255,255,255,0.18)" />
-  <text class="chip" x="18" y="27">Structural health monitoring</text>
-</g><g transform="translate(354 452)">
-  <rect width="172" height="42" rx="21" fill="rgba(255,255,255,0.16)" stroke="rgba(255,255,255,0.18)" />
-  <text class="chip" x="18" y="27">Wind engineering</text>
-</g><g transform="translate(72 508)">
-  <rect width="260" height="42" rx="21" fill="rgba(255,255,255,0.16)" stroke="rgba(255,255,255,0.18)" />
-  <text class="chip" x="18" y="27">Concrete NDT and inspection</text>
-</g><g transform="translate(346 508)">
   <rect width="270" height="42" rx="21" fill="rgba(255,255,255,0.16)" stroke="rgba(255,255,255,0.18)" />
-  <text class="chip" x="18" y="27">AI for resilient infrastruc...</text>
+  <text class="chip" x="18" y="27">S.M. Lee, J. Hong, H. Choi,...</text>
+</g><g transform="translate(356 452)">
+  <rect width="270" height="42" rx="21" fill="rgba(255,255,255,0.16)" stroke="rgba(255,255,255,0.18)" />
+  <text class="chip" x="18" y="27">S.M. Lee, H.S. Choi, C. Kim...</text>
+</g><g transform="translate(72 508)">
+  <rect width="270" height="42" rx="21" fill="rgba(255,255,255,0.16)" stroke="rgba(255,255,255,0.18)" />
+  <text class="chip" x="18" y="27">Y.I. Lee, S.M. Lee, T.H.K....</text>
+</g><g transform="translate(356 508)">
+  <rect width="270" height="42" rx="21" fill="rgba(255,255,255,0.16)" stroke="rgba(255,255,255,0.18)" />
+  <text class="chip" x="18" y="27">S.M. Lee, H.S. Sung, T.H.K....</text>
 </g>
           <g transform="translate(840 126)">
   <rect width="288" height="112" rx="28" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.1)" />
-  <text class="metric-value" x="28" y="48">5</text>
+  <text class="metric-value" x="28" y="48">4</text>
   <text class="metric-label" x="28" y="74">RESEARCH THEMES</text>
   <text class="metric-detail" x="28" y="94">Primary directions surfaced from the profile narrative.</text>
 </g><g transform="translate(840 264)">
   <rect width="288" height="112" rx="28" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.1)" />
-  <text class="metric-value" x="28" y="48">6</text>
+  <text class="metric-value" x="28" y="48">14</text>
   <text class="metric-label" x="28" y="74">SELECTED OUTPUTS</text>
   <text class="metric-detail" x="28" y="94">Highlighted publications and patents visible on the page.</text>
 </g><g transform="translate(840 402)">
   <rect width="288" height="112" rx="28" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.1)" />
-  <text class="metric-value" x="28" y="48">4</text>
+  <text class="metric-value" x="28" y="48">1</text>
   <text class="metric-label" x="28" y="74">PUBLIC LINKS</text>
   <text class="metric-detail" x="28" y="94">Homepage, scholar, ORCID, GitHub, and direct contact endpoints.</text>
 </g>

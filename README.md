@@ -1,10 +1,12 @@
 <div align="center">
 
-# Sang Min Lee
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/output/hero-banner-dark.svg" />
+<source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/output/hero-banner.svg" />
+<img alt="Sang Min Lee — AI for Resilient Infrastructure" src="https://raw.githubusercontent.com/concrete-sangminlee/concrete-sangminlee/output/hero-banner.svg" width="100%" />
+</picture>
 
-**Ph.D. Candidate in AI | Seoul National University**
-
-Academic researcher working on **AI for resilient infrastructure** — structural health monitoring, wind engineering, automated NDT, and engineering-focused LLM systems.
+<br>
 
 [![Profile Site](https://img.shields.io/badge/Profile_Site-102522?style=for-the-badge&logo=googlechrome&logoColor=white)](https://concrete-sangminlee.github.io/)
 [![Google Scholar](https://img.shields.io/badge/Google_Scholar-4285F4?style=for-the-badge&logo=googlescholar&logoColor=white)](https://scholar.google.com/citations?user=ogvd_LsAAAAJ&hl=en)
@@ -12,194 +14,66 @@ Academic researcher working on **AI for resilient infrastructure** — structura
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/sang-min-lee-3a2568174/)
 [![Email](https://img.shields.io/badge/Email-CA5A3F?style=for-the-badge&logo=gmail&logoColor=white)](mailto:201612445@snu.ac.kr)
 
-<br>
-
-![GitHub followers](https://img.shields.io/github/followers/concrete-sangminlee?style=flat&logo=github&label=Followers)
-![GitHub User's stars](https://img.shields.io/github/stars/concrete-sangminlee?style=flat&logo=github&label=Stars&affiliations=OWNER)
-![Last Commit](https://img.shields.io/github/last-commit/concrete-sangminlee/concrete-sangminlee?style=flat&logo=github&label=Last%20Commit)
-![Profile Views](https://komarev.com/ghpvc/?username=concrete-sangminlee&style=flat&color=ca5a3f&label=Profile+Views)
-
 </div>
 
----
+My research develops machine learning methods for automated structural inspection and monitoring. I work on deep anomaly detection for structural health monitoring, AI-assisted non-destructive testing of concrete, and retrieval-augmented generation systems for engineering design codes. This work bridges AI and civil engineering to create practical, deployable tools for infrastructure safety.
 
-## Research Areas
-
-<table>
-<tr>
-<td align="center" width="33%">
-<br>
-<img width="60" src="https://img.shields.io/badge/-SHM-ca5a3f?style=for-the-badge" />
-<br><br>
-<strong>Structural Health<br>Monitoring</strong>
-<br>
-<sub>Deep learning for damage detection,<br>anomaly identification, system ID</sub>
-<br><br>
-</td>
-<td align="center" width="33%">
-<br>
-<img width="60" src="https://img.shields.io/badge/-Wind-0f766e?style=for-the-badge" />
-<br><br>
-<strong>Wind<br>Engineering</strong>
-<br>
-<sub>RAG for wind load codes,<br>pressure analysis, time-history</sub>
-<br><br>
-</td>
-<td align="center" width="33%">
-<br>
-<img width="60" src="https://img.shields.io/badge/-NDT-d1a654?style=for-the-badge" />
-<br><br>
-<strong>Automated<br>NDT</strong>
-<br>
-<sub>Impact-echo automation,<br>crack classification, inspection AI</sub>
-<br><br>
-</td>
-</tr>
-<tr>
-<td align="center" width="33%">
-<br>
-<img width="60" src="https://img.shields.io/badge/-LLM-102522?style=for-the-badge" />
-<br><br>
-<strong>LLM & RAG<br>Systems</strong>
-<br>
-<sub>Engineering code assistants,<br>retrieval-augmented generation</sub>
-<br><br>
-</td>
-<td align="center" width="33%">
-<br>
-<img width="60" src="https://img.shields.io/badge/-Edge-556762?style=for-the-badge" />
-<br><br>
-<strong>Lightweight<br>ML</strong>
-<br>
-<sub>On-device AI, model compression,<br>field deployment</sub>
-<br><br>
-</td>
-<td align="center" width="33%">
-<br>
-<img width="60" src="https://img.shields.io/badge/-AI-ca5a3f?style=for-the-badge" />
-<br><br>
-<strong>AI for<br>Infrastructure</strong>
-<br>
-<sub>Resilient systems, decision support,<br>practical AI pipelines</sub>
-<br><br>
-</td>
-</tr>
-</table>
+**Advisor:** [Prof. Thomas H.-K. Kang](https://scholar.google.com/citations?user=_gH9NNEAAAAJ&hl=en) (Fellow of ACI, PTI, KAST) | **Lab:** [HPSE Lab](http://hpse.snu.ac.kr/), Dept. of Architecture & Architectural Engineering, Seoul National University
 
 ---
 
-## Tech Stack
+## Research
 
-<table>
-<tr>
-<td><strong>ML & Deep Learning</strong></td>
-<td>
+**Structural Health Monitoring & Anomaly Detection** — Deep support vector data description for damage detection and system identification under sparse or noisy sensing conditions. Lightweight models designed for on-device deployment in field inspection scenarios.
 
-![Python](https://img.shields.io/badge/Python-102522?style=flat-square&logo=python&logoColor=white)
-![PyTorch](https://img.shields.io/badge/PyTorch-ca5a3f?style=flat-square&logo=pytorch&logoColor=white)
-![TensorFlow](https://img.shields.io/badge/TensorFlow-0f766e?style=flat-square&logo=tensorflow&logoColor=white)
-![Keras](https://img.shields.io/badge/Keras-d1a654?style=flat-square&logo=keras&logoColor=white)
-![scikit--learn](https://img.shields.io/badge/scikit--learn-556762?style=flat-square&logo=scikitlearn&logoColor=white)
-![HuggingFace](https://img.shields.io/badge/HuggingFace-102522?style=flat-square&logo=huggingface&logoColor=white)
-![LangChain](https://img.shields.io/badge/LangChain-ca5a3f?style=flat-square&logo=langchain&logoColor=white)
+**Automated NDT & Concrete Inspection** — Machine learning pipelines for impact-echo testing automation and concrete crack image classification. Focus on practical systems that reduce manual effort while maintaining reliability.
 
-</td>
-</tr>
-<tr>
-<td><strong>Data & Scientific</strong></td>
-<td>
-
-![NumPy](https://img.shields.io/badge/NumPy-102522?style=flat-square&logo=numpy&logoColor=white)
-![Pandas](https://img.shields.io/badge/Pandas-ca5a3f?style=flat-square&logo=pandas&logoColor=white)
-![SciPy](https://img.shields.io/badge/SciPy-0f766e?style=flat-square&logo=scipy&logoColor=white)
-![Matplotlib](https://img.shields.io/badge/Matplotlib-d1a654?style=flat-square&logo=plotly&logoColor=white)
-![OpenCV](https://img.shields.io/badge/OpenCV-556762?style=flat-square&logo=opencv&logoColor=white)
-![Jupyter](https://img.shields.io/badge/Jupyter-102522?style=flat-square&logo=jupyter&logoColor=white)
-
-</td>
-</tr>
-<tr>
-<td><strong>Tools & Infra</strong></td>
-<td>
-
-![Docker](https://img.shields.io/badge/Docker-0f766e?style=flat-square&logo=docker&logoColor=white)
-![Linux](https://img.shields.io/badge/Linux-556762?style=flat-square&logo=linux&logoColor=white)
-![Git](https://img.shields.io/badge/Git-102522?style=flat-square&logo=git&logoColor=white)
-![CUDA](https://img.shields.io/badge/CUDA-ca5a3f?style=flat-square&logo=nvidia&logoColor=white)
-![LaTeX](https://img.shields.io/badge/LaTeX-d1a654?style=flat-square&logo=latex&logoColor=white)
-![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-556762?style=flat-square&logo=githubactions&logoColor=white)
-
-</td>
-</tr>
-</table>
+**AI for Engineering Standards** — Retrieval-augmented generation (RAG) systems for wind load design codes and engineering standards. Building LLM workflows that understand domain-specific technical language and code requirements.
 
 ---
 
-## Featured Research
+## Publications
 
-| Year | Title | Venue |
-|:----:|-------|-------|
-| 2025 | **Multiclass deep support vector data description for structural health monitoring** | *Journal of Structural Engineering* |
-| 2025 | **Lightweight alternative ML model for automating concrete crack image classification** | *ACI Structural Journal* |
-| 2025 | **ML assisted method for automated impact-echo testing of concrete structures** | *Journal of Nondestructive Evaluation* |
-| 2025 | **Retrieval augmented generation for assistance of using wind load design codes** | *APCWE10* |
+### Journal Articles
 
----
+- **S.M. Lee**, J. Hong, H. Choi, T.H.K. Kang. "Machine learning assisted method for automated impact-echo testing of concrete structures." *Journal of Nondestructive Evaluation* 44(4), 121, 2025.
+- **S.M. Lee**, H.S. Choi, C. Kim, T.H.K. Kang. "Lightweight alternative machine learning model for automating concrete crack image classification." *ACI Structural Journal* 122(5), 2025.
+- Y.I. Lee, **S.M. Lee**, T.H.K. Kang. "Multiclass deep support vector data description for structural health monitoring." *Journal of Structural Engineering* 151(12), 2025.
+- **S.M. Lee**, H.S. Sung, T.H.K. Kang. "Comparison of performance for predicting compressive strength of concrete using machine learning." *Journal of the Korea Concrete Institute* 34(5), 505-513, 2022.
 
-## What I Work On
+### Selected Conference Papers
 
-<table>
-<tr>
-<td width="33%" valign="top">
+- **S.M. Lee**, T.H.K. Kang. "Retrieval augmented generation for assistance of using wind load design codes." *APCWE10*, 2025.
+- **S.M. Lee**, Y.I. Lee, T. Kang. "Multi-sphere deep SVDD for system identification of building structure." *ACEM 2024*.
+- **S.M. Lee**, H.S. Choi, C. Kim, T. Kang. "Representation learning for classification of concrete crack images." *Structures Congress*, Seoul, 2024.
+- **S.M. Lee**, T. Kang. "Clustering wind pressure tap using dynamic time warping." *EACWE 2022*.
+- **S.M. Lee**, T. Kang. "Prediction of wind pressure coefficients on high-rise building facade using LSTM RNN model." *WCAASE 2021*.
 
-**Research**
+<details>
+<summary>Full list (20+ papers including Korean venues) on <a href="https://scholar.google.com/citations?user=ogvd_LsAAAAJ&hl=en">Google Scholar</a></summary>
 
-- Monitoring under sparse/noisy sensing
-- Crack image classification
-- Impact-echo automation
-- Wind pressure analysis
-- Code-aware AI workflows
+Additional Korean journal and conference publications in KCI, WEIK, AIK venues (2021-2025). M.S. thesis: "Machine learning application to automated impact-echo test for concrete structures" (SNU, 2023).
 
-</td>
-<td width="33%" valign="top">
-
-**Translation to Practice**
-
-- On-device lightweight AI
-- Inspection & diagnosis tools
-- Decision-support systems
-- Patents & field tools
-- Industry collaboration
-
-</td>
-<td width="33%" valign="top">
-
-**Academic Activity**
-
-- Journal & conference publications
-- AI + structural engineering
-- WEIK, ASCE, ACI, KCI, AIK, KSMI
-
-</td>
-</tr>
-</table>
+</details>
 
 ---
 
-## Current Focus
+## Projects & Patents
 
-<div align="center">
+### Research Projects
 
-![](https://img.shields.io/badge/Structural_Monitoring-Anomaly_Detection-ca5a3f?style=for-the-badge)
-![](https://img.shields.io/badge/RAG_Assistants-Design_Codes-0f766e?style=for-the-badge)
-![](https://img.shields.io/badge/Concrete_Inspection-NDT_Automation-d1a654?style=for-the-badge)
-![](https://img.shields.io/badge/Research_Pipelines-Accuracy_&_Deployment-556762?style=for-the-badge)
+- **Hyper-converged Forensic Research Center for Infrastructure** (2021-2027) — NRF Korea, funded by MSIT
+- **Smart City Innovative Technology Demonstration** (2024-2025) — KAIA, funded by MOLIT
+- **AI for Construction Research** (2024) — Sejong Construction & Seoul National University
 
-</div>
+### Patents (Granted)
+
+- **AI-based defect detection system inside concrete members** — KR 10-2611457 B1 (Granted 2023) — Bidirectional LSTM for automated NDT with dual-sensor noise cancellation. [[Google Patents](https://patents.google.com/patent/KR102611457B1/en)]
+- **Wind load estimation system based on artificial intelligence** — KR 10-2480382 B1 (Granted 2022) — LSTM RNN for predicting unmeasured wind pressures from sparse sensor arrays. [[Google Patents](https://patents.google.com/patent/KR102480382B1/en)]
 
 ---
 
-## GitHub Activity
+## Open Source
 
 <a href="https://github.com/concrete-sangminlee">
 <picture>
@@ -209,107 +83,40 @@ Academic researcher working on **AI for resilient infrastructure** — structura
 </picture>
 </a>
 
-<div align="center">
+**Featured Repositories**
 
-![Commit Activity](https://img.shields.io/github/commit-activity/m/concrete-sangminlee/concrete-sangminlee?style=flat-square&label=Monthly%20Commits&color=ca5a3f)
-![Repo Count](https://img.shields.io/badge/dynamic/json?url=https://api.github.com/users/concrete-sangminlee&query=$.public_repos&style=flat-square&label=Public%20Repos&color=0f766e)
-![Top Language](https://img.shields.io/github/languages/top/concrete-sangminlee/concrete-sangminlee?style=flat-square&color=d1a654)
-
-</div>
+- [**WindTimeHistoryReconstruction**](https://github.com/concrete-sangminlee/WindTimeHistoryReconstruction) — Wind time history reconstruction from sparse sensor measurements (related to Patent KR 10-2480382)
+- [**paperfactory**](https://github.com/concrete-sangminlee/paperfactory) — AI agent for civil engineering research papers: 15 journal scrapers, 18 analysis utilities, CLI + Web UI
+- [**SNU_ArchitectureAndAI**](https://github.com/concrete-sangminlee/SNU_ArchitectureAndAI) — Course materials for "Architecture and AI" graduate course at SNU
 
 ---
 
-## Selected Publications
+## Background
 
-<details>
-<summary><strong>View all publications</strong></summary>
+### Education
 
-1. **Machine learning assisted method for automated impact-echo testing of concrete structures.** *Journal of Nondestructive Evaluation*, 2025.
-2. **Lightweight alternative machine learning model for automating concrete crack image classification.** *ACI Structural Journal*, 2025.
-3. **Multiclass deep support vector data description for structural health monitoring.** *Journal of Structural Engineering*, 2025.
-4. **Retrieval augmented generation for assistance of using wind load design codes.** *The 10th Asia-Pacific Conference on Wind Engineering (APCWE10)*, 2025.
+| Degree | Field | Institution | Period |
+|--------|-------|-------------|--------|
+| **Ph.D.** | Artificial Intelligence | Seoul National University | 2023-2027 (expected) |
+| **M.S.** | Structural Engineering | Seoul National University | 2021-2023 |
+| **B.S.** | Architecture & Arch. Eng. + ECE (double major) | Seoul National University | 2016-2021 |
 
-</details>
+### Recognition
 
----
-
-## Projects & Funding
-
-<details>
-<summary><strong>View all projects</strong></summary>
-
-| Period | Project | Funder |
-|--------|---------|--------|
-| 2021-2027 | Hyper-converged Forensic Research Center for Infrastructure | NRF Korea (MSIT) |
-| 2024-2025 | Smart City Innovative Technology Demonstration | KAIA (MOLIT) |
-| 2024 | AI for Construction Research | Sejong Construction & SNU |
-| 2023 | Outstanding Patent Prototype Development | Seoul National University |
-
-</details>
-
----
-
-## Education & Recognition
-
-<table>
-<tr>
-<td width="50%" valign="top">
-
-**Education**
-
-| Degree | Institution | Period |
-|--------|------------|--------|
-| Ph.D. in AI | Seoul National University | 2023-2027 |
-| M.S. in Structural Eng. | Seoul National University | 2021-2023 |
-| B.S. Architecture + ECE | Seoul National University | 2016-2021 |
-
-</td>
-<td width="50%" valign="top">
-
-**Recognition**
-
-- SNU AI Fellowship (2025, 2026)
-- SNU AI Paper Competition Excellence Award (2025)
+- **SNU AI Fellowship** (2025, 2026)
+- **SNU AI Paper Competition Excellence Award** (2025)
 - SNU AI Graduate School Scholarship (2023, 2024)
 - SNU Outstanding Teaching Assistant Award (2022)
-- KCI Outstanding Presentation Award (2022)
+- Korea Concrete Institute Outstanding Presentation Award (2022)
 
-</td>
-</tr>
-</table>
-
----
-
-## Patents
-
-| Year | Title | Country |
-|:----:|-------|:-------:|
-| 2023 | **AI-based defect detection system inside concrete members** | KR |
-| 2022 | **Wind load estimation system based on artificial intelligence** | KR |
-
----
-
-## Service
-
-<div align="center">
-
-![ASCE](https://img.shields.io/badge/ASCE-Member-102522?style=flat-square)
-![ACI](https://img.shields.io/badge/ACI-Member-ca5a3f?style=flat-square)
-![KCI](https://img.shields.io/badge/KCI-Member-0f766e?style=flat-square)
-![AIK](https://img.shields.io/badge/AIK-Member-d1a654?style=flat-square)
-![WEIK](https://img.shields.io/badge/WEIK-Organizing_Committee_2025-556762?style=flat-square)
-![KSMI](https://img.shields.io/badge/KSMI-Member-102522?style=flat-square)
-
-</div>
+Member of ASCE, ACI, KCI, AIK, KSMI | WEIK Organizing Committee (2025)
 
 ---
 
 <div align="center">
 
-**Interested in research collaboration, interdisciplinary AI + structural engineering work, and deployable tools for inspection, diagnosis, and code support.**
+Interested in collaboration on AI for structural engineering, infrastructure monitoring, or engineering-focused LLM systems.
 
-[![Email](https://img.shields.io/badge/201612445@snu.ac.kr-CA5A3F?style=for-the-badge&logo=gmail&logoColor=white)](mailto:201612445@snu.ac.kr)
-[![GitHub](https://img.shields.io/badge/GitHub-102522?style=for-the-badge&logo=github&logoColor=white)](https://github.com/concrete-sangminlee)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/sang-min-lee-3a2568174/)
+201612445@snu.ac.kr | [concrete-sangminlee.github.io](https://concrete-sangminlee.github.io/)
 
 </div>

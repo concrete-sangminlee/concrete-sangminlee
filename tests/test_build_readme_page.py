@@ -149,6 +149,27 @@ class BuildReadmePageTests(unittest.TestCase):
         self.assertIn("markdown-image-snake", output)
         self.assertNotIn("img.shields.io", MODULE.summarize_description(MODULE.parse_profile(MEDIA_MARKDOWN), []))
 
+    def test_markdown_tables_render_as_html_tables(self) -> None:
+        md = """# Jane Doe
+
+Applied researcher.
+
+## Data
+
+| Degree | Institution | Period |
+|--------|------------|--------|
+| Ph.D. in AI | SNU | 2023-2027 |
+| M.S. | SNU | 2021-2023 |
+"""
+        profile = MODULE.parse_profile(md)
+        data_section = next(s for s in profile.sections if s.heading == "Data")
+        table_blocks = [b for b in data_section.blocks if b.kind == "html"]
+        self.assertEqual(len(table_blocks), 1)
+        self.assertIn("<table", table_blocks[0].items[0])
+        self.assertIn("<th>Degree</th>", table_blocks[0].items[0])
+        self.assertIn("<td>Ph.D. in AI</td>", table_blocks[0].items[0])
+        self.assertNotIn("|-----", table_blocks[0].items[0])
+
     def test_html_blocks_pass_through_unchanged(self) -> None:
         profile = MODULE.parse_profile(HTML_BLOCK_MARKDOWN)
 

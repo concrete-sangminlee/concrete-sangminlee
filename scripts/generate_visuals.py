@@ -1,6 +1,6 @@
 """Generate profile SVG visualizations for the GitHub README.
 
-Produces tech-stack and research-areas SVGs in light and dark variants.
+Produces hero-banner and research-areas SVGs in light and dark variants.
 All output is pure SVG built with Python stdlib — no external packages.
 """
 
@@ -47,38 +47,12 @@ DARK = {
 }
 
 # ---------------------------------------------------------------------------
-# Tech-stack data
+# Hero banner data
 # ---------------------------------------------------------------------------
 
-TECH_CATEGORIES = [
-    (
-        "ML & Deep Learning",
-        [
-            ("Python", "#ca5a3f"),
-            ("PyTorch", "#0f766e"),
-            ("TensorFlow", "#d1a654"),
-            ("scikit-learn", "#556762"),
-        ],
-    ),
-    (
-        "Data & Computing",
-        [
-            ("NumPy", "#0f766e"),
-            ("Pandas", "#ca5a3f"),
-            ("OpenCV", "#556762"),
-            ("CUDA", "#d1a654"),
-        ],
-    ),
-    (
-        "Tools & Infrastructure",
-        [
-            ("Docker", "#0f766e"),
-            ("Git", "#ca5a3f"),
-            ("LaTeX", "#556762"),
-            ("Linux", "#d1a654"),
-        ],
-    ),
-]
+HERO_NAME = "Sang Min Lee"
+HERO_SUBTITLE = "Ph.D. Candidate in AI \u00b7 Seoul National University"
+HERO_TAGLINE = "AI for Resilient Infrastructure"
 
 # ---------------------------------------------------------------------------
 # Research-areas data (label, value 0-1)
@@ -94,68 +68,82 @@ RESEARCH_AREAS = [
 ]
 
 # ---------------------------------------------------------------------------
-# Tech-stack SVG
+# Hero banner SVG
 # ---------------------------------------------------------------------------
 
-PILL_H = 34
-PILL_PAD_X = 18
-PILL_GAP = 10
-PILL_RADIUS = 8
-PILL_FONT = 13
-CATEGORY_FONT = 12
-ROW_GAP = 14
+HERO_W = 840
+HERO_H = 200
 CARD_PAD = 24
 CARD_RADIUS = 14
 
 
-def _estimate_text_width(text: str, font_size: int) -> float:
-    return len(text) * font_size * 0.58
+def _render_hero_banner(palette: dict[str, str]) -> str:
+    bg = palette["bg"]
+    card = palette["card"]
+    ink = palette["ink"]
+    accent = palette["accent"]
+    teal = palette.get("teal", accent)
+    muted = palette["muted"]
+    grid = palette["grid"]
 
+    name_escaped = html.escape(HERO_NAME)
+    subtitle_escaped = html.escape(HERO_SUBTITLE)
+    tagline_escaped = html.escape(HERO_TAGLINE)
 
-def _render_tech_stack(palette: dict[str, str]) -> str:
-    rows: list[str] = []
-    y = CARD_PAD
-    max_row_width = 0
+    # Build a unique gradient id based on palette to avoid collisions
+    is_dark = palette is DARK
+    suffix = "dark" if is_dark else "light"
 
-    for cat_label, items in TECH_CATEGORIES:
-        # Category label
-        rows.append(
-            f'<text x="{CARD_PAD}" y="{y + 14}" '
-            f'font-family="\'Segoe UI\', sans-serif" font-size="{CATEGORY_FONT}" '
-            f'font-weight="600" fill="{palette["muted"]}" '
-            f'letter-spacing="0.5">{html.escape(cat_label.upper())}</text>'
-        )
-        y += 24
+    svg = textwrap.dedent(f"""\
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {HERO_W} {HERO_H}" width="{HERO_W}" height="{HERO_H}">
+          <defs>
+            <linearGradient id="bgGrad_{suffix}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="{bg}" />
+              <stop offset="100%" stop-color="{card}" />
+            </linearGradient>
+            <linearGradient id="accentLine_{suffix}" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="{accent}" />
+              <stop offset="100%" stop-color="{teal}" />
+            </linearGradient>
+          </defs>
 
-        # Pills
-        x = CARD_PAD
-        for name, color in items:
-            tw = _estimate_text_width(name, PILL_FONT)
-            pw = tw + PILL_PAD_X * 2
-            rows.append(
-                f'<rect x="{x}" y="{y}" width="{pw}" height="{PILL_H}" '
-                f'rx="{PILL_RADIUS}" fill="{color}" opacity="0.92"/>'
-            )
-            rows.append(
-                f'<text x="{x + pw / 2}" y="{y + PILL_H / 2 + 1}" '
-                f'font-family="\'Segoe UI\', sans-serif" font-size="{PILL_FONT}" '
-                f'font-weight="500" fill="#ffffff" text-anchor="middle" '
-                f'dominant-baseline="central">{html.escape(name)}</text>'
-            )
-            x += pw + PILL_GAP
-        max_row_width = max(max_row_width, x)
-        y += PILL_H + ROW_GAP
+          <!-- Outer background -->
+          <rect width="{HERO_W}" height="{HERO_H}" rx="{CARD_RADIUS}" fill="url(#bgGrad_{suffix})" />
 
-    width = max(max_row_width + CARD_PAD, 500)
-    height = y + CARD_PAD - ROW_GAP + 4
+          <!-- Card -->
+          <rect x="16" y="16" width="{HERO_W - 32}" height="{HERO_H - 32}" rx="{CARD_RADIUS}" fill="{card}" />
+          <rect x="16" y="16" width="{HERO_W - 32}" height="{HERO_H - 32}" rx="{CARD_RADIUS}" fill="none" stroke="{grid}" stroke-width="1" />
 
-    return textwrap.dedent(f"""\
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="{width}" height="{height}">
-          <rect width="{width}" height="{height}" rx="{CARD_RADIUS}" fill="{palette['card']}" />
-          <rect width="{width}" height="{height}" rx="{CARD_RADIUS}" fill="none"
-                stroke="{palette['grid']}" stroke-width="1" />
-          {"".join(rows)}
+          <!-- Accent bar at top of card -->
+          <rect x="16" y="16" width="{HERO_W - 32}" height="4" rx="2" fill="url(#accentLine_{suffix})" />
+
+          <!-- Decorative dots -->
+          <circle cx="{HERO_W - 60}" cy="50" r="30" fill="{accent}" opacity="0.06" />
+          <circle cx="{HERO_W - 90}" cy="80" r="50" fill="{teal}" opacity="0.05" />
+          <circle cx="{HERO_W - 50}" cy="140" r="20" fill="{accent}" opacity="0.04" />
+
+          <!-- Name -->
+          <text x="48" y="72"
+                font-family="'Segoe UI', system-ui, sans-serif" font-size="28"
+                font-weight="700" fill="{ink}"
+                letter-spacing="-0.5">{name_escaped}</text>
+
+          <!-- Subtitle -->
+          <text x="48" y="100"
+                font-family="'Segoe UI', system-ui, sans-serif" font-size="14"
+                font-weight="400" fill="{muted}">{subtitle_escaped}</text>
+
+          <!-- Divider line -->
+          <line x1="48" y1="118" x2="260" y2="118" stroke="{grid}" stroke-width="1" />
+
+          <!-- Tagline -->
+          <text x="48" y="148"
+                font-family="'Segoe UI', system-ui, sans-serif" font-size="16"
+                font-weight="600" fill="{accent}"
+                letter-spacing="0.3">{tagline_escaped}</text>
         </svg>""")
+
+    return svg
 
 
 # ---------------------------------------------------------------------------
@@ -274,8 +262,8 @@ def main() -> None:
     os.makedirs(args.output_dir, exist_ok=True)
 
     files = {
-        "tech-stack.svg": _render_tech_stack(LIGHT),
-        "tech-stack-dark.svg": _render_tech_stack(DARK),
+        "hero-banner.svg": _render_hero_banner(LIGHT),
+        "hero-banner-dark.svg": _render_hero_banner(DARK),
         "research-areas.svg": _render_radar(LIGHT),
         "research-areas-dark.svg": _render_radar(DARK),
     }

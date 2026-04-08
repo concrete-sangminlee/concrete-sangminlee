@@ -1024,6 +1024,7 @@ def parse_blocks(lines: list[str]) -> list[Block]:
     ordered: list[str] = []
     quote: list[str] = []
     html_block: list[str] = []
+    table_rows: list[str] = []
 
     def flush_paragraph() -> None:
         if paragraph:
@@ -1050,12 +1051,30 @@ def parse_blocks(lines: list[str]) -> list[Block]:
             blocks.append(Block(kind="html", items=["\n".join(html_block)]))
             html_block.clear()
 
+    def flush_table() -> None:
+        if table_rows:
+            rows = [r.strip().strip("|").split("|") for r in table_rows]
+            rows = [[c.strip() for c in r] for r in rows]
+            header = rows[0] if rows else []
+            data = [r for i, r in enumerate(rows) if i >= 2] if len(rows) > 1 else []
+            head_html = "".join(f"<th>{render_inline(c)}</th>" for c in header)
+            body_html = "".join(
+                "<tr>" + "".join(f"<td>{render_inline(c)}</td>" for c in r) + "</tr>"
+                for r in data
+            )
+            blocks.append(Block(kind="html", items=[
+                f'<table class="md-table"><thead><tr>{head_html}</tr></thead>'
+                f"<tbody>{body_html}</tbody></table>"
+            ]))
+            table_rows.clear()
+
     def flush_all() -> None:
         flush_paragraph()
         flush_bullets()
         flush_ordered()
         flush_quote()
         flush_html()
+        flush_table()
 
     for line in [*lines, ""]:
         stripped = line.strip()
@@ -1091,6 +1110,17 @@ def parse_blocks(lines: list[str]) -> list[Block]:
             flush_html()
             ordered.append(ordered_match.group("item").strip())
             continue
+
+        if stripped.startswith("|") and "|" in stripped[1:]:
+            flush_paragraph()
+            flush_bullets()
+            flush_ordered()
+            flush_quote()
+            flush_html()
+            table_rows.append(stripped)
+            continue
+
+        flush_table()
 
         if stripped.startswith("<"):
             flush_paragraph()
