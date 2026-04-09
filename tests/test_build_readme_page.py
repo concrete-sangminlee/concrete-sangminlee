@@ -165,7 +165,7 @@ Applied researcher.
         data_section = next(s for s in profile.sections if s.heading == "Data")
         table_blocks = [b for b in data_section.blocks if b.kind == "html"]
         self.assertEqual(len(table_blocks), 1)
-        self.assertIn("<table", table_blocks[0].items[0])
+        self.assertIn('<div class="table-wrap"><table', table_blocks[0].items[0])
         self.assertIn("<th>Degree</th>", table_blocks[0].items[0])
         self.assertIn("<td>Ph.D. in AI</td>", table_blocks[0].items[0])
         self.assertNotIn("|-----", table_blocks[0].items[0])
@@ -212,6 +212,70 @@ Applied researcher.
             self.assertTrue((output_path.parent / "robots.txt").exists())
             self.assertTrue((output_path.parent / ".nojekyll").exists())
             self.assertIn("ACADEMIC RESEARCH PROFILE", (output_path.parent / "og-preview.svg").read_text(encoding="utf-8"))
+
+
+    def test_table_alignment_preserved(self) -> None:
+        md = """# Jane Doe
+
+Applied researcher.
+
+## Data
+
+| Year | Publication |
+|:----:|-------------|
+| 2025 | Some paper |
+"""
+        profile = MODULE.parse_profile(md)
+        data_section = next(s for s in profile.sections if s.heading == "Data")
+        table_html = data_section.blocks[0].items[0]
+        self.assertIn('style="text-align:center"', table_html)
+
+    def test_dark_mode_support(self) -> None:
+        output = MODULE.render_site(SAMPLE_MARKDOWN, generated_at=FIXED_AT)
+        self.assertIn("prefers-color-scheme: dark", output)
+        self.assertIn("data-theme", output)
+        self.assertIn("theme-toggle", output)
+        self.assertIn("localStorage", output)
+
+    def test_table_css_present(self) -> None:
+        output = MODULE.render_site(SAMPLE_MARKDOWN, generated_at=FIXED_AT)
+        self.assertIn(".md-table", output)
+        self.assertIn(".table-wrap", output)
+
+    def test_print_styles(self) -> None:
+        output = MODULE.render_site(SAMPLE_MARKDOWN, generated_at=FIXED_AT)
+        self.assertIn("@media print", output)
+
+    def test_dns_prefetch(self) -> None:
+        output = MODULE.render_site(SAMPLE_MARKDOWN, generated_at=FIXED_AT)
+        self.assertIn('rel="dns-prefetch"', output)
+        self.assertIn("img.shields.io", output)
+
+    def test_section_labels_meaningful(self) -> None:
+        md = """# Jane Doe
+
+Applied researcher.
+
+## Code
+- [repo](https://github.com/example/repo): A tool
+
+## Background
+
+| Degree | Field | Institution | Period |
+|--------|-------|-------------|--------|
+| Ph.D. | AI | SNU | 2023-2027 |
+"""
+        profile = MODULE.parse_profile(md)
+        code_section = next(s for s in profile.sections if s.heading == "Code")
+        bg_section = next(s for s in profile.sections if s.heading == "Background")
+        self.assertEqual(MODULE.section_label(5, code_section), "Open Source")
+        self.assertEqual(MODULE.section_label(6, bg_section), "Background")
+
+    def test_signal_grid_uses_focus_label(self) -> None:
+        result = MODULE.render_signal_grid(["Item one", "Item two"])
+        self.assertIn("Focus 01", result)
+        self.assertIn("Focus 02", result)
+        self.assertNotIn("Signal", result)
 
 
 if __name__ == "__main__":

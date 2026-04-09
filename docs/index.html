@@ -29,12 +29,15 @@
     <meta name="twitter:image:alt" content="Sang Min Lee profile preview highlighting Structural Health Monitoring, Concrete NDT, Wind Engineering." />
     <link rel="canonical" href="https://concrete-sangminlee.github.io/" />
     <link rel="sitemap" type="application/xml" href="https://concrete-sangminlee.github.io/sitemap.xml" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <link rel="dns-prefetch" href="https://img.shields.io" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <style>
       :root {
-        color-scheme: light;
+        color-scheme: light dark;
         --bg: #f6efe3;
         --bg-alt: #fcf8f2;
         --surface: rgba(255, 251, 245, 0.88);
@@ -50,6 +53,127 @@
         --gold: #d1a654;
         --shadow-lg: 0 24px 72px rgba(16, 37, 34, 0.12);
         --shadow-md: 0 16px 42px rgba(16, 37, 34, 0.08);
+        --ink-003: rgba(16, 37, 34, 0.03);
+        --ink-004: rgba(16, 37, 34, 0.04);
+        --ink-005: rgba(16, 37, 34, 0.05);
+        --ink-008: rgba(16, 37, 34, 0.08);
+        --ink-010: rgba(16, 37, 34, 0.10);
+        --ink-016: rgba(16, 37, 34, 0.16);
+        --ink-018: rgba(16, 37, 34, 0.18);
+        --ink-028: rgba(16, 37, 34, 0.28);
+        --white-008: rgba(255, 255, 255, 0.08);
+        --white-076: rgba(255, 255, 255, 0.76);
+        --white-078: rgba(255, 255, 255, 0.78);
+        --white-084: rgba(255, 255, 255, 0.84);
+        --white-088: rgba(255, 255, 255, 0.88);
+        --white-090: rgba(255, 255, 255, 0.90);
+        --white-092: rgba(255, 255, 255, 0.92);
+        --hero-main-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 252, 247, 0.72));
+        --preview-card-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 253, 249, 0.72));
+        --body-bg:
+          radial-gradient(circle at top left, rgba(202, 90, 63, 0.12), transparent 28%),
+          radial-gradient(circle at 88% 8%, rgba(15, 118, 110, 0.10), transparent 26%),
+          linear-gradient(180deg, #f6efe3 0%, #fcf8f2 54%, #f6efe3 100%);
+        --grid-line: rgba(16, 37, 34, 0.05);
+        --hero-after-bg: rgba(15, 118, 110, 0.06);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --bg: #0f1c1a;
+          --bg-alt: #132522;
+          --surface: rgba(26, 51, 48, 0.88);
+          --surface-strong: rgba(30, 58, 54, 0.96);
+          --surface-dark: #0a1412;
+          --ink: #f8f2ea;
+          --muted: #8fa69e;
+          --line: rgba(248, 242, 234, 0.12);
+          --accent: #e07050;
+          --accent-soft: rgba(224, 112, 80, 0.16);
+          --teal: #2dd4bf;
+          --teal-soft: rgba(45, 212, 191, 0.14);
+          --gold: #d1a654;
+          --shadow-lg: 0 24px 72px rgba(0, 0, 0, 0.32);
+          --shadow-md: 0 16px 42px rgba(0, 0, 0, 0.22);
+          --ink-003: rgba(248, 242, 234, 0.03);
+          --ink-004: rgba(248, 242, 234, 0.04);
+          --ink-005: rgba(248, 242, 234, 0.05);
+          --ink-008: rgba(248, 242, 234, 0.08);
+          --ink-010: rgba(248, 242, 234, 0.10);
+          --ink-016: rgba(248, 242, 234, 0.16);
+          --ink-018: rgba(248, 242, 234, 0.18);
+          --ink-028: rgba(248, 242, 234, 0.28);
+          --white-008: rgba(26, 51, 48, 0.08);
+          --white-076: rgba(26, 51, 48, 0.76);
+          --white-078: rgba(26, 51, 48, 0.78);
+          --white-084: rgba(26, 51, 48, 0.84);
+          --white-088: rgba(26, 51, 48, 0.88);
+          --white-090: rgba(26, 51, 48, 0.90);
+          --white-092: rgba(26, 51, 48, 0.92);
+          --hero-main-bg: linear-gradient(180deg, rgba(26, 51, 48, 0.9), rgba(20, 42, 38, 0.72));
+          --preview-card-bg: linear-gradient(180deg, rgba(26, 51, 48, 0.9), rgba(20, 42, 38, 0.72));
+          --body-bg:
+            radial-gradient(circle at top left, rgba(224, 112, 80, 0.12), transparent 28%),
+            radial-gradient(circle at 88% 8%, rgba(45, 212, 191, 0.10), transparent 26%),
+            linear-gradient(180deg, #0a1412 0%, #0f1c1a 54%, #0a1412 100%);
+          --grid-line: rgba(248, 242, 234, 0.05);
+          --hero-after-bg: rgba(45, 212, 191, 0.06);
+          --section-links-bg: linear-gradient(180deg, rgba(22, 46, 42, 0.94), rgba(18, 38, 34, 0.76));
+          --section-focus-bg:
+            radial-gradient(circle at top right, rgba(45, 212, 191, 0.08), transparent 38%),
+            linear-gradient(180deg, rgba(22, 46, 42, 0.94), rgba(18, 38, 34, 0.78));
+          --section-collab-bg:
+            radial-gradient(circle at top left, rgba(224, 112, 80, 0.10), transparent 34%),
+            linear-gradient(180deg, rgba(22, 46, 42, 0.94), rgba(18, 38, 34, 0.74));
+        }
+      }
+
+      :root[data-theme="dark"] {
+        --bg: #0f1c1a;
+        --bg-alt: #132522;
+        --surface: rgba(26, 51, 48, 0.88);
+        --surface-strong: rgba(30, 58, 54, 0.96);
+        --surface-dark: #0a1412;
+        --ink: #f8f2ea;
+        --muted: #8fa69e;
+        --line: rgba(248, 242, 234, 0.12);
+        --accent: #e07050;
+        --accent-soft: rgba(224, 112, 80, 0.16);
+        --teal: #2dd4bf;
+        --teal-soft: rgba(45, 212, 191, 0.14);
+        --gold: #d1a654;
+        --shadow-lg: 0 24px 72px rgba(0, 0, 0, 0.32);
+        --shadow-md: 0 16px 42px rgba(0, 0, 0, 0.22);
+        --ink-003: rgba(248, 242, 234, 0.03);
+        --ink-004: rgba(248, 242, 234, 0.04);
+        --ink-005: rgba(248, 242, 234, 0.05);
+        --ink-008: rgba(248, 242, 234, 0.08);
+        --ink-010: rgba(248, 242, 234, 0.10);
+        --ink-016: rgba(248, 242, 234, 0.16);
+        --ink-018: rgba(248, 242, 234, 0.18);
+        --ink-028: rgba(248, 242, 234, 0.28);
+        --white-008: rgba(26, 51, 48, 0.08);
+        --white-076: rgba(26, 51, 48, 0.76);
+        --white-078: rgba(26, 51, 48, 0.78);
+        --white-084: rgba(26, 51, 48, 0.84);
+        --white-088: rgba(26, 51, 48, 0.88);
+        --white-090: rgba(26, 51, 48, 0.90);
+        --white-092: rgba(26, 51, 48, 0.92);
+        --hero-main-bg: linear-gradient(180deg, rgba(26, 51, 48, 0.9), rgba(20, 42, 38, 0.72));
+        --preview-card-bg: linear-gradient(180deg, rgba(26, 51, 48, 0.9), rgba(20, 42, 38, 0.72));
+        --body-bg:
+          radial-gradient(circle at top left, rgba(224, 112, 80, 0.12), transparent 28%),
+          radial-gradient(circle at 88% 8%, rgba(45, 212, 191, 0.10), transparent 26%),
+          linear-gradient(180deg, #0a1412 0%, #0f1c1a 54%, #0a1412 100%);
+        --grid-line: rgba(248, 242, 234, 0.05);
+        --hero-after-bg: rgba(45, 212, 191, 0.06);
+        --section-links-bg: linear-gradient(180deg, rgba(22, 46, 42, 0.94), rgba(18, 38, 34, 0.76));
+        --section-focus-bg:
+          radial-gradient(circle at top right, rgba(45, 212, 191, 0.08), transparent 38%),
+          linear-gradient(180deg, rgba(22, 46, 42, 0.94), rgba(18, 38, 34, 0.78));
+        --section-collab-bg:
+          radial-gradient(circle at top left, rgba(224, 112, 80, 0.10), transparent 34%),
+          linear-gradient(180deg, rgba(22, 46, 42, 0.94), rgba(18, 38, 34, 0.74));
       }
 
       * {
@@ -65,10 +189,7 @@
         min-height: 100vh;
         font-family: "Manrope", sans-serif;
         color: var(--ink);
-        background:
-          radial-gradient(circle at top left, rgba(202, 90, 63, 0.18), transparent 28%),
-          radial-gradient(circle at 88% 8%, rgba(15, 118, 110, 0.16), transparent 26%),
-          linear-gradient(180deg, #efe1cd 0%, #f8f4ee 54%, #efe8dd 100%);
+        background: var(--body-bg);
       }
 
       body::before {
@@ -78,8 +199,8 @@
         pointer-events: none;
         opacity: 0.34;
         background-image:
-          linear-gradient(rgba(16, 37, 34, 0.05) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(16, 37, 34, 0.05) 1px, transparent 1px);
+          linear-gradient(var(--grid-line) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
         background-size: 28px 28px;
         mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1), transparent 92%);
       }
@@ -91,7 +212,7 @@
       code {
         padding: 0.12rem 0.36rem;
         border-radius: 0.5rem;
-        background: rgba(16, 37, 34, 0.08);
+        background: var(--ink-008);
         font-family: "SFMono-Regular", "SF Mono", Menlo, Consolas, monospace;
         font-size: 0.92em;
       }
@@ -135,8 +256,8 @@
         overflow: hidden;
         padding: 36px;
         background:
-          radial-gradient(circle at 8% 0%, rgba(202, 90, 63, 0.14), transparent 26%),
-          linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 252, 247, 0.72));
+          radial-gradient(circle at 8% 0%, var(--accent-soft), transparent 26%),
+          var(--hero-main-bg);
         backdrop-filter: blur(18px);
       }
 
@@ -147,7 +268,7 @@
         width: 220px;
         height: 220px;
         border-radius: 999px;
-        background: rgba(15, 118, 110, 0.08);
+        background: var(--hero-after-bg);
       }
 
       .hero-side {
@@ -182,7 +303,7 @@
         content: "";
         width: 34px;
         height: 1px;
-        background: rgba(16, 37, 34, 0.28);
+        background: var(--ink-028);
       }
 
       .section-intro p {
@@ -250,8 +371,8 @@
       .markdown-image {
         display: block;
         border-radius: 18px;
-        border: 1px solid rgba(16, 37, 34, 0.08);
-        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid var(--ink-008);
+        background: var(--white-090);
       }
 
       .markdown-image-badge {
@@ -289,8 +410,8 @@
         min-height: 38px;
         padding: 0 14px;
         border-radius: 999px;
-        border: 1px solid rgba(16, 37, 34, 0.08);
-        background: rgba(255, 255, 255, 0.84);
+        border: 1px solid var(--ink-008);
+        background: var(--white-084);
         font-size: 0.92rem;
         font-weight: 700;
       }
@@ -326,12 +447,12 @@
       .button-primary {
         background: var(--ink);
         color: #f8f2ea;
-        box-shadow: 0 16px 30px rgba(16, 37, 34, 0.16);
+        box-shadow: 0 16px 30px var(--ink-016);
       }
 
       .button-secondary {
-        background: rgba(255, 255, 255, 0.78);
-        border-color: rgba(16, 37, 34, 0.1);
+        background: var(--white-078);
+        border-color: var(--ink-010);
       }
 
       .hero-side > * {
@@ -346,7 +467,7 @@
         width: 160px;
         height: 160px;
         border-radius: 999px;
-        background: rgba(255, 255, 255, 0.08);
+        background: var(--white-008);
       }
 
       .hero-side .eyebrow {
@@ -380,7 +501,7 @@
       .metric-card {
         padding: 16px 18px;
         border-radius: 22px;
-        background: rgba(255, 255, 255, 0.08);
+        background: var(--white-008);
       }
 
       .metric-card strong,
@@ -428,7 +549,7 @@
         padding: 22px;
         border: 1px solid var(--line);
         border-radius: 28px;
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 253, 249, 0.72));
+        background: var(--preview-card-bg);
         box-shadow: var(--shadow-md);
         text-decoration: none;
       }
@@ -480,8 +601,8 @@
         min-height: 42px;
         padding: 0 16px;
         border-radius: 999px;
-        border: 1px solid rgba(16, 37, 34, 0.1);
-        background: rgba(255, 255, 255, 0.76);
+        border: 1px solid var(--ink-010);
+        background: var(--white-076);
         text-decoration: none;
         font-weight: 700;
         backdrop-filter: blur(10px);
@@ -514,19 +635,19 @@
       }
 
       .section-card.section-links {
-        background: linear-gradient(180deg, rgba(255, 250, 244, 0.94), rgba(255, 252, 248, 0.76));
+        background: var(--section-links-bg, linear-gradient(180deg, rgba(255, 250, 244, 0.94), rgba(255, 252, 248, 0.76)));
       }
 
       .section-card.section-focus {
-        background:
+        background: var(--section-focus-bg,
           radial-gradient(circle at top right, rgba(15, 118, 110, 0.1), transparent 38%),
-          linear-gradient(180deg, rgba(255, 253, 249, 0.94), rgba(255, 250, 245, 0.78));
+          linear-gradient(180deg, rgba(255, 253, 249, 0.94), rgba(255, 250, 245, 0.78)));
       }
 
       .section-card.section-collaboration {
-        background:
+        background: var(--section-collab-bg,
           radial-gradient(circle at top left, rgba(202, 90, 63, 0.12), transparent 34%),
-          linear-gradient(180deg, rgba(255, 252, 247, 0.94), rgba(255, 249, 243, 0.74));
+          linear-gradient(180deg, rgba(255, 252, 247, 0.94), rgba(255, 249, 243, 0.74)));
       }
 
       .section-label {
@@ -588,8 +709,8 @@
         min-height: 100%;
         padding: 16px;
         border-radius: 22px;
-        border: 1px solid rgba(16, 37, 34, 0.08);
-        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid var(--ink-008);
+        background: var(--white-092);
       }
 
       .signal-grid strong {
@@ -612,8 +733,8 @@
         min-height: 100%;
         padding: 18px;
         border-radius: 22px;
-        border: 1px solid rgba(16, 37, 34, 0.08);
-        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid var(--ink-008);
+        background: var(--white-090);
         color: var(--ink);
         font-weight: 700;
       }
@@ -651,8 +772,8 @@
         align-items: start;
         padding: 16px;
         border-radius: 24px;
-        background: rgba(255, 255, 255, 0.88);
-        border: 1px solid rgba(16, 37, 34, 0.08);
+        background: var(--white-088);
+        border: 1px solid var(--ink-008);
       }
 
       .timeline-item strong {
@@ -679,7 +800,7 @@
         padding: 20px 22px;
         border-left: 4px solid var(--accent);
         border-radius: 0 20px 20px 0;
-        background: rgba(202, 90, 63, 0.08);
+        background: var(--accent-soft);
       }
 
       .quote-block p {
@@ -703,7 +824,7 @@
         background: linear-gradient(180deg, #172b27 0%, #101b18 100%);
         color: #f8f4ee;
         text-decoration: none;
-        box-shadow: 0 22px 46px rgba(16, 37, 34, 0.18);
+        box-shadow: 0 22px 46px var(--ink-018);
       }
 
       .link-card strong {
@@ -743,6 +864,89 @@
 
       .footer-note {
         color: var(--accent);
+      }
+
+      .theme-toggle {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 100;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--surface-strong);
+        color: var(--ink);
+        cursor: pointer;
+        box-shadow: var(--shadow-md);
+        backdrop-filter: blur(12px);
+        transition: transform 160ms ease, box-shadow 160ms ease;
+      }
+
+      .theme-toggle:hover,
+      .theme-toggle:focus-visible {
+        transform: translateY(-2px);
+      }
+
+      .theme-toggle-sun { display: none; }
+      .theme-toggle-moon { display: block; }
+
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) .theme-toggle-sun { display: block; }
+        :root:not([data-theme="light"]) .theme-toggle-moon { display: none; }
+      }
+      :root[data-theme="dark"] .theme-toggle-sun { display: block; }
+      :root[data-theme="dark"] .theme-toggle-moon { display: none; }
+      :root[data-theme="light"] .theme-toggle-sun { display: none; }
+      :root[data-theme="light"] .theme-toggle-moon { display: block; }
+
+      .table-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin: 18px 0;
+        border-radius: 22px;
+        border: 1px solid var(--line);
+        background: var(--white-088);
+      }
+
+      .md-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.94rem;
+        line-height: 1.7;
+      }
+
+      .md-table th,
+      .md-table td {
+        padding: 12px 18px;
+        text-align: left;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .md-table th {
+        font-size: 0.76rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+        background: var(--ink-004);
+        white-space: nowrap;
+      }
+
+      .md-table tbody tr:last-child td {
+        border-bottom: none;
+      }
+
+      .md-table tbody tr:hover {
+        background: var(--ink-003);
+      }
+
+      .md-table td:first-child {
+        font-weight: 700;
+        white-space: nowrap;
       }
 
       @keyframes rise-in {
@@ -804,8 +1008,99 @@
         .timeline-item {
           grid-template-columns: 1fr;
         }
+
+        .md-table th,
+        .md-table td {
+          padding: 10px 14px;
+          font-size: 0.88rem;
+        }
+      }
+
+      @media print {
+        *, *::before, *::after {
+          animation: none !important;
+          transition: none !important;
+        }
+
+        body {
+          background: #fff;
+          color: #000;
+          font-size: 11pt;
+          line-height: 1.5;
+        }
+
+        body::before { display: none; }
+
+        .page { width: 100%; padding: 0; }
+
+        .hero { grid-template-columns: 1fr; }
+
+        .hero-main, .hero-side, .section-card, .preview-card {
+          backdrop-filter: none;
+          box-shadow: none;
+          background: #fff;
+          border: 1px solid #ccc;
+        }
+
+        .hero-main::after, .hero-side::after { display: none; }
+
+        .hero-title { font-size: 28pt; }
+        .section-title { font-size: 16pt; }
+
+        .hero-side {
+          background: #f5f5f5;
+          color: #000;
+        }
+        .hero-side .eyebrow { color: #666; }
+        .hero-side .eyebrow::before { background: #999; }
+        .hero-side p { color: #333; }
+        .hero-side h2 { color: #000; }
+        .metric-card { background: #eee; color: #000; }
+        .metric-card small { color: #555; }
+
+        .content-grid { display: block; }
+        .section-card,
+        .section-card.section-span-12,
+        .section-card.section-span-7,
+        .section-card.section-span-5 {
+          margin-bottom: 16pt;
+        }
+
+        .preview-grid { grid-template-columns: 1fr; }
+
+        .link-card {
+          background: #f5f5f5;
+          color: #000;
+          box-shadow: none;
+        }
+        .link-card span { color: #333; }
+        .link-card small { color: #666; }
+
+        a[href^="http"]::after {
+          content: " (" attr(href) ")";
+          font-size: 0.8em;
+          font-weight: 400;
+          color: #666;
+          word-break: break-all;
+        }
+        .image-link::after, .nav a::after, .button::after,
+        .preview-card::after, .link-card a::after { content: none; }
+
+        .nav-wrap, .preview-wrap, .cta-row, .tag-list, .theme-toggle {
+          display: none;
+        }
+
+        .section-card, img, h1, h2, h3 {
+          page-break-inside: avoid;
+          break-inside: avoid;
+        }
+        h1, h2, h3 {
+          page-break-after: avoid;
+          break-after: avoid;
+        }
       }
     </style>
+    <script>(function(){var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})()</script>
     <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "@id": "https://concrete-sangminlee.github.io/#website", "url": "https://concrete-sangminlee.github.io/", "name": "Sang Min Lee", "description": "Ph.D. Candidate in AI | Seoul National University ML for structural health monitoring, concrete inspection, and wind engineering. Building practical AI tools for infrastructure....", "inLanguage": "en", "publisher": {"@id": "https://concrete-sangminlee.github.io/#person"}}, {"@type": "ProfilePage", "@id": "https://concrete-sangminlee.github.io/#webpage", "url": "https://concrete-sangminlee.github.io/", "name": "Sang Min Lee | Research Profile", "description": "Ph.D. Candidate in AI | Seoul National University ML for structural health monitoring, concrete inspection, and wind engineering. Building practical AI tools for infrastructure....", "inLanguage": "en", "isPartOf": {"@id": "https://concrete-sangminlee.github.io/#website"}, "about": {"@id": "https://concrete-sangminlee.github.io/#person"}, "primaryImageOfPage": {"@id": "https://concrete-sangminlee.github.io/#primaryimage"}}, {"@type": "ImageObject", "@id": "https://concrete-sangminlee.github.io/#primaryimage", "url": "https://concrete-sangminlee.github.io/og-preview.svg", "contentUrl": "https://concrete-sangminlee.github.io/og-preview.svg", "width": 1200, "height": 630, "caption": "Sang Min Lee profile preview highlighting Structural Health Monitoring, Concrete NDT, Wind Engineering."}, {"@type": "Person", "@id": "https://concrete-sangminlee.github.io/#person", "name": "Sang Min Lee", "url": "https://concrete-sangminlee.github.io/", "description": "Ph.D. Candidate in AI | Seoul National University ML for structural health monitoring, concrete inspection, and wind engineering. Building practical AI tools for infrastructure....", "image": {"@id": "https://concrete-sangminlee.github.io/#primaryimage"}, "knowsAbout": ["Structural Health Monitoring", "Concrete NDT", "Wind Engineering", "Research", "Publications", "Patents", "Projects", "Code", "Background"]}]}</script>
   </head>
   <body>
@@ -873,20 +1168,20 @@
           <p class="section-label">Research Agenda</p>
           <h2 class="section-title">Research</h2>
           <div class="section-body"><ul class="signal-grid"><li>
-  <strong>Signal 01</strong>
+  <strong>Focus 01</strong>
   <span><strong>Structural Health Monitoring</strong>: Anomaly detection and system identification using deep SVDD</span>
 </li><li>
-  <strong>Signal 02</strong>
+  <strong>Focus 02</strong>
   <span><strong>Concrete NDT</strong>: Automated impact-echo testing and crack image classification</span>
 </li><li>
-  <strong>Signal 03</strong>
+  <strong>Focus 03</strong>
   <span><strong>Wind Engineering</strong>: RAG for wind load design codes, wind pressure prediction</span>
 </li></ul></div>
         </article>
 <article class="section-card section-span-7 section-story" id="publications">
   <p class="section-label">Research Outputs</p>
   <h2 class="section-title">Publications</h2>
-  <div class="section-body"><p class="subheading">Journal Articles</p><table class="md-table"><thead><tr><th>Year</th><th>Publication</th></tr></thead><tbody><tr><td>2025</td><td><strong>S.M. Lee</strong>, J. Hong, H. Choi, T.H.K. Kang. &quot;Machine learning assisted method for automated impact-echo testing of concrete structures.&quot; <em>J. Nondestructive Evaluation</em> 44(4). <a href="https://doi.org/10.1007/s10921-025-01260-3" target="_blank" rel="noreferrer">[DOI</a>]</td></tr><tr><td>2025</td><td><strong>S.M. Lee</strong>, H.S. Choi, C. Kim, T.H.K. Kang. &quot;Lightweight alternative ML model for automating concrete crack image classification.&quot; <em>ACI Structural J.</em> 122(5). <a href="https://doi.org/10.14359/51746755" target="_blank" rel="noreferrer">[DOI</a>]</td></tr><tr><td>2025</td><td>Y.I. Lee, <strong>S.M. Lee</strong>, T.H.K. Kang. &quot;Multiclass deep SVDD for structural health monitoring.&quot; <em>J. Structural Engineering</em> 151(12). <a href="https://doi.org/10.1061/JSENDH.STENG-14823" target="_blank" rel="noreferrer">[DOI</a>]</td></tr><tr><td>2022</td><td><strong>S.M. Lee</strong>, H.S. Sung, T.H.K. Kang. &quot;Comparison of performance for predicting compressive strength of concrete using ML.&quot; <em>J. Korea Concrete Inst.</em> 34(5). <a href="https://doi.org/10.4334/jkci.2022.34.5.505" target="_blank" rel="noreferrer">[DOI</a>]</td></tr></tbody></table><p class="subheading">Selected Conference Papers</p><table class="md-table"><thead><tr><th>Year</th><th>Publication</th></tr></thead><tbody><tr><td>2025</td><td><strong>S.M. Lee</strong>, T.H.K. Kang. &quot;Retrieval augmented generation for assistance of using wind load design codes.&quot; <em>APCWE10</em>.</td></tr><tr><td>2024</td><td><strong>S.M. Lee</strong>, Y.I. Lee, T. Kang. &quot;Multi-sphere deep SVDD for system identification of building structure.&quot; <em>ACEM 2024</em>.</td></tr><tr><td>2024</td><td><strong>S.M. Lee</strong>, H.S. Choi, C. Kim, T. Kang. &quot;Representation learning for classification of concrete crack images.&quot; <em>Structures Congress</em>, Seoul.</td></tr><tr><td>2022</td><td><strong>S.M. Lee</strong>, T. Kang. &quot;Clustering wind pressure tap using dynamic time warping.&quot; <em>EACWE 2022</em>.</td></tr></tbody></table><p><a href="https://scholar.google.com/citations?user=ogvd_LsAAAAJ&amp;hl=en" target="_blank" rel="noreferrer">Full list on Google Scholar →</a></p></div>
+  <div class="section-body"><p class="subheading">Journal Articles</p><div class="table-wrap"><table class="md-table"><thead><tr><th style="text-align:center">Year</th><th>Publication</th></tr></thead><tbody><tr><td style="text-align:center">2025</td><td><strong>S.M. Lee</strong>, J. Hong, H. Choi, T.H.K. Kang. &quot;Machine learning assisted method for automated impact-echo testing of concrete structures.&quot; <em>J. Nondestructive Evaluation</em> 44(4). <a href="https://doi.org/10.1007/s10921-025-01260-3" target="_blank" rel="noreferrer">[DOI</a>]</td></tr><tr><td style="text-align:center">2025</td><td><strong>S.M. Lee</strong>, H.S. Choi, C. Kim, T.H.K. Kang. &quot;Lightweight alternative ML model for automating concrete crack image classification.&quot; <em>ACI Structural J.</em> 122(5). <a href="https://doi.org/10.14359/51746755" target="_blank" rel="noreferrer">[DOI</a>]</td></tr><tr><td style="text-align:center">2025</td><td>Y.I. Lee, <strong>S.M. Lee</strong>, T.H.K. Kang. &quot;Multiclass deep SVDD for structural health monitoring.&quot; <em>J. Structural Engineering</em> 151(12). <a href="https://doi.org/10.1061/JSENDH.STENG-14823" target="_blank" rel="noreferrer">[DOI</a>]</td></tr><tr><td style="text-align:center">2022</td><td><strong>S.M. Lee</strong>, H.S. Sung, T.H.K. Kang. &quot;Comparison of performance for predicting compressive strength of concrete using ML.&quot; <em>J. Korea Concrete Inst.</em> 34(5). <a href="https://doi.org/10.4334/jkci.2022.34.5.505" target="_blank" rel="noreferrer">[DOI</a>]</td></tr></tbody></table></div><p class="subheading">Selected Conference Papers</p><div class="table-wrap"><table class="md-table"><thead><tr><th style="text-align:center">Year</th><th>Publication</th></tr></thead><tbody><tr><td style="text-align:center">2025</td><td><strong>S.M. Lee</strong>, T.H.K. Kang. &quot;Retrieval augmented generation for assistance of using wind load design codes.&quot; <em>APCWE10</em>.</td></tr><tr><td style="text-align:center">2024</td><td><strong>S.M. Lee</strong>, Y.I. Lee, T. Kang. &quot;Multi-sphere deep SVDD for system identification of building structure.&quot; <em>ACEM 2024</em>.</td></tr><tr><td style="text-align:center">2024</td><td><strong>S.M. Lee</strong>, H.S. Choi, C. Kim, T. Kang. &quot;Representation learning for classification of concrete crack images.&quot; <em>Structures Congress</em>, Seoul.</td></tr><tr><td style="text-align:center">2022</td><td><strong>S.M. Lee</strong>, T. Kang. &quot;Clustering wind pressure tap using dynamic time warping.&quot; <em>EACWE 2022</em>.</td></tr></tbody></table></div><p><a href="https://scholar.google.com/citations?user=ogvd_LsAAAAJ&amp;hl=en" target="_blank" rel="noreferrer">Full list on Google Scholar →</a></p></div>
 </article>
 <article class="section-card section-span-7 section-story" id="patents">
   <p class="section-label">Patents</p>
@@ -899,21 +1194,26 @@
   <div class="section-body"><ul class="stack-grid"><li><strong>Hyper-converged Forensic Research Center for Infrastructure</strong> (2021-2027): NRF Korea</li><li><strong>Smart City Innovative Technology Demonstration</strong> (2024-2025): KAIA</li><li><strong>AI for Construction Research</strong> (2024): Sejong Construction &amp; SNU</li></ul></div>
 </article>
 <article class="section-card section-span-6 section-stack" id="code">
-  <p class="section-label">Section 05</p>
+  <p class="section-label">Open Source</p>
   <h2 class="section-title">Code</h2>
   <div class="section-body"><ul class="stack-grid"><li><a href="https://github.com/concrete-sangminlee/paperfactory" target="_blank" rel="noreferrer">**paperfactory**</a>: AI agent for civil engineering research papers (15 journals, 18 utilities, CLI + Web UI)</li><li><a href="https://github.com/concrete-sangminlee/WindTimeHistoryReconstruction" target="_blank" rel="noreferrer">**WindTimeHistoryReconstruction**</a>: Wind time history reconstruction</li><li><a href="https://github.com/concrete-sangminlee/SNU_ArchitectureAndAI" target="_blank" rel="noreferrer">**SNU_ArchitectureAndAI**</a>: &quot;Architecture and AI&quot; graduate course materials, SNU</li></ul></div>
 </article>
 <article class="section-card section-span-7 section-story" id="background">
-  <p class="section-label">Section 06</p>
+  <p class="section-label">Background</p>
   <h2 class="section-title">Background</h2>
-  <div class="section-body"><table class="md-table"><thead><tr><th>Degree</th><th>Field</th><th>Institution</th><th>Period</th></tr></thead><tbody><tr><td><strong>Ph.D.</strong></td><td>Artificial Intelligence</td><td>Seoul National University</td><td>2023-2027 (expected)</td></tr><tr><td><strong>M.S.</strong></td><td>Structural Engineering</td><td>Seoul National University</td><td>2021-2023</td></tr><tr><td><strong>B.S.</strong></td><td>Architecture &amp; Arch. Eng. + ECE (double major)</td><td>Seoul National University</td><td>2016-2021</td></tr><tr><td></td><td>Science</td><td>Korea Science Academy of KAIST</td><td>2013-2016</td></tr></tbody></table><ul class="detail-list"><li><strong>SNU AI Fellowship</strong> (2025, 2026) · <strong>SNU AI Paper Competition Excellence Award</strong> (2025)</li><li>SNU AI Graduate School Scholarship (2023, 2024) · Outstanding TA Award (2022) · KCI Presentation Award (2022)</li></ul><p>Member of ASCE, ACI, KCI, AIK, KSMI | WEIK Organizing Committee (2025)</p><div align="center"><p><a href="mailto:201612445@snu.ac.kr">201612445@snu.ac.kr</a> · <a href="https://concrete-sangminlee.github.io/" target="_blank" rel="noreferrer">concrete-sangminlee.github.io</a></p></div></div>
+  <div class="section-body"><div class="table-wrap"><table class="md-table"><thead><tr><th>Degree</th><th>Field</th><th>Institution</th><th>Period</th></tr></thead><tbody><tr><td><strong>Ph.D.</strong></td><td>Artificial Intelligence</td><td>Seoul National University</td><td>2023-2027 (expected)</td></tr><tr><td><strong>M.S.</strong></td><td>Structural Engineering</td><td>Seoul National University</td><td>2021-2023</td></tr><tr><td><strong>B.S.</strong></td><td>Architecture &amp; Arch. Eng. + ECE (double major)</td><td>Seoul National University</td><td>2016-2021</td></tr><tr><td></td><td>Science</td><td>Korea Science Academy of KAIST</td><td>2013-2016</td></tr></tbody></table></div><ul class="detail-list"><li><strong>SNU AI Fellowship</strong> (2025, 2026) · <strong>SNU AI Paper Competition Excellence Award</strong> (2025)</li><li>SNU AI Graduate School Scholarship (2023, 2024) · Outstanding TA Award (2022) · KCI Presentation Award (2022)</li></ul><p>Member of ASCE, ACI, KCI, AIK, KSMI | WEIK Organizing Committee (2025)</p><div align="center"><p><a href="mailto:201612445@snu.ac.kr">201612445@snu.ac.kr</a> · <a href="https://concrete-sangminlee.github.io/" target="_blank" rel="noreferrer">concrete-sangminlee.github.io</a></p></div></div>
 </article>
     </section>
 
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode">
+        <svg class="theme-toggle-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="theme-toggle-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
       <footer class="footer">
         <span>Maintained in <a href="https://github.com/concrete-sangminlee/concrete-sangminlee">the profile repository</a> and published as static output.</span>
         <span><span class="footer-note">Build stamp</span> Profile snapshot</span>
       </footer>
     </main>
+    <script>(function(){var b=document.getElementById('theme-toggle');b&&b.addEventListener('click',function(){var r=document.documentElement,c=r.getAttribute('data-theme'),d=c==='dark'||(c!=='light'&&window.matchMedia('(prefers-color-scheme:dark)').matches);var n=d?'light':'dark';r.setAttribute('data-theme',n);localStorage.setItem('theme',n);});})()</script>
   </body>
 </html>
