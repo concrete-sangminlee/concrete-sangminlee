@@ -434,6 +434,12 @@ Applied researcher.
         self.assertIn("Sample title", output)
         self.assertIn("Sample Journal", output)
 
+    def test_og_svg_starts_at_column_zero(self) -> None:
+        artifacts = MODULE.render_site_artifacts(SAMPLE_MARKDOWN, generated_at=FIXED_AT)
+        first_line = artifacts.og_image.split("\n", 1)[0]
+        self.assertTrue(first_line.startswith("<svg "),
+                        f"SVG should start at column 0, got: {first_line!r}")
+
     def test_sitemap_xml_declaration_starts_at_column_zero(self) -> None:
         artifacts = MODULE.render_site_artifacts(SAMPLE_MARKDOWN, generated_at=FIXED_AT)
         first_line = artifacts.sitemap.split("\n", 1)[0]

@@ -2226,7 +2226,7 @@ def render_og_image(profile: Profile, description: str, tags: list[str], metrics
     description_lines = wrap_svg_lines(description, width=42, max_lines=3)
     chips = tags[:4] or ["academic profile"]
 
-    chip_markup: list[str] = []
+    chip_lines: list[str] = []
     x = 72
     y = 452
     row_limit = 760
@@ -2236,102 +2236,68 @@ def render_og_image(profile: Profile, description: str, tags: list[str], metrics
         if x + width > row_limit:
             x = 72
             y += 56
-        chip_markup.append(
-            textwrap.dedent(
-                f"""
-                <g transform="translate({x} {y})">
-                  <rect width="{width}" height="42" rx="21" fill="rgba(255,255,255,0.16)" stroke="rgba(255,255,255,0.18)" />
-                  <text class="chip" x="18" y="27">{html.escape(label)}</text>
-                </g>"""
-            ).strip()
-        )
+        chip_lines.extend([
+            f'  <g transform="translate({x} {y})">',
+            f'    <rect width="{width}" height="42" rx="21" fill="rgba(255,255,255,0.16)" stroke="rgba(255,255,255,0.18)" />',
+            f'    <text class="chip" x="18" y="27">{html.escape(label)}</text>',
+            '  </g>',
+        ])
         x += width + 14
 
-    metric_markup = "".join(
-        textwrap.dedent(
-            f"""
-            <g transform="translate(840 {126 + index * 138})">
-              <rect width="288" height="112" rx="28" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.1)" />
-              <text class="metric-value" x="28" y="48">{html.escape(metric.value)}</text>
-              <text class="metric-label" x="28" y="74">{html.escape(metric.label.upper())}</text>
-              <text class="metric-detail" x="28" y="94">{html.escape(metric.detail)}</text>
-            </g>"""
-        ).strip()
-        for index, metric in enumerate(metrics)
-    )
+    metric_lines: list[str] = []
+    for index, metric in enumerate(metrics):
+        metric_lines.extend([
+            f'  <g transform="translate(840 {126 + index * 138})">',
+            '    <rect width="288" height="112" rx="28" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.1)" />',
+            f'    <text class="metric-value" x="28" y="48">{html.escape(metric.value)}</text>',
+            f'    <text class="metric-label" x="28" y="74">{html.escape(metric.label.upper())}</text>',
+            f'    <text class="metric-detail" x="28" y="94">{html.escape(metric.detail)}</text>',
+            '  </g>',
+        ])
 
-    return textwrap.dedent(
-        f"""\
-        <svg xmlns="http://www.w3.org/2000/svg" width="{OG_IMAGE_WIDTH}" height="{OG_IMAGE_HEIGHT}" viewBox="0 0 {OG_IMAGE_WIDTH} {OG_IMAGE_HEIGHT}" role="img" aria-labelledby="title desc">
-          <title id="title">{html.escape(profile.title)} profile preview</title>
-          <desc id="desc">{html.escape(description)}</desc>
-          <defs>
-            <linearGradient id="bg" x1="0%" x2="100%" y1="0%" y2="100%">
-              <stop offset="0%" stop-color="#132824" />
-              <stop offset="52%" stop-color="#0f1c1a" />
-              <stop offset="100%" stop-color="#102d28" />
-            </linearGradient>
-            <radialGradient id="coral" cx="18%" cy="8%" r="58%">
-              <stop offset="0%" stop-color="rgba(202,90,63,0.42)" />
-              <stop offset="100%" stop-color="rgba(202,90,63,0)" />
-            </radialGradient>
-            <radialGradient id="teal" cx="88%" cy="0%" r="54%">
-              <stop offset="0%" stop-color="rgba(15,118,110,0.42)" />
-              <stop offset="100%" stop-color="rgba(15,118,110,0)" />
-            </radialGradient>
-            <style>
-              .eyebrow {{
-                fill: rgba(248, 242, 234, 0.72);
-                font: 800 14px Manrope, Arial, sans-serif;
-                letter-spacing: 0.22em;
-              }}
-              .title {{
-                fill: #f8f2ea;
-                font: 700 86px Fraunces, Georgia, serif;
-                letter-spacing: -0.06em;
-              }}
-              .body {{
-                fill: rgba(248, 242, 234, 0.82);
-                font: 500 28px Manrope, Arial, sans-serif;
-              }}
-              .chip {{
-                fill: #f8f2ea;
-                font: 700 18px Manrope, Arial, sans-serif;
-              }}
-              .metric-value {{
-                fill: #f8f2ea;
-                font: 700 42px Fraunces, Georgia, serif;
-                letter-spacing: -0.04em;
-              }}
-              .metric-label {{
-                fill: #f3cab7;
-                font: 800 12px Manrope, Arial, sans-serif;
-                letter-spacing: 0.18em;
-              }}
-              .metric-detail {{
-                fill: rgba(248, 242, 234, 0.7);
-                font: 500 14px Manrope, Arial, sans-serif;
-              }}
-              .url {{
-                fill: rgba(248, 242, 234, 0.64);
-                font: 700 16px Manrope, Arial, sans-serif;
-                letter-spacing: 0.08em;
-              }}
-            </style>
-          </defs>
-          <rect width="{OG_IMAGE_WIDTH}" height="{OG_IMAGE_HEIGHT}" rx="0" fill="url(#bg)" />
-          <rect width="{OG_IMAGE_WIDTH}" height="{OG_IMAGE_HEIGHT}" rx="0" fill="url(#coral)" />
-          <rect width="{OG_IMAGE_WIDTH}" height="{OG_IMAGE_HEIGHT}" rx="0" fill="url(#teal)" />
-          <rect x="36" y="36" width="1128" height="558" rx="36" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.09)" />
-          <text class="eyebrow" x="72" y="88">ACADEMIC RESEARCH PROFILE</text>
-          {render_svg_text_block(title_lines, 72, 182, 92, "title")}
-          {render_svg_text_block(description_lines, 72, 322, 40, "body")}
-          {''.join(chip_markup)}
-          {metric_markup}
-          <text class="url" x="72" y="582">{html.escape(canonical_url)}</text>
-        </svg>
-        """
-    )
+    lines = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{OG_IMAGE_WIDTH}" height="{OG_IMAGE_HEIGHT}" viewBox="0 0 {OG_IMAGE_WIDTH} {OG_IMAGE_HEIGHT}" role="img" aria-labelledby="title desc">',
+        f'  <title id="title">{html.escape(profile.title)} profile preview</title>',
+        f'  <desc id="desc">{html.escape(description)}</desc>',
+        '  <defs>',
+        '    <linearGradient id="bg" x1="0%" x2="100%" y1="0%" y2="100%">',
+        '      <stop offset="0%" stop-color="#132824" />',
+        '      <stop offset="52%" stop-color="#0f1c1a" />',
+        '      <stop offset="100%" stop-color="#102d28" />',
+        '    </linearGradient>',
+        '    <radialGradient id="coral" cx="18%" cy="8%" r="58%">',
+        '      <stop offset="0%" stop-color="rgba(202,90,63,0.42)" />',
+        '      <stop offset="100%" stop-color="rgba(202,90,63,0)" />',
+        '    </radialGradient>',
+        '    <radialGradient id="teal" cx="88%" cy="0%" r="54%">',
+        '      <stop offset="0%" stop-color="rgba(15,118,110,0.42)" />',
+        '      <stop offset="100%" stop-color="rgba(15,118,110,0)" />',
+        '    </radialGradient>',
+        '    <style>',
+        '      .eyebrow { fill: rgba(248, 242, 234, 0.72); font: 800 14px Manrope, Arial, sans-serif; letter-spacing: 0.22em; }',
+        '      .title { fill: #f8f2ea; font: 700 86px Fraunces, Georgia, serif; letter-spacing: -0.06em; }',
+        '      .body { fill: rgba(248, 242, 234, 0.82); font: 500 28px Manrope, Arial, sans-serif; }',
+        '      .chip { fill: #f8f2ea; font: 700 18px Manrope, Arial, sans-serif; }',
+        '      .metric-value { fill: #f8f2ea; font: 700 42px Fraunces, Georgia, serif; letter-spacing: -0.04em; }',
+        '      .metric-label { fill: #f3cab7; font: 800 12px Manrope, Arial, sans-serif; letter-spacing: 0.18em; }',
+        '      .metric-detail { fill: rgba(248, 242, 234, 0.7); font: 500 14px Manrope, Arial, sans-serif; }',
+        '      .url { fill: rgba(248, 242, 234, 0.64); font: 700 16px Manrope, Arial, sans-serif; letter-spacing: 0.08em; }',
+        '    </style>',
+        '  </defs>',
+        f'  <rect width="{OG_IMAGE_WIDTH}" height="{OG_IMAGE_HEIGHT}" rx="0" fill="url(#bg)" />',
+        f'  <rect width="{OG_IMAGE_WIDTH}" height="{OG_IMAGE_HEIGHT}" rx="0" fill="url(#coral)" />',
+        f'  <rect width="{OG_IMAGE_WIDTH}" height="{OG_IMAGE_HEIGHT}" rx="0" fill="url(#teal)" />',
+        '  <rect x="36" y="36" width="1128" height="558" rx="36" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.09)" />',
+        '  <text class="eyebrow" x="72" y="88">ACADEMIC RESEARCH PROFILE</text>',
+        f'  {render_svg_text_block(title_lines, 72, 182, 92, "title")}',
+        f'  {render_svg_text_block(description_lines, 72, 322, 40, "body")}',
+        *chip_lines,
+        *metric_lines,
+        f'  <text class="url" x="72" y="582">{html.escape(canonical_url)}</text>',
+        '</svg>',
+        '',
+    ]
+    return "\n".join(lines)
 
 
 def build_og_image_alt(profile: Profile, tags: list[str]) -> str:
