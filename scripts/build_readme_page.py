@@ -2595,6 +2595,31 @@ def build_structured_data(
 
     publications = extract_publications(profile, person_id)
     if publications:
+        base = person_id.rsplit("#", 1)[0]
+        co_author_ids: dict[str, str] = {}
+        co_author_entities: list[dict[str, object]] = []
+        for article in publications:
+            new_authors: list[dict[str, object]] = []
+            for author in article.get("author", []):  # type: ignore[assignment]
+                if isinstance(author, dict) and "@id" in author and "@type" not in author:
+                    new_authors.append(author)
+                    continue
+                if isinstance(author, dict) and author.get("@type") == "Person" and "name" in author:
+                    name = str(author["name"])
+                    if name not in co_author_ids:
+                        slug = slugify(name) or f"co-author-{len(co_author_ids) + 1}"
+                        cid = f"{base}#person-{slug}"
+                        co_author_ids[name] = cid
+                        co_author_entities.append({
+                            "@type": "Person",
+                            "@id": cid,
+                            "name": name,
+                        })
+                    new_authors.append({"@id": co_author_ids[name]})
+                else:
+                    new_authors.append(author)
+            article["author"] = new_authors
+        graph.extend(co_author_entities)
         graph.extend(publications)
 
     if generated_at is not None:

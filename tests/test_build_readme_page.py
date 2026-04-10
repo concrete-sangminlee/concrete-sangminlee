@@ -472,6 +472,38 @@ Researcher.
         self.assertIn("First real publication title", summary)
         self.assertNotIn("Scholar", summary)
 
+    def test_publication_co_authors_deduplicated_via_id(self) -> None:
+        md = """# Jane Doe
+
+Researcher.
+
+## Publications
+
+| Year | Publication |
+|------|-------------|
+| 2025 | **J. Doe**, A. Smith, B. Lee. "Paper one." *Test Journal* 1(1). |
+| 2024 | **J. Doe**, A. Smith. "Paper two." *Test Journal* 2(1). |
+| 2023 | **J. Doe**, B. Lee, C. Park. "Paper three." *Test Journal* 3(1). |
+"""
+        output = MODULE.render_site(md, generated_at=FIXED_AT)
+        import json as _json
+        match = re.search(r'<script type="application/ld\+json">(.*?)</script>', output, re.DOTALL)
+        data = _json.loads(match.group(1))
+        people = [e for e in data["@graph"] if e.get("@type") == "Person"]
+        # 1 main person + 3 unique co-authors (A. Smith, B. Lee, C. Park)
+        self.assertEqual(len(people), 4)
+        # Each co-author should appear exactly once with a stable @id
+        co_author_names = [p["name"] for p in people if "co-author" not in p["@id"] and p["name"] != "Jane Doe"]
+        self.assertIn("A. Smith", co_author_names)
+        self.assertIn("B. Lee", co_author_names)
+        self.assertIn("C. Park", co_author_names)
+        # All publication authors should be @id refs
+        articles = [e for e in data["@graph"] if e.get("@type") == "ScholarlyArticle"]
+        for article in articles:
+            for author in article["author"]:
+                self.assertIn("@id", author, f"Author should be @id ref: {author}")
+                self.assertNotIn("name", author, f"Author should not have inline name: {author}")
+
     def test_favicon_generated_and_referenced(self) -> None:
         artifacts = MODULE.render_site_artifacts(SAMPLE_MARKDOWN, generated_at=FIXED_AT)
         self.assertIn("<svg", artifacts.favicon)
