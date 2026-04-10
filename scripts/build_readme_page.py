@@ -2714,10 +2714,6 @@ def render_site_artifacts(markdown: str, generated_at: datetime | None = None) -
         preview_section_html = textwrap.dedent(
             f"""
             <section class="preview-wrap">
-              <div class="section-intro">
-                <p>Research Overview</p>
-                <h2 class="section-title">Research directions, outputs, and activity signals at a glance.</h2>
-              </div>
               <div class="preview-grid">{preview_html}</div>
             </section>
             """
