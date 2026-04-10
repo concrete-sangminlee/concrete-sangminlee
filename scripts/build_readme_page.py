@@ -1250,12 +1250,8 @@ __MODIFIED_META__
           </div>
         </div>
         <aside class="hero-side">
-          <p class="eyebrow">Research Profile</p>
-          <h2>Selected outputs, active directions, and direct paths for collaboration.</h2>
-          <p>
-            The page turns the repository profile into a research-facing overview with focus areas,
-            recent highlights, publications, projects, and verifiable links for deeper context.
-          </p>
+          <p class="eyebrow">At a glance</p>
+          <h2>__HERO_SIDE_HEADING__</h2>
           <div class="metric-grid">__METRIC_HTML__</div>
         </aside>
       </section>
@@ -2707,6 +2703,11 @@ def render_site_artifacts(markdown: str, generated_at: datetime | None = None) -
             """
         ).strip()
 
+    if tags:
+        hero_side_heading = " · ".join(tags[:3])
+    else:
+        hero_side_heading = page_title
+
     sitemap = build_sitemap(canonical_url, og_image_url, profile, built_at)
     robots = build_robots(canonical_url)
     og_image = render_og_image(profile, description, tags, metrics, canonical_url)
@@ -2747,6 +2748,7 @@ def render_site_artifacts(markdown: str, generated_at: datetime | None = None) -
         "__CONTENT_SECTION__": content_section_html,
         "__GENERATED_AT__": generated_label,
         "__BUILD_STAMP_HTML__": build_stamp_html,
+        "__HERO_SIDE_HEADING__": html.escape(hero_side_heading),
         "__REPO_URL__": html.escape(REPO_URL, quote=True),
     }
 
