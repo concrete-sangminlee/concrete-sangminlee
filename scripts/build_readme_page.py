@@ -2506,6 +2506,48 @@ PATENT_NUMBER_RE = re.compile(r"/patent/([A-Z0-9]+)(?:/|$)")
 PATENT_BADGE_YEAR_RE = re.compile(r"Granted[_\s]*(\d{4})")
 PATENT_NAME_RE = re.compile(r"\*\*([^*]+)\*\*")
 PATENT_LINK_RE = re.compile(r"\[\[([^\]]+)\]\(([^)]+)\)\]")
+PROJECT_RE = re.compile(
+    r"^\*\*(?P<name>[^*]+)\*\*\s*\((?P<period>[^)]+)\)\s*:\s*(?P<funder>.+?)\s*$"
+)
+
+
+def extract_research_projects(profile: Profile, person_id: str) -> list[dict[str, object]]:
+    projects: list[dict[str, object]] = []
+    for section in profile.sections:
+        heading = section.heading.lower()
+        if not any(token in heading for token in ("project", "funding", "grant")):
+            continue
+        for block in section.blocks:
+            if block.kind not in {"list", "ordered_list"}:
+                continue
+            for item in block.items:
+                match = PROJECT_RE.match(item.strip())
+                if not match:
+                    continue
+                name = strip_markdown(match.group("name")).strip()
+                period = match.group("period").strip()
+                funder = strip_markdown(match.group("funder")).strip()
+                if not name:
+                    continue
+                project: dict[str, object] = {
+                    "@type": "ResearchProject",
+                    "name": name,
+                    "member": {"@id": person_id},
+                }
+                # Parse period like "2021-2027" or "2024"
+                period_parts = period.split("-")
+                if len(period_parts) == 2 and period_parts[0].strip().isdigit() and period_parts[1].strip().isdigit():
+                    project["startDate"] = period_parts[0].strip()
+                    project["endDate"] = period_parts[1].strip()
+                elif period_parts[0].strip().isdigit():
+                    project["startDate"] = period_parts[0].strip()
+                if funder:
+                    project["funder"] = {
+                        "@type": "Organization",
+                        "name": funder,
+                    }
+                projects.append(project)
+    return projects
 
 
 def extract_patents(profile: Profile, person_id: str) -> list[dict[str, object]]:
@@ -2642,6 +2684,10 @@ def build_structured_data(
     patents = extract_patents(profile, person_id)
     if patents:
         graph.extend(patents)
+
+    research_projects = extract_research_projects(profile, person_id)
+    if research_projects:
+        graph.extend(research_projects)
 
     publications = extract_publications(profile, person_id)
     if publications:

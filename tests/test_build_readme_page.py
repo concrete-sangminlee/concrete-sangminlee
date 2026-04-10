@@ -472,6 +472,35 @@ Researcher.
         self.assertIn("First real publication title", summary)
         self.assertNotIn("Scholar", summary)
 
+    def test_research_projects_parsed_into_schema_org_entities(self) -> None:
+        md = """# Jane Doe
+
+Researcher.
+
+## Projects
+
+- **Sample Project A** (2021-2025): NRF Korea
+- **Single Year Project** (2024): Foundation X
+- **Long Running** (2020-2030): Multiple Funders
+"""
+        profile = MODULE.parse_profile(md)
+        person_id = "https://example.com/#person"
+        projects = MODULE.extract_research_projects(profile, person_id)
+        self.assertEqual(len(projects), 3)
+
+        first = projects[0]
+        self.assertEqual(first["@type"], "ResearchProject")
+        self.assertEqual(first["name"], "Sample Project A")
+        self.assertEqual(first["startDate"], "2021")
+        self.assertEqual(first["endDate"], "2025")
+        self.assertEqual(first["funder"]["name"], "NRF Korea")
+        self.assertEqual(first["member"], {"@id": person_id})
+
+        # Single year project should have only startDate
+        single = projects[1]
+        self.assertEqual(single["startDate"], "2024")
+        self.assertNotIn("endDate", single)
+
     def test_patents_parsed_into_schema_org_entities(self) -> None:
         md = """# Jane Doe
 
