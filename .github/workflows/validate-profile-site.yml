@@ -23,7 +23,7 @@ jobs:
         run: make check
 
       - name: Verify generated docs are committed
-        run: git diff --exit-code -- docs/index.html docs/og-preview.svg docs/sitemap.xml docs/robots.txt docs/.nojekyll
+        run: git diff --exit-code -- docs/
 
       - name: Upload site artifact
         if: always()
