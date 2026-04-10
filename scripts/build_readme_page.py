@@ -2502,6 +2502,45 @@ def extract_publications(profile: Profile, person_id: str) -> list[dict[str, obj
     return publications
 
 
+PATENT_NUMBER_RE = re.compile(r"/patent/([A-Z0-9]+)(?:/|$)")
+PATENT_BADGE_YEAR_RE = re.compile(r"Granted[_\s]*(\d{4})")
+PATENT_NAME_RE = re.compile(r"\*\*([^*]+)\*\*")
+PATENT_LINK_RE = re.compile(r"\[\[([^\]]+)\]\(([^)]+)\)\]")
+
+
+def extract_patents(profile: Profile, person_id: str) -> list[dict[str, object]]:
+    patents: list[dict[str, object]] = []
+    for section in profile.sections:
+        heading = section.heading.lower()
+        if "patent" not in heading:
+            continue
+        for block in section.blocks:
+            if block.kind != "paragraph" or not block.items:
+                continue
+            text = block.items[0]
+            name_m = PATENT_NAME_RE.search(text)
+            link_m = PATENT_LINK_RE.search(text)
+            if not name_m:
+                continue
+            name = name_m.group(1).strip()
+            patent: dict[str, object] = {
+                "@type": "Patent",
+                "name": name,
+                "inventor": {"@id": person_id},
+            }
+            if link_m:
+                url = link_m.group(2)
+                patent["sameAs"] = url
+                num_m = PATENT_NUMBER_RE.search(url)
+                if num_m:
+                    patent["patentNumber"] = num_m.group(1)
+            year_m = PATENT_BADGE_YEAR_RE.search(text)
+            if year_m:
+                patent["datePublished"] = year_m.group(1)
+            patents.append(patent)
+    return patents
+
+
 def build_structured_data(
     profile: Profile,
     page_title: str,
@@ -2599,6 +2638,10 @@ def build_structured_data(
             "@type": "CollegeOrUniversity",
             "name": first_institution,
         }
+
+    patents = extract_patents(profile, person_id)
+    if patents:
+        graph.extend(patents)
 
     publications = extract_publications(profile, person_id)
     if publications:

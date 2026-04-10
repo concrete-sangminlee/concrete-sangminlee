@@ -472,6 +472,30 @@ Researcher.
         self.assertIn("First real publication title", summary)
         self.assertNotIn("Scholar", summary)
 
+    def test_patents_parsed_into_schema_org_entities(self) -> None:
+        md = """# Jane Doe
+
+Researcher.
+
+## Patents
+
+![Granted](https://shields.io/badge/KR_10--1234567_B1-Granted_2023-green) **Sample patent name** [[Google Patents](https://patents.google.com/patent/KR101234567B1/en)]
+
+![Granted](https://shields.io/badge/KR_10--7654321_B1-Granted_2022-green) **Another patent** [[Google Patents](https://patents.google.com/patent/KR107654321B1/en)]
+"""
+        profile = MODULE.parse_profile(md)
+        person_id = "https://example.com/#person"
+        patents = MODULE.extract_patents(profile, person_id)
+        self.assertEqual(len(patents), 2)
+        self.assertEqual(patents[0]["@type"], "Patent")
+        self.assertEqual(patents[0]["name"], "Sample patent name")
+        self.assertEqual(patents[0]["patentNumber"], "KR101234567B1")
+        self.assertEqual(patents[0]["datePublished"], "2023")
+        self.assertEqual(patents[0]["sameAs"], "https://patents.google.com/patent/KR101234567B1/en")
+        self.assertEqual(patents[0]["inventor"], {"@id": person_id})
+        self.assertEqual(patents[1]["patentNumber"], "KR107654321B1")
+        self.assertEqual(patents[1]["datePublished"], "2022")
+
     def test_person_affiliation_set_from_first_credential(self) -> None:
         md = """# Jane Doe
 
