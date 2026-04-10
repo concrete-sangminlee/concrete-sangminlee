@@ -433,6 +433,28 @@ Applied researcher.
         self.assertIn("Sample title", output)
         self.assertIn("Sample Journal", output)
 
+    def test_summarize_section_uses_table_content_not_trailing_paragraph(self) -> None:
+        md = """# Jane Doe
+
+Researcher.
+
+## Publications
+
+### Journal Articles
+
+| Year | Publication |
+|------|-------------|
+| 2025 | First real publication title |
+| 2024 | Second publication |
+
+[See full list on Scholar](https://scholar.google.com/x)
+"""
+        profile = MODULE.parse_profile(md)
+        section = next(s for s in profile.sections if s.heading == "Publications")
+        summary = MODULE.summarize_section(section)
+        self.assertIn("First real publication title", summary)
+        self.assertNotIn("Scholar", summary)
+
     def test_keywords_excludes_section_headings(self) -> None:
         md = """# Jane Doe
 

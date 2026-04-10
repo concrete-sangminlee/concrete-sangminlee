@@ -1865,12 +1865,23 @@ def count_intro_badges(profile: Profile) -> int:
 def summarize_section(section: Section, limit: int = 150) -> str:
     fragments: list[str] = []
     for block in section.blocks:
-        if block.kind in {"paragraph", "quote"}:
-            fragments.extend(
-                strip_markdown(item)
-                for item in block.items
-                if not is_media_only_text(item)
-            )
+        if block.kind == "subheading":
+            continue
+        if block.table_data and len(block.table_data) > 1:
+            data_rows = block.table_data[1:]
+            content_col = len(block.table_data[0]) - 1
+            for row in data_rows[:2]:
+                if content_col < len(row):
+                    cell = strip_markdown(row[content_col]).strip()
+                    if cell:
+                        fragments.append(cell)
+        elif block.kind in {"paragraph", "quote"}:
+            for item in block.items:
+                if is_media_only_text(item):
+                    continue
+                cleaned = strip_markdown(item).strip()
+                if cleaned:
+                    fragments.append(cleaned)
         elif block.kind in {"list", "ordered_list"}:
             fragments.extend(strip_markdown(item) for item in block.items[:2])
         if fragments:
