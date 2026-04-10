@@ -2627,24 +2627,24 @@ def build_structured_data(
 
 
 def build_sitemap(canonical_url: str, og_image_url: str, profile: Profile, generated_at: datetime | None) -> str:
-    last_modified = ""
+    lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">',
+        '  <url>',
+        f'    <loc>{html.escape(canonical_url)}</loc>',
+    ]
     if generated_at is not None:
-        last_modified = f"\n    <lastmod>{generated_at.date().isoformat()}</lastmod>"
-    return textwrap.dedent(
-        f"""\
-        <?xml version="1.0" encoding="UTF-8"?>
-        <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-          <url>
-            <loc>{html.escape(canonical_url)}</loc>
-{last_modified}
-            <image:image>
-              <image:loc>{html.escape(og_image_url)}</image:loc>
-              <image:title>{html.escape(profile.title)}</image:title>
-            </image:image>
-          </url>
-        </urlset>
-        """
-    )
+        lines.append(f'    <lastmod>{generated_at.date().isoformat()}</lastmod>')
+    lines.extend([
+        '    <image:image>',
+        f'      <image:loc>{html.escape(og_image_url)}</image:loc>',
+        f'      <image:title>{html.escape(profile.title)}</image:title>',
+        '    </image:image>',
+        '  </url>',
+        '</urlset>',
+        '',
+    ])
+    return "\n".join(lines)
 
 
 def build_robots(canonical_url: str) -> str:

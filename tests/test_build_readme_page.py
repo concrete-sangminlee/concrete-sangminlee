@@ -434,6 +434,16 @@ Applied researcher.
         self.assertIn("Sample title", output)
         self.assertIn("Sample Journal", output)
 
+    def test_sitemap_xml_declaration_starts_at_column_zero(self) -> None:
+        artifacts = MODULE.render_site_artifacts(SAMPLE_MARKDOWN, generated_at=FIXED_AT)
+        first_line = artifacts.sitemap.split("\n", 1)[0]
+        self.assertEqual(first_line, '<?xml version="1.0" encoding="UTF-8"?>')
+        for line in artifacts.sitemap.splitlines():
+            stripped = line.lstrip()
+            if stripped.startswith("<lastmod>"):
+                self.assertTrue(line.startswith("    <lastmod>"),
+                                f"lastmod should be indented with 4 spaces, got: {line!r}")
+
     def test_summarize_section_uses_table_content_not_trailing_paragraph(self) -> None:
         md = """# Jane Doe
 
