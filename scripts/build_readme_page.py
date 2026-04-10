@@ -1821,7 +1821,26 @@ def section_label(index: int, section: Section) -> str:
 
 
 def section_item_count(section: Section) -> int:
-    return sum(len(block.items) for block in section.blocks if block.kind in {"list", "ordered_list"})
+    count = 0
+    for block in section.blocks:
+        if block.kind in {"list", "ordered_list"}:
+            count += len(block.items)
+        elif block.table_data and len(block.table_data) > 1:
+            count += len(block.table_data) - 1
+    if count == 0:
+        for block in section.blocks:
+            if block.kind == "paragraph" and block.items:
+                if not is_media_only_text(block.items[0]):
+                    count += 1
+    return count
+
+
+def count_intro_badges(profile: Profile) -> int:
+    count = 0
+    for block in profile.intro_blocks:
+        for item in block.items:
+            count += len(LINKED_IMAGE_RE.findall(item))
+    return count
 
 
 def summarize_section(section: Section, limit: int = 150) -> str:
@@ -1854,6 +1873,8 @@ def count_items_for_sections(profile: Profile, keywords: tuple[str, ...]) -> int
 def build_metric_cards(profile: Profile, links: list[Link], tags: list[str]) -> list[MetricCard]:
     selected_outputs = count_items_for_sections(profile, ("publication", "paper", "patent", "output"))
     external_links = sum(1 for link in links if link.href.startswith("http"))
+    intro_badges = count_intro_badges(profile)
+    public_links = max(external_links, intro_badges)
 
     return [
         MetricCard(
@@ -1867,7 +1888,7 @@ def build_metric_cards(profile: Profile, links: list[Link], tags: list[str]) -> 
             detail="Highlighted publications and patents visible on the page.",
         ),
         MetricCard(
-            value=str(max(external_links or len(links), 1)),
+            value=str(max(public_links, 1)),
             label="Public Links",
             detail="Homepage, scholar, ORCID, GitHub, and direct contact endpoints.",
         ),
