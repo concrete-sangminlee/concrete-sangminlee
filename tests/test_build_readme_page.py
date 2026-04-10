@@ -580,6 +580,13 @@ Researcher.
         self.assertFalse(lines[-1].rstrip(".").endswith(("a", "e", "i", "o", "u")) and len(lines[-1]) < 5,
                          "Should not cut mid-word with single char")
 
+    def test_wrap_svg_lines_drops_dangling_connector(self) -> None:
+        text = "monitoring, concrete inspection, and wind engineering testing"
+        lines = MODULE.wrap_svg_lines(text, width=42, max_lines=1)
+        self.assertEqual(len(lines), 1)
+        self.assertNotIn(" and...", lines[0])
+        self.assertNotIn(", and", lines[0])
+
     def test_summarize_description_separates_intro_paragraphs(self) -> None:
         md = """# Jane Doe
 

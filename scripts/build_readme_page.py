@@ -2229,6 +2229,12 @@ def wrap_svg_lines(text: str, width: int, *, max_lines: int | None = None) -> li
             if last_space >= int(target * 0.5):
                 cut = cut[:last_space]
             last = cut.rstrip()
+        # Drop a dangling short connector word after a comma (e.g., "and", "or")
+        if "," in last:
+            head, _, tail = last.rpartition(",")
+            if 0 < len(tail.strip()) <= 4:
+                last = head.rstrip(", ")
+        last = last.rstrip(",;:- ")
         lines[-1] = last + "..."
     return lines
 
