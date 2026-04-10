@@ -406,6 +406,18 @@ Applied researcher.
         self.assertIn("Sample title", output)
         self.assertIn("Sample Journal", output)
 
+    def test_summarize_description_separates_intro_paragraphs(self) -> None:
+        md = """# Jane Doe
+
+**Senior researcher**
+
+ML engineer working on robust systems
+"""
+        profile = MODULE.parse_profile(md)
+        summary = MODULE.summarize_description(profile, [])
+        self.assertIn("Senior researcher. ML engineer", summary)
+        self.assertNotIn("researcher ML engineer", summary)
+
     def test_metric_cards_count_table_publications_and_intro_badges(self) -> None:
         md = """# Test Person
 

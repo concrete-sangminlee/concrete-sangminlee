@@ -1716,7 +1716,15 @@ def extract_tags(profile: Profile, limit: int = 5) -> list[str]:
 
 
 def summarize_description(profile: Profile, tags: list[str]) -> str:
-    summary = " ".join(strip_markdown(paragraph) for paragraph in profile.intro).strip()
+    cleaned: list[str] = []
+    for paragraph in profile.intro:
+        text = strip_markdown(paragraph).strip()
+        if not text:
+            continue
+        if text[-1] not in ".!?":
+            text += "."
+        cleaned.append(text)
+    summary = " ".join(cleaned).strip()
     if tags:
         focus_summary = ", ".join(tags[:3])
         if summary:
