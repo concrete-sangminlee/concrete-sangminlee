@@ -2653,7 +2653,7 @@ def render_site_artifacts(markdown: str, generated_at: datetime | None = None) -
     if not tag_html:
         tag_html = '<span class="tag">README-driven profile</span>'
 
-    cta_links = links[:4]
+    cta_links = links[:5]
     cta_html = ""
     for index, link in enumerate(cta_links):
         safe_href = html.escape(link.href, quote=True)
