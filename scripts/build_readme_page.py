@@ -2309,7 +2309,6 @@ def extract_credentials(profile: Profile) -> list[dict[str, object]]:
             degree_idx = next((i for i, h in enumerate(headers) if "degree" in h), None)
             field_idx = next((i for i, h in enumerate(headers) if "field" in h or "subject" in h), None)
             inst_idx = next((i for i, h in enumerate(headers) if "institution" in h or "school" in h or "university" in h), None)
-            period_idx = next((i for i, h in enumerate(headers) if "period" in h or "year" in h or "date" in h), None)
             if inst_idx is None:
                 continue
             for row in block.table_data[1:]:
@@ -2320,7 +2319,6 @@ def extract_credentials(profile: Profile) -> list[dict[str, object]]:
                     continue
                 degree = strip_markdown(row[degree_idx]).strip() if degree_idx is not None and degree_idx < len(row) else ""
                 field = strip_markdown(row[field_idx]).strip() if field_idx is not None and field_idx < len(row) else ""
-                period = strip_markdown(row[period_idx]).strip() if period_idx is not None and period_idx < len(row) else ""
 
                 if degree and field:
                     name = f"{degree} in {field}"
@@ -2346,8 +2344,6 @@ def extract_credentials(profile: Profile) -> list[dict[str, object]]:
                     cred["educationalLevel"] = DEGREE_LEVELS[normalized]
                 elif no_dots in DEGREE_LEVELS:
                     cred["educationalLevel"] = DEGREE_LEVELS[no_dots]
-                if period:
-                    cred["validFor"] = period
                 credentials.append(cred)
     return credentials
 
