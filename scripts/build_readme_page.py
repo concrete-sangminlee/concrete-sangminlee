@@ -129,8 +129,6 @@ __MODIFIED_META__
     <link rel="canonical" href="__CANONICAL_URL__" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="sitemap" type="application/xml" href="__SITEMAP_URL__" />
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
     <link rel="dns-prefetch" href="https://img.shields.io" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
