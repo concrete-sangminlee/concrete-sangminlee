@@ -1905,6 +1905,12 @@ def build_metric_cards(profile: Profile, links: list[Link], tags: list[str]) -> 
     intro_badges = count_intro_badges(profile)
     public_links = max(external_links, intro_badges)
 
+    link_labels = [link.label for link in links[:5]]
+    if link_labels:
+        public_links_detail = ", ".join(link_labels) + "."
+    else:
+        public_links_detail = "Direct contact and profile endpoints."
+
     return [
         MetricCard(
             value=str(max(len(tags), 1)),
@@ -1919,7 +1925,7 @@ def build_metric_cards(profile: Profile, links: list[Link], tags: list[str]) -> 
         MetricCard(
             value=str(max(public_links, 1)),
             label="Public Links",
-            detail="Homepage, scholar, ORCID, GitHub, and direct contact endpoints.",
+            detail=public_links_detail,
         ),
     ]
 

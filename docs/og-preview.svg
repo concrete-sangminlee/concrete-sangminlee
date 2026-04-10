@@ -61,7 +61,7 @@
     <rect width="288" height="112" rx="28" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.1)" />
     <text class="metric-value" x="28" y="48">5</text>
     <text class="metric-label" x="28" y="74">PUBLIC LINKS</text>
-    <text class="metric-detail" x="28" y="94">Homepage, scholar, ORCID, GitHub, and direct contact endpoints.</text>
+    <text class="metric-detail" x="28" y="94">Profile Site, Google Scholar, LinkedIn, ORCID, Email.</text>
   </g>
   <text class="url" x="72" y="582">https://concrete-sangminlee.github.io/</text>
 </svg>
