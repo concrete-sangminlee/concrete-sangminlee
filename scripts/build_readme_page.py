@@ -17,6 +17,7 @@ README_PATH = ROOT / "README.md"
 DOCS_DIR = ROOT / "docs"
 OUTPUT_PATH = DOCS_DIR / "index.html"
 OG_IMAGE_FILENAME = "og-preview.svg"
+FAVICON_FILENAME = "favicon.svg"
 SITEMAP_FILENAME = "sitemap.xml"
 ROBOTS_FILENAME = "robots.txt"
 NOJEKYLL_FILENAME = ".nojekyll"
@@ -87,6 +88,7 @@ class PreviewCard:
 class SiteArtifacts:
     html: str
     og_image: str
+    favicon: str
     sitemap: str
     robots: str
     nojekyll: str
@@ -125,6 +127,7 @@ __MODIFIED_META__
     <meta name="twitter:image" content="__OG_IMAGE_URL__" />
     <meta name="twitter:image:alt" content="__OG_IMAGE_ALT__" />
     <link rel="canonical" href="__CANONICAL_URL__" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="sitemap" type="application/xml" href="__SITEMAP_URL__" />
     <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
     <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
@@ -2772,14 +2775,30 @@ def render_site_artifacts(markdown: str, generated_at: datetime | None = None) -
     for token, value in replacements.items():
         output = output.replace(token, value)
 
+    favicon_letter = profile.title[0].upper() if profile.title else "?"
+    favicon = render_favicon(favicon_letter)
+
     return SiteArtifacts(
         html=output,
         og_image=og_image,
+        favicon=favicon,
         sitemap=sitemap,
         robots=robots,
         nojekyll="",
         canonical_url=canonical_url,
     )
+
+
+def render_favicon(letter: str) -> str:
+    safe_letter = html.escape(letter[:1])
+    lines = [
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">',
+        '  <rect width="32" height="32" rx="6" fill="#ca5a3f"/>',
+        f'  <text x="16" y="22" font-family="Georgia, \'Times New Roman\', serif" font-size="20" font-weight="700" fill="#f8f2ea" text-anchor="middle">{safe_letter}</text>',
+        '</svg>',
+        '',
+    ]
+    return "\n".join(lines)
 
 
 def render_site(markdown: str, generated_at: datetime | None = None) -> str:
@@ -2798,6 +2817,7 @@ def build(
 
     output_path.write_text(artifacts.html, encoding="utf-8")
     (output_dir / OG_IMAGE_FILENAME).write_text(artifacts.og_image, encoding="utf-8")
+    (output_dir / FAVICON_FILENAME).write_text(artifacts.favicon, encoding="utf-8")
     (output_dir / SITEMAP_FILENAME).write_text(artifacts.sitemap, encoding="utf-8")
     (output_dir / ROBOTS_FILENAME).write_text(artifacts.robots, encoding="utf-8")
     (output_dir / NOJEKYLL_FILENAME).write_text(artifacts.nojekyll, encoding="utf-8")

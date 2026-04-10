@@ -472,6 +472,21 @@ Researcher.
         self.assertIn("First real publication title", summary)
         self.assertNotIn("Scholar", summary)
 
+    def test_favicon_generated_and_referenced(self) -> None:
+        artifacts = MODULE.render_site_artifacts(SAMPLE_MARKDOWN, generated_at=FIXED_AT)
+        self.assertIn("<svg", artifacts.favicon)
+        self.assertIn(">J<", artifacts.favicon)
+        self.assertIn('rel="icon" type="image/svg+xml" href="favicon.svg"', artifacts.html)
+
+    def test_build_writes_favicon_file(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_root = Path(temp_dir)
+            readme_path = temp_root / "README.md"
+            output_path = temp_root / "docs" / "index.html"
+            readme_path.write_text(SAMPLE_MARKDOWN, encoding="utf-8")
+            MODULE.build(readme_path=readme_path, output_path=output_path, generated_at=FIXED_AT)
+            self.assertTrue((output_path.parent / "favicon.svg").exists())
+
     def test_profile_first_last_name_meta_tags(self) -> None:
         output = MODULE.render_site(SAMPLE_MARKDOWN, generated_at=FIXED_AT)
         self.assertIn('property="profile:first_name" content="Jane"', output)
