@@ -1736,14 +1736,11 @@ def summarize_description(profile: Profile, tags: list[str]) -> str:
             text += "."
         cleaned.append(text)
     summary = " ".join(cleaned).strip()
-    if tags:
-        focus_summary = ", ".join(tags[:3])
-        if summary:
-            summary = f"{summary} Focus areas include {focus_summary}."
-        else:
-            summary = f"{profile.title} profile. Focus areas include {focus_summary}."
     if not summary:
-        summary = f"{profile.title} profile."
+        if tags:
+            summary = f"{profile.title} profile. Focus areas include {', '.join(tags[:3])}."
+        else:
+            summary = f"{profile.title} profile."
     return truncate(summary, 180)
 
 
