@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import re
 import sys
 import tempfile
 import unittest
@@ -431,6 +432,32 @@ Applied researcher.
         self.assertIn('"ScholarlyArticle"', output)
         self.assertIn("Sample title", output)
         self.assertIn("Sample Journal", output)
+
+    def test_keywords_excludes_section_headings(self) -> None:
+        md = """# Jane Doe
+
+Researcher.
+
+## Focus
+- Topic alpha
+- Topic beta
+
+## Background
+
+| Degree | Field | Institution | Period |
+|--------|-------|-------------|--------|
+| Ph.D. | AI | SNU | 2023-2027 |
+
+## Code
+- [tool](https://example.com): A thing
+"""
+        output = MODULE.render_site(md, generated_at=FIXED_AT)
+        kw_match = re.search(r'<meta name="keywords" content="([^"]+)"', output)
+        self.assertIsNotNone(kw_match)
+        keywords = [k.strip() for k in kw_match.group(1).split(",")]
+        self.assertNotIn("Background", keywords)
+        self.assertNotIn("Code", keywords)
+        self.assertIn("Jane Doe", keywords)
 
     def test_knows_about_excludes_section_headings(self) -> None:
         md = """# Jane Doe

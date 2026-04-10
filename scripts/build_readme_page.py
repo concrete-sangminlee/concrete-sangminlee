@@ -1750,7 +1750,7 @@ def summarize_description(profile: Profile, tags: list[str]) -> str:
 def build_keywords(profile: Profile, tags: list[str]) -> str:
     seen: set[str] = set()
     ordered: list[str] = []
-    for candidate in [profile.title, *tags, *(section.heading for section in profile.sections)]:
+    for candidate in [profile.title, *tags]:
         cleaned = strip_markdown(candidate).strip()
         if not cleaned:
             continue
