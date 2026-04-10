@@ -1605,6 +1605,19 @@ def is_link_section(section: Section) -> bool:
 
 def extract_links(profile: Profile) -> list[Link]:
     links: list[Link] = []
+    seen: set[str] = set()
+
+    def add(link: Link | None) -> None:
+        if link and link.href not in seen:
+            seen.add(link.href)
+            links.append(link)
+
+    for block in profile.intro_blocks:
+        for item in block.items:
+            for match in LINKED_IMAGE_RE.finditer(item):
+                alt, _src, target = match.groups()
+                add(Link(label=strip_markdown(alt).strip() or "Link", href=normalize_href(target)))
+
     for section in profile.sections:
         if not is_link_section(section):
             continue
@@ -1612,9 +1625,7 @@ def extract_links(profile: Profile) -> list[Link]:
             if block.kind not in {"list", "ordered_list"}:
                 continue
             for item in block.items:
-                parsed = parse_link_item(item)
-                if parsed:
-                    links.append(parsed)
+                add(parse_link_item(item))
     return links
 
 
@@ -1926,7 +1937,7 @@ def build_preview_cards(profile: Profile, limit: int = 3) -> list[PreviewCard]:
 
 def collect_knows_about(profile: Profile, tags: list[str]) -> list[str]:
     topics: list[str] = []
-    for candidate in [*tags, *(section.heading for section in profile.sections)]:
+    for candidate in tags:
         cleaned = strip_markdown(candidate).strip()
         if not cleaned or cleaned in topics:
             continue

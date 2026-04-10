@@ -432,6 +432,45 @@ Applied researcher.
         self.assertIn("Sample title", output)
         self.assertIn("Sample Journal", output)
 
+    def test_knows_about_excludes_section_headings(self) -> None:
+        md = """# Jane Doe
+
+Researcher.
+
+## Research
+- Topic alpha
+- Topic beta
+
+## Background
+
+| Degree | Field | Institution | Period |
+|--------|-------|-------------|--------|
+| Ph.D. | AI | SNU | 2023-2027 |
+
+## Code
+- [tool](https://example.com): A thing
+"""
+        output = MODULE.render_site(md, generated_at=FIXED_AT)
+        self.assertIn('"knowsAbout"', output)
+        self.assertNotIn('"Background"', output.split('"knowsAbout"')[1].split(']')[0])
+        self.assertNotIn('"Code"', output.split('"knowsAbout"')[1].split(']')[0])
+
+    def test_extract_links_includes_intro_badges(self) -> None:
+        md = """# Jane Doe
+
+[![Scholar](https://shields.io/badge/scholar-x?style=for-the-badge)](https://scholar.google.com/x)
+[![ORCID](https://shields.io/badge/orcid-x?style=for-the-badge)](https://orcid.org/x)
+[![Email](https://shields.io/badge/email-x?style=for-the-badge)](mailto:jane@example.com)
+
+Researcher.
+"""
+        profile = MODULE.parse_profile(md)
+        links = MODULE.extract_links(profile)
+        hrefs = [link.href for link in links]
+        self.assertIn("https://scholar.google.com/x", hrefs)
+        self.assertIn("https://orcid.org/x", hrefs)
+        self.assertIn("mailto:jane@example.com", hrefs)
+
     def test_link_label_renders_markdown_bold(self) -> None:
         md = """# Jane Doe
 
