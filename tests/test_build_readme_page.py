@@ -357,9 +357,13 @@ Applied researcher.
         self.assertEqual(journal["@type"], "ScholarlyArticle")
         self.assertEqual(journal["name"], "Deep learning for structural monitoring")
         self.assertEqual(journal["datePublished"], "2025")
-        self.assertEqual(journal["isPartOf"]["@type"], "Periodical")
-        self.assertEqual(journal["isPartOf"]["name"], "J. Structural Engineering")
-        self.assertEqual(journal["isPartOf"]["issueNumber"], "151(12)")
+        self.assertEqual(journal["isPartOf"]["@type"], "PublicationIssue")
+        self.assertEqual(journal["isPartOf"]["issueNumber"], "12")
+        volume = journal["isPartOf"]["isPartOf"]
+        self.assertEqual(volume["@type"], "PublicationVolume")
+        self.assertEqual(volume["volumeNumber"], "151")
+        self.assertEqual(volume["isPartOf"]["@type"], "Periodical")
+        self.assertEqual(volume["isPartOf"]["name"], "J. Structural Engineering")
         self.assertEqual(journal["sameAs"], "https://doi.org/10.1234/example")
         self.assertEqual(journal["identifier"]["value"], "10.1234/example")
         self.assertEqual(journal["identifier"]["propertyID"], "DOI")
@@ -367,7 +371,29 @@ Applied researcher.
         conference = pubs[1]
         self.assertEqual(conference["isPartOf"]["@type"], "PublicationEvent")
         self.assertEqual(conference["isPartOf"]["name"], "EACWE 2024")
+        self.assertNotIn("issueNumber", conference["isPartOf"])
         self.assertNotIn("identifier", conference)
+
+    def test_conference_with_location_does_not_set_issue_number(self) -> None:
+        md = """# Jane Doe
+
+Researcher.
+
+## Publications
+
+### Selected Conference Papers
+
+| Year | Publication |
+|:----:|-------------|
+| 2024 | **J. Doe**, A. Smith. "Test paper." *Structures Congress*, Seoul. |
+"""
+        profile = MODULE.parse_profile(md)
+        pubs = MODULE.extract_publications(profile, "https://example.com/#person")
+        self.assertEqual(len(pubs), 1)
+        is_part_of = pubs[0]["isPartOf"]
+        self.assertEqual(is_part_of["@type"], "PublicationEvent")
+        self.assertEqual(is_part_of["name"], "Structures Congress")
+        self.assertNotIn("issueNumber", is_part_of)
 
     def test_publication_authors_link_self_to_person(self) -> None:
         md = """# Jane Doe

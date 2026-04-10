@@ -2396,6 +2396,7 @@ PUBLICATION_RE = re.compile(
     r'(?P<rest>.*)$'
 )
 DOI_LINK_RE = re.compile(r'\[\[DOI\]\(([^)]+)\)\]')
+VOLUME_ISSUE_RE = re.compile(r"^(\d+)\s*\(\s*(\d+)\s*\)$")
 DOI_PREFIX = "https://doi.org/"
 CONFERENCE_TOKENS = ("conference", "congress", "proceedings", "symposium", "workshop")
 
@@ -2455,13 +2456,36 @@ def extract_publications(profile: Profile, person_id: str) -> list[dict[str, obj
                 if not title or not venue:
                     continue
 
-                venue_type = "PublicationEvent" if is_conference else "Periodical"
-                is_part_of: dict[str, object] = {
-                    "@type": venue_type,
-                    "name": venue,
-                }
-                if volume:
-                    is_part_of["issueNumber"] = volume
+                if is_conference:
+                    is_part_of: dict[str, object] = {
+                        "@type": "PublicationEvent",
+                        "name": venue,
+                    }
+                else:
+                    periodical: dict[str, object] = {
+                        "@type": "Periodical",
+                        "name": venue,
+                    }
+                    vi_match = VOLUME_ISSUE_RE.match(volume)
+                    if vi_match:
+                        vol_num, iss_num = vi_match.groups()
+                        is_part_of = {
+                            "@type": "PublicationIssue",
+                            "issueNumber": iss_num,
+                            "isPartOf": {
+                                "@type": "PublicationVolume",
+                                "volumeNumber": vol_num,
+                                "isPartOf": periodical,
+                            },
+                        }
+                    elif volume.isdigit():
+                        is_part_of = {
+                            "@type": "PublicationVolume",
+                            "volumeNumber": volume,
+                            "isPartOf": periodical,
+                        }
+                    else:
+                        is_part_of = periodical
 
                 article: dict[str, object] = {
                     "@type": "ScholarlyArticle",
