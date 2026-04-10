@@ -283,7 +283,6 @@
       }
 
       .eyebrow,
-      .section-intro p,
       .preview-kicker,
       .section-label,
       .footer-note {
@@ -301,19 +300,11 @@
         color: var(--muted);
       }
 
-      .eyebrow::before,
-      .section-intro p::before {
+      .eyebrow::before {
         content: "";
         width: 34px;
         height: 1px;
         background: var(--ink-028);
-      }
-
-      .section-intro p {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        color: var(--accent);
       }
 
       .hero-title {
@@ -487,12 +478,6 @@
         font-size: 2.05rem;
         line-height: 1.02;
         letter-spacing: -0.04em;
-      }
-
-      .hero-side p {
-        margin: 14px 0 0;
-        color: rgba(248, 242, 234, 0.76);
-        line-height: 1.75;
       }
 
       .metric-grid {
@@ -1094,7 +1079,6 @@
         }
         .hero-side .eyebrow { color: #666; }
         .hero-side .eyebrow::before { background: #999; }
-        .hero-side p { color: #333; }
         .hero-side h2 { color: #000; }
         .metric-card { background: #eee; color: #000; }
         .metric-card small { color: #555; }
