@@ -406,6 +406,43 @@ Applied researcher.
         self.assertIn("Sample title", output)
         self.assertIn("Sample Journal", output)
 
+    def test_metric_cards_count_table_publications_and_intro_badges(self) -> None:
+        md = """# Test Person
+
+[![Site](https://shields.io/badge/site-x?style=for-the-badge)](https://example.com)
+[![Scholar](https://shields.io/badge/scholar-x?style=for-the-badge)](https://scholar.google.com/x)
+[![ORCID](https://shields.io/badge/orcid-x?style=for-the-badge)](https://orcid.org/x)
+
+ML researcher.
+
+## Focus
+- Theme one
+- Theme two
+
+## Publications
+
+| Year | Publication |
+|------|-------------|
+| 2025 | Paper one |
+| 2024 | Paper two |
+| 2023 | Paper three |
+
+## Patents
+
+![Granted](https://shields.io/badge/x-y) **Patent A** [[link](https://example.com/a)]
+
+![Granted](https://shields.io/badge/x-y) **Patent B** [[link](https://example.com/b)]
+"""
+        profile = MODULE.parse_profile(md)
+        links = MODULE.extract_links(profile)
+        tags = MODULE.extract_tags(profile, limit=5)
+        cards = MODULE.build_metric_cards(profile, links, tags)
+        by_label = {c.label: c.value for c in cards}
+        self.assertEqual(by_label["Selected Outputs"], "5")
+        self.assertEqual(by_label["Public Links"], "3")
+        self.assertNotEqual(by_label["Selected Outputs"], "1")
+        self.assertNotEqual(by_label["Public Links"], "1")
+
     def test_credential_parsing_handles_empty_degree(self) -> None:
         md = """# Jane Doe
 
