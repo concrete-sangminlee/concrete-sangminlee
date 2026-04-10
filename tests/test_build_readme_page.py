@@ -472,6 +472,27 @@ Researcher.
         self.assertIn("First real publication title", summary)
         self.assertNotIn("Scholar", summary)
 
+    def test_person_affiliation_set_from_first_credential(self) -> None:
+        md = """# Jane Doe
+
+Researcher.
+
+## Background
+
+| Degree | Field | Institution | Period |
+|--------|-------|-------------|--------|
+| **Ph.D.** | AI | Seoul National University | 2023-2027 |
+| **M.S.** | CS | KAIST | 2021-2023 |
+"""
+        output = MODULE.render_site(md, generated_at=FIXED_AT)
+        import json as _json
+        match = re.search(r'<script type="application/ld\+json">(.*?)</script>', output, re.DOTALL)
+        data = _json.loads(match.group(1))
+        person = next(e for e in data["@graph"] if e.get("@type") == "Person" and "alumniOf" in e)
+        self.assertIn("affiliation", person)
+        self.assertEqual(person["affiliation"]["@type"], "CollegeOrUniversity")
+        self.assertEqual(person["affiliation"]["name"], "Seoul National University")
+
     def test_publication_co_authors_deduplicated_via_id(self) -> None:
         md = """# Jane Doe
 

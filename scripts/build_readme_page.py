@@ -2592,6 +2592,13 @@ def build_structured_data(
             })
         if alumni_of:
             person["alumniOf"] = alumni_of
+        # The first credential is treated as the current affiliation (the README convention
+        # is most-recent-first, so the first listed degree is the one in progress).
+        first_institution = credentials[0]["recognizedBy"]["name"]  # type: ignore[index]
+        person["affiliation"] = {
+            "@type": "CollegeOrUniversity",
+            "name": first_institution,
+        }
 
     publications = extract_publications(profile, person_id)
     if publications:
