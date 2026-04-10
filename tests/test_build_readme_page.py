@@ -472,6 +472,13 @@ Researcher.
         self.assertIn("First real publication title", summary)
         self.assertNotIn("Scholar", summary)
 
+    def test_profile_first_last_name_meta_tags(self) -> None:
+        output = MODULE.render_site(SAMPLE_MARKDOWN, generated_at=FIXED_AT)
+        self.assertIn('property="profile:first_name" content="Jane"', output)
+        self.assertIn('property="profile:last_name" content="Doe"', output)
+        self.assertIn('"familyName": "Doe"', output)
+        self.assertIn('"givenName": "Jane"', output)
+
     def test_keywords_excludes_section_headings(self) -> None:
         md = """# Jane Doe
 

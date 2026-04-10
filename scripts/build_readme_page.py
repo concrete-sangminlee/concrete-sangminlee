@@ -108,6 +108,8 @@ HTML_TEMPLATE = """<!doctype html>
     <meta property="og:title" content="__PAGE_TITLE__" />
     <meta property="og:description" content="__DESCRIPTION__" />
     <meta property="og:type" content="profile" />
+    <meta property="profile:first_name" content="__PROFILE_FIRST_NAME__" />
+    <meta property="profile:last_name" content="__PROFILE_LAST_NAME__" />
     <meta property="og:url" content="__CANONICAL_URL__" />
     <meta property="og:site_name" content="__TITLE__" />
     <meta property="og:locale" content="__SITE_LOCALE__" />
@@ -2560,6 +2562,10 @@ def build_structured_data(
     ]
 
     person = graph[-1]
+    name_parts = profile.title.split()
+    if len(name_parts) >= 2:
+        person["familyName"] = name_parts[-1]
+        person["givenName"] = " ".join(name_parts[:-1])
     if same_as:
         person["sameAs"] = same_as
     if email:
@@ -2708,6 +2714,14 @@ def render_site_artifacts(markdown: str, generated_at: datetime | None = None) -
     else:
         hero_side_heading = page_title
 
+    name_parts = profile.title.split()
+    if len(name_parts) >= 2:
+        profile_last_name = name_parts[-1]
+        profile_first_name = " ".join(name_parts[:-1])
+    else:
+        profile_last_name = ""
+        profile_first_name = profile.title
+
     sitemap = build_sitemap(canonical_url, og_image_url, profile, built_at)
     robots = build_robots(canonical_url)
     og_image = render_og_image(profile, description, tags, metrics, canonical_url)
@@ -2749,6 +2763,8 @@ def render_site_artifacts(markdown: str, generated_at: datetime | None = None) -
         "__GENERATED_AT__": generated_label,
         "__BUILD_STAMP_HTML__": build_stamp_html,
         "__HERO_SIDE_HEADING__": html.escape(hero_side_heading),
+        "__PROFILE_FIRST_NAME__": html.escape(profile_first_name, quote=True),
+        "__PROFILE_LAST_NAME__": html.escape(profile_last_name, quote=True),
         "__REPO_URL__": html.escape(REPO_URL, quote=True),
     }
 
