@@ -49,13 +49,13 @@
     <rect width="288" height="112" rx="28" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.1)" />
     <text class="metric-value" x="28" y="48">3</text>
     <text class="metric-label" x="28" y="74">RESEARCH THEMES</text>
-    <text class="metric-detail" x="28" y="94">Primary directions surfaced from the profile narrative.</text>
+    <text class="metric-detail" x="28" y="94">Structural Health Monitoring, Concrete NDT, Wind Engineering.</text>
   </g>
   <g transform="translate(840 264)">
     <rect width="288" height="112" rx="28" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.1)" />
     <text class="metric-value" x="28" y="48">10</text>
     <text class="metric-label" x="28" y="74">SELECTED OUTPUTS</text>
-    <text class="metric-detail" x="28" y="94">Highlighted publications and patents visible on the page.</text>
+    <text class="metric-detail" x="28" y="94">Publications, Patents.</text>
   </g>
   <g transform="translate(840 402)">
     <rect width="288" height="112" rx="28" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.1)" />

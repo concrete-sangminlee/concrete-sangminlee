@@ -1901,10 +1901,26 @@ def count_items_for_sections(profile: Profile, keywords: tuple[str, ...]) -> int
 
 
 def build_metric_cards(profile: Profile, links: list[Link], tags: list[str]) -> list[MetricCard]:
-    selected_outputs = count_items_for_sections(profile, ("publication", "paper", "patent", "output"))
+    output_keywords = ("publication", "paper", "patent", "output")
+    selected_outputs = count_items_for_sections(profile, output_keywords)
     external_links = sum(1 for link in links if link.href.startswith("http"))
     intro_badges = count_intro_badges(profile)
     public_links = max(external_links, intro_badges)
+
+    if tags:
+        research_themes_detail = ", ".join(tags[:3]) + "."
+    else:
+        research_themes_detail = "Focus areas drawn from the profile."
+
+    output_section_names = [
+        section.heading
+        for section in profile.sections
+        if any(token in section.heading.lower() for token in output_keywords)
+    ]
+    if output_section_names:
+        selected_outputs_detail = ", ".join(output_section_names) + "."
+    else:
+        selected_outputs_detail = "Highlighted outputs from the profile."
 
     link_labels = [link.label for link in links[:5]]
     if link_labels:
@@ -1916,12 +1932,12 @@ def build_metric_cards(profile: Profile, links: list[Link], tags: list[str]) -> 
         MetricCard(
             value=str(max(len(tags), 1)),
             label="Research Themes",
-            detail="Primary directions surfaced from the profile narrative.",
+            detail=research_themes_detail,
         ),
         MetricCard(
             value=str(max(selected_outputs, 1)),
             label="Selected Outputs",
-            detail="Highlighted publications and patents visible on the page.",
+            detail=selected_outputs_detail,
         ),
         MetricCard(
             value=str(max(public_links, 1)),
