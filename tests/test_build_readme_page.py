@@ -329,6 +329,83 @@ Applied researcher.
         self.assertIn('"Doctorate"', output)
         self.assertIn('"Masters"', output)
 
+    def test_publications_parsed_into_scholarly_articles(self) -> None:
+        md = """# Jane Doe
+
+Applied researcher.
+
+## Publications
+
+### Journal Articles
+
+| Year | Publication |
+|:----:|-------------|
+| 2025 | **J. Doe**, A. Smith. "Deep learning for structural monitoring." *J. Structural Engineering* 151(12). [[DOI](https://doi.org/10.1234/example)] |
+
+### Selected Conference Papers
+
+| Year | Publication |
+|:----:|-------------|
+| 2024 | **J. Doe**, B. Lee. "Wind pressure clustering." *EACWE 2024*. |
+"""
+        profile = MODULE.parse_profile(md)
+        person_id = "https://example.com/#person"
+        pubs = MODULE.extract_publications(profile, person_id)
+        self.assertEqual(len(pubs), 2)
+
+        journal = pubs[0]
+        self.assertEqual(journal["@type"], "ScholarlyArticle")
+        self.assertEqual(journal["name"], "Deep learning for structural monitoring")
+        self.assertEqual(journal["datePublished"], "2025")
+        self.assertEqual(journal["isPartOf"]["@type"], "Periodical")
+        self.assertEqual(journal["isPartOf"]["name"], "J. Structural Engineering")
+        self.assertEqual(journal["isPartOf"]["issueNumber"], "151(12)")
+        self.assertEqual(journal["sameAs"], "https://doi.org/10.1234/example")
+        self.assertEqual(journal["identifier"]["value"], "10.1234/example")
+        self.assertEqual(journal["identifier"]["propertyID"], "DOI")
+
+        conference = pubs[1]
+        self.assertEqual(conference["isPartOf"]["@type"], "PublicationEvent")
+        self.assertEqual(conference["isPartOf"]["name"], "EACWE 2024")
+        self.assertNotIn("identifier", conference)
+
+    def test_publication_authors_link_self_to_person(self) -> None:
+        md = """# Jane Doe
+
+Applied researcher.
+
+## Publications
+
+| Year | Publication |
+|:----:|-------------|
+| 2025 | A. Smith, **J. Doe**, C. Lee. "Test paper." *Test Journal* 1(1). |
+"""
+        profile = MODULE.parse_profile(md)
+        person_id = "https://example.com/#person"
+        pubs = MODULE.extract_publications(profile, person_id)
+        self.assertEqual(len(pubs), 1)
+        authors = pubs[0]["author"]
+        self.assertEqual(len(authors), 3)
+        self.assertEqual(authors[0]["name"], "A. Smith")
+        self.assertEqual(authors[1], {"@id": person_id})
+        self.assertEqual(authors[2]["name"], "C. Lee")
+
+    def test_publications_in_rendered_schema(self) -> None:
+        md = """# Jane Doe
+
+Applied researcher.
+
+## Publications
+
+| Year | Publication |
+|:----:|-------------|
+| 2025 | **J. Doe**. "Sample title." *Sample Journal* 1(1). |
+"""
+        output = MODULE.render_site(md, generated_at=FIXED_AT)
+        self.assertIn('"ScholarlyArticle"', output)
+        self.assertIn("Sample title", output)
+        self.assertIn("Sample Journal", output)
+
     def test_credential_parsing_handles_empty_degree(self) -> None:
         md = """# Jane Doe
 

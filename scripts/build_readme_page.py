@@ -2352,6 +2352,101 @@ def extract_credentials(profile: Profile) -> list[dict[str, object]]:
     return credentials
 
 
+PUBLICATION_RE = re.compile(
+    r'^(?P<authors>[^"]+?)\.\s*'
+    r'"(?P<title>[^"]+?)\.?"\s*\.?\s*'
+    r'\*(?P<venue>[^*]+?)\*'
+    r'(?P<rest>.*)$'
+)
+DOI_LINK_RE = re.compile(r'\[\[DOI\]\(([^)]+)\)\]')
+DOI_PREFIX = "https://doi.org/"
+CONFERENCE_TOKENS = ("conference", "congress", "proceedings", "symposium", "workshop")
+
+
+def parse_authors(authors_str: str, person_id: str) -> list[dict[str, object]]:
+    parsed: list[dict[str, object]] = []
+    for raw in authors_str.split(","):
+        is_self = "**" in raw
+        name = strip_markdown(raw).strip(" .")
+        if not name:
+            continue
+        if is_self:
+            parsed.append({"@id": person_id})
+        else:
+            parsed.append({"@type": "Person", "name": name})
+    return parsed
+
+
+def extract_publications(profile: Profile, person_id: str) -> list[dict[str, object]]:
+    publications: list[dict[str, object]] = []
+    for section in profile.sections:
+        heading = section.heading.lower()
+        if not any(token in heading for token in ("publication", "paper")):
+            continue
+        current_subheading = ""
+        for block in section.blocks:
+            if block.kind == "subheading" and block.items:
+                current_subheading = block.items[0].lower()
+                continue
+            if not block.table_data or len(block.table_data) < 2:
+                continue
+            headers = [h.lower() for h in block.table_data[0]]
+            year_idx = next((i for i, h in enumerate(headers) if "year" in h or "date" in h), None)
+            pub_idx = next((i for i, h in enumerate(headers) if "publication" in h or "title" in h or "citation" in h), None)
+            if pub_idx is None:
+                pub_idx = 1 if len(headers) > 1 else 0
+            is_conference = any(token in current_subheading for token in CONFERENCE_TOKENS)
+            for row in block.table_data[1:]:
+                if len(row) <= pub_idx:
+                    continue
+                year = ""
+                if year_idx is not None and year_idx < len(row):
+                    year = strip_markdown(row[year_idx]).strip()
+                pub_text = row[pub_idx].strip()
+
+                doi_match = DOI_LINK_RE.search(pub_text)
+                doi_url = doi_match.group(1) if doi_match else ""
+                pub_text_clean = DOI_LINK_RE.sub("", pub_text).strip(" .")
+
+                match = PUBLICATION_RE.match(pub_text_clean)
+                if not match:
+                    continue
+                authors = parse_authors(match.group("authors"), person_id)
+                title = strip_markdown(match.group("title")).strip(" .")
+                venue = strip_markdown(match.group("venue")).strip()
+                volume = strip_markdown(match.group("rest")).strip(" .,")
+                if not title or not venue:
+                    continue
+
+                venue_type = "PublicationEvent" if is_conference else "Periodical"
+                is_part_of: dict[str, object] = {
+                    "@type": venue_type,
+                    "name": venue,
+                }
+                if volume:
+                    is_part_of["issueNumber"] = volume
+
+                article: dict[str, object] = {
+                    "@type": "ScholarlyArticle",
+                    "headline": title,
+                    "name": title,
+                    "author": authors,
+                    "isPartOf": is_part_of,
+                }
+                if year:
+                    article["datePublished"] = year
+                if doi_url:
+                    article["sameAs"] = doi_url
+                    doi_value = doi_url.removeprefix(DOI_PREFIX)
+                    article["identifier"] = {
+                        "@type": "PropertyValue",
+                        "propertyID": "DOI",
+                        "value": doi_value,
+                    }
+                publications.append(article)
+    return publications
+
+
 def build_structured_data(
     profile: Profile,
     page_title: str,
@@ -2438,6 +2533,10 @@ def build_structured_data(
             })
         if alumni_of:
             person["alumniOf"] = alumni_of
+
+    publications = extract_publications(profile, person_id)
+    if publications:
+        graph.extend(publications)
 
     if generated_at is not None:
         graph[1]["dateModified"] = generated_at.date().isoformat()
