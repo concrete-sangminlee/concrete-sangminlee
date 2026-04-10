@@ -1271,8 +1271,7 @@ __CONTENT_SECTION__
         <svg class="theme-toggle-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
       <footer class="footer">
-        <span>Maintained in <a href="__REPO_URL__">the profile repository</a> and published as static output.</span>
-        <span><span class="footer-note">Build stamp</span> __GENERATED_AT__</span>
+        <span>Maintained in <a href="__REPO_URL__">the profile repository</a> and published as static output.</span>__BUILD_STAMP_HTML__
       </footer>
     </main>
     <script>(function(){var b=document.getElementById('theme-toggle');b&&b.addEventListener('click',function(){var r=document.documentElement,c=r.getAttribute('data-theme'),d=c==='dark'||(c!=='light'&&window.matchMedia('(prefers-color-scheme:dark)').matches);var n=d?'light':'dark';r.setAttribute('data-theme',n);localStorage.setItem('theme',n);});})()</script>
@@ -2671,7 +2670,12 @@ def render_site_artifacts(markdown: str, generated_at: datetime | None = None) -
     og_image_url = urljoin(canonical_url, OG_IMAGE_FILENAME)
     og_image_alt = build_og_image_alt(profile, tags)
     keywords = build_keywords(profile, tags)
-    generated_label = built_at.strftime("%Y-%m-%d %H:%M UTC") if built_at is not None else "Profile snapshot"
+    if built_at is not None:
+        generated_label = built_at.strftime("%Y-%m-%d %H:%M UTC")
+        build_stamp_html = f'\n        <span><span class="footer-note">Build stamp</span> {generated_label}</span>'
+    else:
+        generated_label = ""
+        build_stamp_html = ""
     metrics = build_metric_cards(profile, links, tags)
     previews = build_preview_cards(profile)
 
@@ -2770,6 +2774,7 @@ def render_site_artifacts(markdown: str, generated_at: datetime | None = None) -
         "__NAV_SECTION__": nav_section_html,
         "__CONTENT_SECTION__": content_section_html,
         "__GENERATED_AT__": generated_label,
+        "__BUILD_STAMP_HTML__": build_stamp_html,
         "__REPO_URL__": html.escape(REPO_URL, quote=True),
     }
 
@@ -2810,5 +2815,23 @@ def build(
     return artifacts.html
 
 
+def _readme_git_mtime() -> datetime | None:
+    try:
+        import subprocess
+        result = subprocess.run(
+            ["git", "log", "-1", "--format=%cI", "--", str(README_PATH)],
+            capture_output=True,
+            text=True,
+            check=False,
+            cwd=str(README_PATH.parent),
+        )
+        stamp = result.stdout.strip()
+        if not stamp:
+            return None
+        return datetime.fromisoformat(stamp).astimezone(UTC)
+    except (OSError, ValueError):
+        return None
+
+
 if __name__ == "__main__":
-    build()
+    build(generated_at=_readme_git_mtime())

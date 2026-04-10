@@ -128,7 +128,8 @@ class BuildReadmePageTests(unittest.TestCase):
     def test_render_site_artifacts_are_deterministic_without_timestamp(self) -> None:
         artifacts = MODULE.render_site_artifacts(SAMPLE_MARKDOWN)
 
-        self.assertIn("Profile snapshot", artifacts.html)
+        self.assertNotIn("Profile snapshot", artifacts.html)
+        self.assertNotIn("Build stamp", artifacts.html)
         self.assertNotIn("article:modified_time", artifacts.html)
         self.assertNotIn("<lastmod>", artifacts.sitemap)
         self.assertIn('"ProfilePage"', artifacts.html)
