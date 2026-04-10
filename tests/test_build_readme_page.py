@@ -406,6 +406,27 @@ Applied researcher.
         self.assertIn("Sample title", output)
         self.assertIn("Sample Journal", output)
 
+    def test_link_label_renders_markdown_bold(self) -> None:
+        md = """# Jane Doe
+
+Researcher.
+
+## Code
+- [**myrepo**](https://github.com/x/myrepo): A tool
+"""
+        output = MODULE.render_site(md, generated_at=FIXED_AT)
+        self.assertIn("<strong>myrepo</strong>", output)
+        self.assertNotIn(">**myrepo**<", output)
+        self.assertNotIn("**myrepo**</a>", output)
+
+    def test_wrap_svg_lines_truncation_indicator(self) -> None:
+        long_text = "alpha beta gamma delta epsilon zeta eta theta iota kappa lambda mu nu xi omicron"
+        lines = MODULE.wrap_svg_lines(long_text, width=20, max_lines=2)
+        self.assertEqual(len(lines), 2)
+        self.assertTrue(lines[-1].endswith("..."), f"Last line should end with ...: {lines[-1]!r}")
+        self.assertFalse(lines[-1].rstrip(".").endswith(("a", "e", "i", "o", "u")) and len(lines[-1]) < 5,
+                         "Should not cut mid-word with single char")
+
     def test_summarize_description_separates_intro_paragraphs(self) -> None:
         md = """# Jane Doe
 

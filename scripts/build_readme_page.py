@@ -1995,7 +1995,11 @@ def render_inline(text: str) -> str:
             parts.append(render_image(src, alt))
         elif token.startswith("["):
             label, target = INLINE_LINK_RE.fullmatch(token).groups()
-            parts.append(render_anchor(normalize_href(target), label))
+            href = normalize_href(target)
+            safe_href = html.escape(href, quote=True)
+            inner = render_inline(label)
+            link_attrs = ' target="_blank" rel="noreferrer"' if href.startswith("http") else ""
+            parts.append(f'<a href="{safe_href}"{link_attrs}>{inner}</a>')
         elif token.startswith("`"):
             parts.append(f"<code>{html.escape(token[1:-1])}</code>")
         elif token.startswith(("**", "__")):
@@ -2176,7 +2180,15 @@ def wrap_svg_lines(text: str, width: int, *, max_lines: int | None = None) -> li
         return [""]
     if max_lines is not None and len(lines) > max_lines:
         lines = lines[:max_lines]
-        lines[-1] = truncate(lines[-1], width)
+        last = lines[-1].rstrip()
+        target = max(0, width - 3)
+        if len(last) > target:
+            cut = last[:target]
+            last_space = cut.rfind(" ")
+            if last_space >= int(target * 0.5):
+                cut = cut[:last_space]
+            last = cut.rstrip()
+        lines[-1] = last + "..."
     return lines
 
 
