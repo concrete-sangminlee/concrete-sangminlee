@@ -166,8 +166,8 @@ Applied researcher.
         table_blocks = [b for b in data_section.blocks if b.kind == "html"]
         self.assertEqual(len(table_blocks), 1)
         self.assertIn('<div class="table-wrap"><table', table_blocks[0].items[0])
-        self.assertIn("<th>Degree</th>", table_blocks[0].items[0])
-        self.assertIn("<td>Ph.D. in AI</td>", table_blocks[0].items[0])
+        self.assertIn('<th scope="col">Degree</th>', table_blocks[0].items[0])
+        self.assertIn('<td scope="row">Ph.D. in AI</td>', table_blocks[0].items[0])
         self.assertNotIn("|-----", table_blocks[0].items[0])
 
     def test_html_blocks_pass_through_unchanged(self) -> None:
@@ -276,6 +276,80 @@ Applied researcher.
         self.assertIn("Focus 01", result)
         self.assertIn("Focus 02", result)
         self.assertNotIn("Signal", result)
+
+    def test_skip_link_present(self) -> None:
+        output = MODULE.render_site(SAMPLE_MARKDOWN, generated_at=FIXED_AT)
+        self.assertIn('class="skip-link"', output)
+        self.assertIn('href="#main-content"', output)
+        self.assertIn('id="main-content"', output)
+
+    def test_table_scope_attributes(self) -> None:
+        md = """# Jane Doe
+
+Applied researcher.
+
+## Data
+
+| Year | Publication |
+|------|-------------|
+| 2025 | Some paper |
+"""
+        profile = MODULE.parse_profile(md)
+        data_section = next(s for s in profile.sections if s.heading == "Data")
+        table_html = data_section.blocks[0].items[0]
+        self.assertIn('scope="col"', table_html)
+        self.assertIn('scope="row"', table_html)
+
+    def test_reduced_motion_support(self) -> None:
+        output = MODULE.render_site(SAMPLE_MARKDOWN, generated_at=FIXED_AT)
+        self.assertIn("prefers-reduced-motion: reduce", output)
+
+    def test_focus_visible_outline(self) -> None:
+        output = MODULE.render_site(SAMPLE_MARKDOWN, generated_at=FIXED_AT)
+        self.assertIn(":focus-visible", output)
+        self.assertIn("outline:", output)
+
+    def test_educational_credentials_in_schema(self) -> None:
+        md = """# Jane Doe
+
+Applied researcher.
+
+## Background
+
+| Degree | Field | Institution | Period |
+|--------|-------|-------------|--------|
+| **Ph.D.** | Artificial Intelligence | Seoul National University | 2023-2027 |
+| **M.S.** | Structural Engineering | Seoul National University | 2021-2023 |
+"""
+        output = MODULE.render_site(md, generated_at=FIXED_AT)
+        self.assertIn('"EducationalOccupationalCredential"', output)
+        self.assertIn('"alumniOf"', output)
+        self.assertIn('"CollegeOrUniversity"', output)
+        self.assertIn("Seoul National University", output)
+        self.assertIn('"Doctorate"', output)
+        self.assertIn('"Masters"', output)
+
+    def test_credential_parsing_handles_empty_degree(self) -> None:
+        md = """# Jane Doe
+
+Applied researcher.
+
+## Background
+
+| Degree | Field | Institution | Period |
+|--------|-------|-------------|--------|
+| **Ph.D.** | AI | Seoul National University | 2023-2027 |
+| | Science | KAIST Science Academy | 2013-2016 |
+"""
+        profile = MODULE.parse_profile(md)
+        creds = MODULE.extract_credentials(profile)
+        self.assertEqual(len(creds), 2)
+        kaist = next(c for c in creds if "KAIST" in c["recognizedBy"]["name"])
+        self.assertEqual(kaist["credentialCategory"], "training")
+        self.assertNotIn("educationalLevel", kaist)
+        snu = next(c for c in creds if "Seoul" in c["recognizedBy"]["name"])
+        self.assertEqual(snu["credentialCategory"], "degree")
+        self.assertEqual(snu["educationalLevel"], "Doctorate")
 
 
 if __name__ == "__main__":

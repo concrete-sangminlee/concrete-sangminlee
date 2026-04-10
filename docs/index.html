@@ -866,6 +866,35 @@
         color: var(--accent);
       }
 
+      .skip-link {
+        position: absolute;
+        top: -48px;
+        left: 8px;
+        z-index: 200;
+        padding: 10px 16px;
+        background: var(--ink);
+        color: var(--bg);
+        text-decoration: none;
+        font-weight: 800;
+        border-radius: 8px;
+        transition: top 160ms ease;
+      }
+
+      .skip-link:focus {
+        top: 8px;
+      }
+
+      :focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+        border-radius: 4px;
+      }
+
+      .theme-toggle:focus-visible,
+      .skip-link:focus-visible {
+        outline-offset: 2px;
+      }
+
       .theme-toggle {
         position: fixed;
         bottom: 24px;
@@ -1016,6 +1045,15 @@
         }
       }
 
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
+      }
+
       @media print {
         *, *::before, *::after {
           animation: none !important;
@@ -1101,10 +1139,11 @@
       }
     </style>
     <script>(function(){var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})()</script>
-    <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "@id": "https://concrete-sangminlee.github.io/#website", "url": "https://concrete-sangminlee.github.io/", "name": "Sang Min Lee", "description": "Ph.D. Candidate in AI | Seoul National University ML for structural health monitoring, concrete inspection, and wind engineering. Building practical AI tools for infrastructure....", "inLanguage": "en", "publisher": {"@id": "https://concrete-sangminlee.github.io/#person"}}, {"@type": "ProfilePage", "@id": "https://concrete-sangminlee.github.io/#webpage", "url": "https://concrete-sangminlee.github.io/", "name": "Sang Min Lee | Research Profile", "description": "Ph.D. Candidate in AI | Seoul National University ML for structural health monitoring, concrete inspection, and wind engineering. Building practical AI tools for infrastructure....", "inLanguage": "en", "isPartOf": {"@id": "https://concrete-sangminlee.github.io/#website"}, "about": {"@id": "https://concrete-sangminlee.github.io/#person"}, "primaryImageOfPage": {"@id": "https://concrete-sangminlee.github.io/#primaryimage"}}, {"@type": "ImageObject", "@id": "https://concrete-sangminlee.github.io/#primaryimage", "url": "https://concrete-sangminlee.github.io/og-preview.svg", "contentUrl": "https://concrete-sangminlee.github.io/og-preview.svg", "width": 1200, "height": 630, "caption": "Sang Min Lee profile preview highlighting Structural Health Monitoring, Concrete NDT, Wind Engineering."}, {"@type": "Person", "@id": "https://concrete-sangminlee.github.io/#person", "name": "Sang Min Lee", "url": "https://concrete-sangminlee.github.io/", "description": "Ph.D. Candidate in AI | Seoul National University ML for structural health monitoring, concrete inspection, and wind engineering. Building practical AI tools for infrastructure....", "image": {"@id": "https://concrete-sangminlee.github.io/#primaryimage"}, "knowsAbout": ["Structural Health Monitoring", "Concrete NDT", "Wind Engineering", "Research", "Publications", "Patents", "Projects", "Code", "Background"]}]}</script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "@id": "https://concrete-sangminlee.github.io/#website", "url": "https://concrete-sangminlee.github.io/", "name": "Sang Min Lee", "description": "Ph.D. Candidate in AI | Seoul National University ML for structural health monitoring, concrete inspection, and wind engineering. Building practical AI tools for infrastructure....", "inLanguage": "en", "publisher": {"@id": "https://concrete-sangminlee.github.io/#person"}}, {"@type": "ProfilePage", "@id": "https://concrete-sangminlee.github.io/#webpage", "url": "https://concrete-sangminlee.github.io/", "name": "Sang Min Lee | Research Profile", "description": "Ph.D. Candidate in AI | Seoul National University ML for structural health monitoring, concrete inspection, and wind engineering. Building practical AI tools for infrastructure....", "inLanguage": "en", "isPartOf": {"@id": "https://concrete-sangminlee.github.io/#website"}, "about": {"@id": "https://concrete-sangminlee.github.io/#person"}, "primaryImageOfPage": {"@id": "https://concrete-sangminlee.github.io/#primaryimage"}}, {"@type": "ImageObject", "@id": "https://concrete-sangminlee.github.io/#primaryimage", "url": "https://concrete-sangminlee.github.io/og-preview.svg", "contentUrl": "https://concrete-sangminlee.github.io/og-preview.svg", "width": 1200, "height": 630, "caption": "Sang Min Lee profile preview highlighting Structural Health Monitoring, Concrete NDT, Wind Engineering."}, {"@type": "Person", "@id": "https://concrete-sangminlee.github.io/#person", "name": "Sang Min Lee", "url": "https://concrete-sangminlee.github.io/", "description": "Ph.D. Candidate in AI | Seoul National University ML for structural health monitoring, concrete inspection, and wind engineering. Building practical AI tools for infrastructure....", "image": {"@id": "https://concrete-sangminlee.github.io/#primaryimage"}, "knowsAbout": ["Structural Health Monitoring", "Concrete NDT", "Wind Engineering", "Research", "Publications", "Patents", "Projects", "Code", "Background"], "alumniOf": [{"@type": "CollegeOrUniversity", "name": "Seoul National University"}, {"@type": "CollegeOrUniversity", "name": "Korea Science Academy of KAIST"}]}, {"@type": "EducationalOccupationalCredential", "credentialCategory": "degree", "name": "Ph.D. in Artificial Intelligence", "recognizedBy": {"@type": "CollegeOrUniversity", "name": "Seoul National University"}, "educationalLevel": "Doctorate", "validFor": "2023-2027 (expected)"}, {"@type": "EducationalOccupationalCredential", "credentialCategory": "degree", "name": "M.S. in Structural Engineering", "recognizedBy": {"@type": "CollegeOrUniversity", "name": "Seoul National University"}, "educationalLevel": "Masters", "validFor": "2021-2023"}, {"@type": "EducationalOccupationalCredential", "credentialCategory": "degree", "name": "B.S. in Architecture & Arch. Eng. + ECE (double major)", "recognizedBy": {"@type": "CollegeOrUniversity", "name": "Seoul National University"}, "educationalLevel": "Bachelors", "validFor": "2016-2021"}, {"@type": "EducationalOccupationalCredential", "credentialCategory": "training", "name": "Science", "recognizedBy": {"@type": "CollegeOrUniversity", "name": "Korea Science Academy of KAIST"}, "validFor": "2013-2016"}]}</script>
   </head>
   <body>
-    <main class="page">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <main class="page" id="main-content">
       <section class="hero">
         <div class="hero-main">
           <div class="hero-copy">
@@ -1181,7 +1220,7 @@
 <article class="section-card section-span-7 section-story" id="publications">
   <p class="section-label">Research Outputs</p>
   <h2 class="section-title">Publications</h2>
-  <div class="section-body"><p class="subheading">Journal Articles</p><div class="table-wrap"><table class="md-table"><thead><tr><th style="text-align:center">Year</th><th>Publication</th></tr></thead><tbody><tr><td style="text-align:center">2025</td><td><strong>S.M. Lee</strong>, J. Hong, H. Choi, T.H.K. Kang. &quot;Machine learning assisted method for automated impact-echo testing of concrete structures.&quot; <em>J. Nondestructive Evaluation</em> 44(4). <a href="https://doi.org/10.1007/s10921-025-01260-3" target="_blank" rel="noreferrer">[DOI</a>]</td></tr><tr><td style="text-align:center">2025</td><td><strong>S.M. Lee</strong>, H.S. Choi, C. Kim, T.H.K. Kang. &quot;Lightweight alternative ML model for automating concrete crack image classification.&quot; <em>ACI Structural J.</em> 122(5). <a href="https://doi.org/10.14359/51746755" target="_blank" rel="noreferrer">[DOI</a>]</td></tr><tr><td style="text-align:center">2025</td><td>Y.I. Lee, <strong>S.M. Lee</strong>, T.H.K. Kang. &quot;Multiclass deep SVDD for structural health monitoring.&quot; <em>J. Structural Engineering</em> 151(12). <a href="https://doi.org/10.1061/JSENDH.STENG-14823" target="_blank" rel="noreferrer">[DOI</a>]</td></tr><tr><td style="text-align:center">2022</td><td><strong>S.M. Lee</strong>, H.S. Sung, T.H.K. Kang. &quot;Comparison of performance for predicting compressive strength of concrete using ML.&quot; <em>J. Korea Concrete Inst.</em> 34(5). <a href="https://doi.org/10.4334/jkci.2022.34.5.505" target="_blank" rel="noreferrer">[DOI</a>]</td></tr></tbody></table></div><p class="subheading">Selected Conference Papers</p><div class="table-wrap"><table class="md-table"><thead><tr><th style="text-align:center">Year</th><th>Publication</th></tr></thead><tbody><tr><td style="text-align:center">2025</td><td><strong>S.M. Lee</strong>, T.H.K. Kang. &quot;Retrieval augmented generation for assistance of using wind load design codes.&quot; <em>APCWE10</em>.</td></tr><tr><td style="text-align:center">2024</td><td><strong>S.M. Lee</strong>, Y.I. Lee, T. Kang. &quot;Multi-sphere deep SVDD for system identification of building structure.&quot; <em>ACEM 2024</em>.</td></tr><tr><td style="text-align:center">2024</td><td><strong>S.M. Lee</strong>, H.S. Choi, C. Kim, T. Kang. &quot;Representation learning for classification of concrete crack images.&quot; <em>Structures Congress</em>, Seoul.</td></tr><tr><td style="text-align:center">2022</td><td><strong>S.M. Lee</strong>, T. Kang. &quot;Clustering wind pressure tap using dynamic time warping.&quot; <em>EACWE 2022</em>.</td></tr></tbody></table></div><p><a href="https://scholar.google.com/citations?user=ogvd_LsAAAAJ&amp;hl=en" target="_blank" rel="noreferrer">Full list on Google Scholar →</a></p></div>
+  <div class="section-body"><p class="subheading">Journal Articles</p><div class="table-wrap"><table class="md-table"><thead><tr><th scope="col" style="text-align:center">Year</th><th scope="col">Publication</th></tr></thead><tbody><tr><td scope="row" style="text-align:center">2025</td><td><strong>S.M. Lee</strong>, J. Hong, H. Choi, T.H.K. Kang. &quot;Machine learning assisted method for automated impact-echo testing of concrete structures.&quot; <em>J. Nondestructive Evaluation</em> 44(4). <a href="https://doi.org/10.1007/s10921-025-01260-3" target="_blank" rel="noreferrer">[DOI</a>]</td></tr><tr><td scope="row" style="text-align:center">2025</td><td><strong>S.M. Lee</strong>, H.S. Choi, C. Kim, T.H.K. Kang. &quot;Lightweight alternative ML model for automating concrete crack image classification.&quot; <em>ACI Structural J.</em> 122(5). <a href="https://doi.org/10.14359/51746755" target="_blank" rel="noreferrer">[DOI</a>]</td></tr><tr><td scope="row" style="text-align:center">2025</td><td>Y.I. Lee, <strong>S.M. Lee</strong>, T.H.K. Kang. &quot;Multiclass deep SVDD for structural health monitoring.&quot; <em>J. Structural Engineering</em> 151(12). <a href="https://doi.org/10.1061/JSENDH.STENG-14823" target="_blank" rel="noreferrer">[DOI</a>]</td></tr><tr><td scope="row" style="text-align:center">2022</td><td><strong>S.M. Lee</strong>, H.S. Sung, T.H.K. Kang. &quot;Comparison of performance for predicting compressive strength of concrete using ML.&quot; <em>J. Korea Concrete Inst.</em> 34(5). <a href="https://doi.org/10.4334/jkci.2022.34.5.505" target="_blank" rel="noreferrer">[DOI</a>]</td></tr></tbody></table></div><p class="subheading">Selected Conference Papers</p><div class="table-wrap"><table class="md-table"><thead><tr><th scope="col" style="text-align:center">Year</th><th scope="col">Publication</th></tr></thead><tbody><tr><td scope="row" style="text-align:center">2025</td><td><strong>S.M. Lee</strong>, T.H.K. Kang. &quot;Retrieval augmented generation for assistance of using wind load design codes.&quot; <em>APCWE10</em>.</td></tr><tr><td scope="row" style="text-align:center">2024</td><td><strong>S.M. Lee</strong>, Y.I. Lee, T. Kang. &quot;Multi-sphere deep SVDD for system identification of building structure.&quot; <em>ACEM 2024</em>.</td></tr><tr><td scope="row" style="text-align:center">2024</td><td><strong>S.M. Lee</strong>, H.S. Choi, C. Kim, T. Kang. &quot;Representation learning for classification of concrete crack images.&quot; <em>Structures Congress</em>, Seoul.</td></tr><tr><td scope="row" style="text-align:center">2022</td><td><strong>S.M. Lee</strong>, T. Kang. &quot;Clustering wind pressure tap using dynamic time warping.&quot; <em>EACWE 2022</em>.</td></tr></tbody></table></div><p><a href="https://scholar.google.com/citations?user=ogvd_LsAAAAJ&amp;hl=en" target="_blank" rel="noreferrer">Full list on Google Scholar →</a></p></div>
 </article>
 <article class="section-card section-span-7 section-story" id="patents">
   <p class="section-label">Patents</p>
@@ -1201,7 +1240,7 @@
 <article class="section-card section-span-7 section-story" id="background">
   <p class="section-label">Background</p>
   <h2 class="section-title">Background</h2>
-  <div class="section-body"><div class="table-wrap"><table class="md-table"><thead><tr><th>Degree</th><th>Field</th><th>Institution</th><th>Period</th></tr></thead><tbody><tr><td><strong>Ph.D.</strong></td><td>Artificial Intelligence</td><td>Seoul National University</td><td>2023-2027 (expected)</td></tr><tr><td><strong>M.S.</strong></td><td>Structural Engineering</td><td>Seoul National University</td><td>2021-2023</td></tr><tr><td><strong>B.S.</strong></td><td>Architecture &amp; Arch. Eng. + ECE (double major)</td><td>Seoul National University</td><td>2016-2021</td></tr><tr><td></td><td>Science</td><td>Korea Science Academy of KAIST</td><td>2013-2016</td></tr></tbody></table></div><ul class="detail-list"><li><strong>SNU AI Fellowship</strong> (2025, 2026) · <strong>SNU AI Paper Competition Excellence Award</strong> (2025)</li><li>SNU AI Graduate School Scholarship (2023, 2024) · Outstanding TA Award (2022) · KCI Presentation Award (2022)</li></ul><p>Member of ASCE, ACI, KCI, AIK, KSMI | WEIK Organizing Committee (2025)</p><div align="center"><p><a href="mailto:201612445@snu.ac.kr">201612445@snu.ac.kr</a> · <a href="https://concrete-sangminlee.github.io/" target="_blank" rel="noreferrer">concrete-sangminlee.github.io</a></p></div></div>
+  <div class="section-body"><div class="table-wrap"><table class="md-table"><thead><tr><th scope="col">Degree</th><th scope="col">Field</th><th scope="col">Institution</th><th scope="col">Period</th></tr></thead><tbody><tr><td scope="row"><strong>Ph.D.</strong></td><td>Artificial Intelligence</td><td>Seoul National University</td><td>2023-2027 (expected)</td></tr><tr><td scope="row"><strong>M.S.</strong></td><td>Structural Engineering</td><td>Seoul National University</td><td>2021-2023</td></tr><tr><td scope="row"><strong>B.S.</strong></td><td>Architecture &amp; Arch. Eng. + ECE (double major)</td><td>Seoul National University</td><td>2016-2021</td></tr><tr><td scope="row"></td><td>Science</td><td>Korea Science Academy of KAIST</td><td>2013-2016</td></tr></tbody></table></div><ul class="detail-list"><li><strong>SNU AI Fellowship</strong> (2025, 2026) · <strong>SNU AI Paper Competition Excellence Award</strong> (2025)</li><li>SNU AI Graduate School Scholarship (2023, 2024) · Outstanding TA Award (2022) · KCI Presentation Award (2022)</li></ul><p>Member of ASCE, ACI, KCI, AIK, KSMI | WEIK Organizing Committee (2025)</p><div align="center"><p><a href="mailto:201612445@snu.ac.kr">201612445@snu.ac.kr</a> · <a href="https://concrete-sangminlee.github.io/" target="_blank" rel="noreferrer">concrete-sangminlee.github.io</a></p></div></div>
 </article>
     </section>
 

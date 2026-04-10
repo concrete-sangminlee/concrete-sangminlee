@@ -43,6 +43,7 @@ ORDERED_ITEM_RE = re.compile(r"^\d+\.\s+(?P<item>.+)$")
 class Block:
     kind: str
     items: list[str]
+    table_data: list[list[str]] | None = None
 
 
 @dataclass
@@ -960,6 +961,35 @@ __MODIFIED_META__
         color: var(--accent);
       }
 
+      .skip-link {
+        position: absolute;
+        top: -48px;
+        left: 8px;
+        z-index: 200;
+        padding: 10px 16px;
+        background: var(--ink);
+        color: var(--bg);
+        text-decoration: none;
+        font-weight: 800;
+        border-radius: 8px;
+        transition: top 160ms ease;
+      }
+
+      .skip-link:focus {
+        top: 8px;
+      }
+
+      :focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+        border-radius: 4px;
+      }
+
+      .theme-toggle:focus-visible,
+      .skip-link:focus-visible {
+        outline-offset: 2px;
+      }
+
       .theme-toggle {
         position: fixed;
         bottom: 24px;
@@ -1110,6 +1140,15 @@ __MODIFIED_META__
         }
       }
 
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
+      }
+
       @media print {
         *, *::before, *::after {
           animation: none !important;
@@ -1198,7 +1237,8 @@ __MODIFIED_META__
     <script type="application/ld+json">__STRUCTURED_DATA__</script>
   </head>
   <body>
-    <main class="page">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <main class="page" id="main-content">
       <section class="hero">
         <div class="hero-main">
           <div class="hero-copy">
@@ -1374,22 +1414,28 @@ def parse_blocks(lines: list[str]) -> list[Block]:
                 return ""
 
             head_html = "".join(
-                f"<th{align_attr(i)}>{render_inline(c)}</th>"
+                f'<th scope="col"{align_attr(i)}>{render_inline(c)}</th>'
                 for i, c in enumerate(header)
             )
             body_html = "".join(
                 "<tr>"
                 + "".join(
-                    f"<td{align_attr(i)}>{render_inline(c)}</td>"
+                    (f'<td scope="row"{align_attr(i)}>{render_inline(c)}</td>'
+                     if i == 0 else
+                     f"<td{align_attr(i)}>{render_inline(c)}</td>")
                     for i, c in enumerate(r)
                 )
                 + "</tr>"
                 for r in data
             )
-            blocks.append(Block(kind="html", items=[
-                f'<div class="table-wrap"><table class="md-table"><thead><tr>{head_html}</tr></thead>'
-                f"<tbody>{body_html}</tbody></table></div>"
-            ]))
+            blocks.append(Block(
+                kind="html",
+                items=[
+                    f'<div class="table-wrap"><table class="md-table"><thead><tr>{head_html}</tr></thead>'
+                    f"<tbody>{body_html}</tbody></table></div>"
+                ],
+                table_data=[header, *data],
+            ))
             table_rows.clear()
 
     def flush_all() -> None:
@@ -2235,6 +2281,77 @@ def build_og_image_alt(profile: Profile, tags: list[str]) -> str:
     return truncate(f"{profile.title} profile preview.", 120)
 
 
+DEGREE_LEVELS: dict[str, str] = {
+    "ph.d.": "Doctorate",
+    "phd": "Doctorate",
+    "doctorate": "Doctorate",
+    "m.s.": "Masters",
+    "ms": "Masters",
+    "master": "Masters",
+    "masters": "Masters",
+    "b.s.": "Bachelors",
+    "bs": "Bachelors",
+    "bachelor": "Bachelors",
+    "bachelors": "Bachelors",
+}
+
+
+def extract_credentials(profile: Profile) -> list[dict[str, object]]:
+    credentials: list[dict[str, object]] = []
+    for section in profile.sections:
+        heading = section.heading.lower()
+        if not any(token in heading for token in ("background", "education", "training")):
+            continue
+        for block in section.blocks:
+            if not block.table_data or len(block.table_data) < 2:
+                continue
+            headers = [h.lower() for h in block.table_data[0]]
+            degree_idx = next((i for i, h in enumerate(headers) if "degree" in h), None)
+            field_idx = next((i for i, h in enumerate(headers) if "field" in h or "subject" in h), None)
+            inst_idx = next((i for i, h in enumerate(headers) if "institution" in h or "school" in h or "university" in h), None)
+            period_idx = next((i for i, h in enumerate(headers) if "period" in h or "year" in h or "date" in h), None)
+            if inst_idx is None:
+                continue
+            for row in block.table_data[1:]:
+                if len(row) <= inst_idx:
+                    continue
+                institution = strip_markdown(row[inst_idx]).strip()
+                if not institution:
+                    continue
+                degree = strip_markdown(row[degree_idx]).strip() if degree_idx is not None and degree_idx < len(row) else ""
+                field = strip_markdown(row[field_idx]).strip() if field_idx is not None and field_idx < len(row) else ""
+                period = strip_markdown(row[period_idx]).strip() if period_idx is not None and period_idx < len(row) else ""
+
+                if degree and field:
+                    name = f"{degree} in {field}"
+                elif degree:
+                    name = degree
+                elif field:
+                    name = field
+                else:
+                    name = "Studies"
+
+                cred: dict[str, object] = {
+                    "@type": "EducationalOccupationalCredential",
+                    "credentialCategory": "degree" if degree else "training",
+                    "name": name,
+                    "recognizedBy": {
+                        "@type": "CollegeOrUniversity",
+                        "name": institution,
+                    },
+                }
+                normalized = degree.lower().strip()
+                no_dots = normalized.replace(".", "")
+                if normalized in DEGREE_LEVELS:
+                    cred["educationalLevel"] = DEGREE_LEVELS[normalized]
+                elif no_dots in DEGREE_LEVELS:
+                    cred["educationalLevel"] = DEGREE_LEVELS[no_dots]
+                if period:
+                    cred["validFor"] = period
+                credentials.append(cred)
+    return credentials
+
+
 def build_structured_data(
     profile: Profile,
     page_title: str,
@@ -2304,6 +2421,24 @@ def build_structured_data(
         person["email"] = email
     if knows_about:
         person["knowsAbout"] = knows_about
+
+    credentials = extract_credentials(profile)
+    if credentials:
+        graph.extend(credentials)
+        seen_institutions: set[str] = set()
+        alumni_of: list[dict[str, str]] = []
+        for cred in credentials:
+            institution_name = cred["recognizedBy"]["name"]  # type: ignore[index]
+            if institution_name in seen_institutions:
+                continue
+            seen_institutions.add(institution_name)
+            alumni_of.append({
+                "@type": "CollegeOrUniversity",
+                "name": institution_name,
+            })
+        if alumni_of:
+            person["alumniOf"] = alumni_of
+
     if generated_at is not None:
         graph[1]["dateModified"] = generated_at.date().isoformat()
 
