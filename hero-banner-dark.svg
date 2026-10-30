@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 200" width="840" height="200">
+  <defs>
+    <linearGradient id="bgGrad_dark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#132522" />
+      <stop offset="100%" stop-color="#1a3330" />
+    </linearGradient>
+    <linearGradient id="accentLine_dark" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#d1a654" />
+      <stop offset="100%" stop-color="#0f766e" />
+    </linearGradient>
+  </defs>
+
+  <!-- Outer background -->
+  <rect width="840" height="200" rx="14" fill="url(#bgGrad_dark)" />
+
+  <!-- Card -->
+  <rect x="16" y="16" width="808" height="168" rx="14" fill="#1a3330" />
+  <rect x="16" y="16" width="808" height="168" rx="14" fill="none" stroke="#2a4a45" stroke-width="1" />
+
+  <!-- Accent bar at top of card -->
+  <rect x="16" y="16" width="808" height="4" rx="2" fill="url(#accentLine_dark)" />
+
+  <!-- Decorative dots -->
+  <circle cx="780" cy="50" r="30" fill="#d1a654" opacity="0.06" />
+  <circle cx="750" cy="80" r="50" fill="#0f766e" opacity="0.05" />
+  <circle cx="790" cy="140" r="20" fill="#d1a654" opacity="0.04" />
+
+  <!-- Name -->
+  <text x="48" y="72"
+        font-family="'Segoe UI', system-ui, sans-serif" font-size="28"
+        font-weight="700" fill="#f8f2ea"
+        letter-spacing="-0.5">Sang Min Lee</text>
+
+  <!-- Subtitle -->
+  <text x="48" y="100"
+        font-family="'Segoe UI', system-ui, sans-serif" font-size="14"
+        font-weight="400" fill="#8fa69e">Ph.D. Candidate in AI · Seoul National University</text>
+
+  <!-- Divider line -->
+  <line x1="48" y1="118" x2="260" y2="118" stroke="#2a4a45" stroke-width="1" />
+
+  <!-- Tagline -->
+  <text x="48" y="148"
+        font-family="'Segoe UI', system-ui, sans-serif" font-size="16"
+        font-weight="600" fill="#d1a654"
+        letter-spacing="0.3">AI for Resilient Infrastructure</text>
+</svg>
