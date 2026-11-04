@@ -793,5 +793,26 @@ Applied researcher.
         )
 
 
+    def test_doi_identifier_extracted_from_publisher_url(self) -> None:
+        md = """# Jane Doe
+
+Applied researcher.
+
+## Publications
+
+| Year | Publication |
+|:----:|-------------|
+| 2025 | **J. Doe**, A. Kim. "Paper one." *J. Structural Engineering* 151(12). [[DOI](https://ascelibrary.org/doi/10.1061/JSENDH.STENG-14823)] |
+| 2024 | **J. Doe**. "Paper two." *ACI Structural J.* 122(5). [[DOI](https://doi.org/10.14359/51746755)] |
+"""
+        profile = MODULE.parse_profile(md)
+        pubs = MODULE.extract_publications(profile, "https://example.com/#person")
+        by_title = {p["headline"]: p for p in pubs}
+        publisher = by_title["Paper one"]
+        self.assertEqual(publisher["sameAs"], "https://ascelibrary.org/doi/10.1061/JSENDH.STENG-14823")
+        self.assertEqual(publisher["identifier"]["value"], "10.1061/JSENDH.STENG-14823")
+        self.assertEqual(by_title["Paper two"]["identifier"]["value"], "10.14359/51746755")
+
+
 if __name__ == "__main__":
     unittest.main()
