@@ -38,6 +38,7 @@ ML for structural health monitoring, concrete inspection, and wind engineering. 
 
 | Year | Publication |
 |:----:|-------------|
+| 2026 | **S.M. Lee**, T. Kang. "CoMuRAG: Condition-Mutated Hard Negatives for Safety-Sensitive Korean Building-Code Retrieval." *JCDL 2026*. |
 | 2025 | **S.M. Lee**, T.H.K. Kang. "Retrieval augmented generation for assistance of using wind load design codes." *APCWE10*. |
 | 2022 | **S.M. Lee**, T. Kang. "Clustering wind pressure tap using dynamic time warping." *EACWE 2022*. |
 
