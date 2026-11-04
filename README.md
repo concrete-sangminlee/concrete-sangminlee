@@ -33,15 +33,12 @@ ML for structural health monitoring, concrete inspection, and wind engineering. 
 | 2025 | **S.M. Lee**, J. Hong, H. Choi, T.H.K. Kang. "Machine learning assisted method for automated impact-echo testing of concrete structures." *J. Nondestructive Evaluation* 44(4). [[DOI](https://doi.org/10.1007/s10921-025-01260-3)] |
 | 2025 | **S.M. Lee**, H.S. Choi, C. Kim, T.H.K. Kang. "Lightweight alternative ML model for automating concrete crack image classification." *ACI Structural J.* 122(5). [[DOI](https://doi.org/10.14359/51746755)] |
 | 2025 | Y.I. Lee, **S.M. Lee**, T.H.K. Kang. "Multiclass deep SVDD for structural health monitoring." *J. Structural Engineering* 151(12). [[DOI](https://doi.org/10.1061/JSENDH.STENG-14823)] |
-| 2022 | **S.M. Lee**, H.S. Sung, T.H.K. Kang. "Comparison of performance for predicting compressive strength of concrete using ML." *J. Korea Concrete Inst.* 34(5). [[DOI](https://doi.org/10.4334/jkci.2022.34.5.505)] |
 
 ### Selected Conference Papers
 
 | Year | Publication |
 |:----:|-------------|
 | 2025 | **S.M. Lee**, T.H.K. Kang. "Retrieval augmented generation for assistance of using wind load design codes." *APCWE10*. |
-| 2024 | **S.M. Lee**, Y.I. Lee, T. Kang. "Multi-sphere deep SVDD for system identification of building structure." *ACEM 2024*. |
-| 2024 | **S.M. Lee**, H.S. Choi, C. Kim, T. Kang. "Representation learning for classification of concrete crack images." *Structures Congress*, Seoul. |
 | 2022 | **S.M. Lee**, T. Kang. "Clustering wind pressure tap using dynamic time warping." *EACWE 2022*. |
 
 [Full list on Google Scholar →](https://scholar.google.com/citations?user=ogvd_LsAAAAJ&hl=en)
