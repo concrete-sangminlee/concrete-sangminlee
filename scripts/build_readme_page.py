@@ -2423,6 +2423,8 @@ PUBLICATION_RE = re.compile(
 DOI_LINK_RE = re.compile(r'\[\[DOI\]\(([^)]+)\)\]')
 VOLUME_ISSUE_RE = re.compile(r"^(\d+)\s*\(\s*(\d+)\s*\)$")
 DOI_PREFIX = "https://doi.org/"
+# DOIs also appear inside publisher URLs such as https://ascelibrary.org/doi/10.1061/...
+DOI_VALUE_RE = re.compile(r"\b(10\.\d{4,9}/[^\s?#]+)")
 CONFERENCE_TOKENS = ("conference", "congress", "proceedings", "symposium", "workshop")
 
 
@@ -2523,12 +2525,13 @@ def extract_publications(profile: Profile, person_id: str) -> list[dict[str, obj
                     article["datePublished"] = year
                 if doi_url:
                     article["sameAs"] = doi_url
-                    doi_value = doi_url.removeprefix(DOI_PREFIX)
-                    article["identifier"] = {
-                        "@type": "PropertyValue",
-                        "propertyID": "DOI",
-                        "value": doi_value,
-                    }
+                    doi_match = DOI_VALUE_RE.search(doi_url)
+                    if doi_match:
+                        article["identifier"] = {
+                            "@type": "PropertyValue",
+                            "propertyID": "DOI",
+                            "value": doi_match.group(1),
+                        }
                 publications.append(article)
     return publications
 
