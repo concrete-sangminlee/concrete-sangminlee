@@ -12,7 +12,15 @@
 
 </div>
 
-ML for structural health monitoring, concrete inspection, and wind engineering. Building practical AI tools for infrastructure.
+Building practical AI tools for infrastructure: structural health monitoring, concrete NDT, wind engineering, and LLM-based retrieval for building codes.
+
+---
+
+## News
+
+- **2026**: CoMuRAG, on retrieval for safety-sensitive Korean building codes, published at *JCDL 2026*.
+- **2026**: Awarded the SNU AI Fellowship for the second year in a row.
+- **2025**: Journal articles published in *J. Nondestructive Evaluation*, *ACI Structural J.*, and *J. Structural Engineering*.
 
 ---
 
@@ -20,7 +28,8 @@ ML for structural health monitoring, concrete inspection, and wind engineering. 
 
 - **Structural Health Monitoring**: Anomaly detection and system identification using deep SVDD
 - **Concrete NDT**: Automated impact-echo testing and crack image classification
-- **Wind Engineering**: RAG for wind load design codes, wind pressure prediction
+- **Wind Engineering**: Wind pressure prediction and AI-based wind load estimation
+- **AI for Building Codes**: Retrieval and retrieval-augmented generation (RAG) for safety-sensitive building and wind load design codes
 
 ---
 
@@ -30,16 +39,16 @@ ML for structural health monitoring, concrete inspection, and wind engineering. 
 
 | Year | Publication |
 |:----:|-------------|
-| 2025 | **S.M. Lee**, J. Hong, H. Choi, T.H.K. Kang. "Machine learning assisted method for automated impact-echo testing of concrete structures." *J. Nondestructive Evaluation* 44(4). [[DOI](https://doi.org/10.1007/s10921-025-01260-3)] |
-| 2025 | **S.M. Lee**, H.S. Choi, C. Kim, T.H.K. Kang. "Lightweight alternative ML model for automating concrete crack image classification." *ACI Structural J.* 122(5). [[DOI](https://doi.org/10.14359/51746755)] |
-| 2025 | Y.I. Lee, **S.M. Lee**, T.H.K. Kang. "Multiclass deep SVDD for structural health monitoring." *J. Structural Engineering* 151(12). [[DOI](https://doi.org/10.1061/JSENDH.STENG-14823)] |
+| 2025 | **S.M. Lee**, J. Hong, H. Choi, T. H.-K. Kang. "Machine learning assisted method for automated impact-echo testing of concrete structures." *J. Nondestructive Evaluation* 44(4). [[DOI](https://doi.org/10.1007/s10921-025-01260-3)] |
+| 2025 | **S.M. Lee**, H.S. Choi, C. Kim, T. H.-K. Kang. "Lightweight alternative ML model for automating concrete crack image classification." *ACI Structural J.* 122(5). [[DOI](https://doi.org/10.14359/51746755)] |
+| 2025 | Y.I. Lee, **S.M. Lee**, T. H.-K. Kang. "Multiclass deep SVDD for structural health monitoring." *J. Structural Engineering* 151(12). [[DOI](https://doi.org/10.1061/JSENDH.STENG-14823)] |
 
 ### Selected Conference Papers
 
 | Year | Publication |
 |:----:|-------------|
 | 2026 | **S.M. Lee**, T. Kang. "CoMuRAG: Condition-Mutated Hard Negatives for Safety-Sensitive Korean Building-Code Retrieval." *JCDL 2026*. |
-| 2025 | **S.M. Lee**, T.H.K. Kang. "Retrieval augmented generation for assistance of using wind load design codes." *APCWE10*. |
+| 2025 | **S.M. Lee**, T. Kang. "Retrieval augmented generation for assistance of using wind load design codes." *APCWE10*. |
 | 2022 | **S.M. Lee**, T. Kang. "Clustering wind pressure tap using dynamic time warping." *EACWE 2022*. |
 
 [Full list on Google Scholar →](https://scholar.google.com/citations?user=ogvd_LsAAAAJ&hl=en)
@@ -64,9 +73,10 @@ ML for structural health monitoring, concrete inspection, and wind engineering. 
 
 ## Code
 
-- [**paperfactory**](https://github.com/concrete-sangminlee/paperfactory): AI agent for civil engineering research papers (15 journals, 18 utilities, CLI + Web UI)
+- [**paperfactory**](https://github.com/concrete-sangminlee/paperfactory): AI agent for civil engineering research papers (15 journals, 18 utilities, CLI + Web UI + Docker)
 - [**WindTimeHistoryReconstruction**](https://github.com/concrete-sangminlee/WindTimeHistoryReconstruction): Wind time history reconstruction
 - [**SNU_ArchitectureAndAI**](https://github.com/concrete-sangminlee/SNU_ArchitectureAndAI): "Architecture and AI" graduate course materials, SNU
+- [**academic-cv-template**](https://github.com/concrete-sangminlee/academic-cv-template): LaTeX academic CV template for graduate students
 
 ---
 
@@ -77,7 +87,7 @@ ML for structural health monitoring, concrete inspection, and wind engineering. 
 | **Ph.D.** | Artificial Intelligence | Seoul National University | 2023-2027 (expected) |
 | **M.S.** | Structural Engineering | Seoul National University | 2021-2023 |
 | **B.S.** | Architecture & Arch. Eng. + ECE (double major) | Seoul National University | 2016-2021 |
-| | Science | Korea Science Academy of KAIST | 2013-2016 |
+| **High School** | Science | Korea Science Academy of KAIST | 2013-2016 |
 
 - **SNU AI Fellowship** (2025, 2026) · **SNU AI Paper Competition Excellence Award** (2025)
 - SNU AI Graduate School Scholarship (2023, 2024) · Outstanding TA Award (2022) · KCI Presentation Award (2022)
