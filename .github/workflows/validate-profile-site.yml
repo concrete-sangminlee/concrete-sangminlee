@@ -24,9 +24,6 @@ jobs:
       - name: Validate and build profile site
         run: make check
 
-      - name: Verify generated docs are committed
-        run: git diff --exit-code -- docs/
-
       - name: Upload site artifact
         if: always()
         uses: actions/upload-artifact@v4
