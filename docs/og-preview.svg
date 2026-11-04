@@ -53,7 +53,7 @@
   </g>
   <g transform="translate(840 264)">
     <rect width="288" height="112" rx="28" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.1)" />
-    <text class="metric-value" x="28" y="48">7</text>
+    <text class="metric-value" x="28" y="48">8</text>
     <text class="metric-label" x="28" y="74">SELECTED OUTPUTS</text>
     <text class="metric-detail" x="28" y="94">Publications, Patents.</text>
   </g>
