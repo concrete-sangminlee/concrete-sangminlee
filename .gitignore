@@ -1,3 +1,6 @@
 __pycache__/
 *.py[cod]
 .DS_Store
+
+# Built by `make build` and deployed by CI; not committed.
+docs/
