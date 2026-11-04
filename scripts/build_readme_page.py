@@ -23,6 +23,9 @@ ROBOTS_FILENAME = "robots.txt"
 NOJEKYLL_FILENAME = ".nojekyll"
 REPO_URL = "https://github.com/concrete-sangminlee/concrete-sangminlee"
 SITE_URL = "https://concrete-sangminlee.github.io/"
+# Where this repository's Pages build is served. The canonical URL follows the
+# README's "Profile Site" link, but generated assets only exist here.
+PAGES_URL = "https://concrete-sangminlee.github.io/concrete-sangminlee/"
 SITE_LOCALE = "en_US"
 THEME_COLOR = "#102522"
 OG_IMAGE_WIDTH = 1200
@@ -93,6 +96,7 @@ class SiteArtifacts:
     robots: str
     nojekyll: str
     canonical_url: str
+    og_image_url: str
 
 
 HTML_TEMPLATE = """<!doctype html>
@@ -1878,6 +1882,22 @@ def count_items_for_sections(profile: Profile, keywords: tuple[str, ...]) -> int
     return count
 
 
+METRIC_DETAIL_MAX_CHARS = 36
+
+
+def summarize_names(names: list[str], max_chars: int = METRIC_DETAIL_MAX_CHARS) -> str:
+    """Join names and fold the overflow into '+N more' so SVG text stays inside its card."""
+    shown: list[str] = []
+    for index, name in enumerate(names):
+        remaining = len(names) - index - 1
+        candidate = ", ".join([*shown, name]) + (f" +{remaining} more" if remaining else "")
+        if shown and len(candidate) > max_chars:
+            break
+        shown.append(name)
+    hidden = len(names) - len(shown)
+    return ", ".join(shown) + (f" +{hidden} more" if hidden else ".")
+
+
 def build_metric_cards(profile: Profile, links: list[Link], tags: list[str]) -> list[MetricCard]:
     output_keywords = ("publication", "paper", "patent", "output")
     selected_outputs = count_items_for_sections(profile, output_keywords)
@@ -1886,7 +1906,7 @@ def build_metric_cards(profile: Profile, links: list[Link], tags: list[str]) -> 
     public_links = max(external_links, intro_badges)
 
     if tags:
-        research_themes_detail = ", ".join(tags[:3]) + "."
+        research_themes_detail = summarize_names(tags)
     else:
         research_themes_detail = "Focus areas drawn from the profile."
 
@@ -1902,7 +1922,7 @@ def build_metric_cards(profile: Profile, links: list[Link], tags: list[str]) -> 
 
     link_labels = [link.label for link in links[:5]]
     if link_labels:
-        public_links_detail = ", ".join(link_labels) + "."
+        public_links_detail = summarize_names(link_labels)
     else:
         public_links_detail = "Direct contact and profile endpoints."
 
@@ -2034,13 +2054,24 @@ def render_inline(text: str) -> str:
     return "".join(parts)
 
 
+LABELED_ITEM_RE = re.compile(r"^(\*\*[^*]+\*\*)\s*[:\-]\s*(.+)$", re.DOTALL)
+
+
+def render_labeled_item(item: str) -> str:
+    """Render '**Label**: text' without the separator, since the label is shown as its own line."""
+    match = LABELED_ITEM_RE.match(item.strip())
+    if not match:
+        return render_inline(item)
+    return render_inline(match.group(1)) + render_inline(match.group(2))
+
+
 def render_signal_grid(items: list[str]) -> str:
     rendered_items = "".join(
         textwrap.dedent(
             f"""
             <li>
               <strong>Focus {index:02d}</strong>
-              <span>{render_inline(item)}</span>
+              <span>{render_labeled_item(item)}</span>
             </li>"""
         ).strip()
         for index, item in enumerate(items, start=1)
@@ -2757,7 +2788,11 @@ def build_robots(canonical_url: str) -> str:
     )
 
 
-def render_site_artifacts(markdown: str, generated_at: datetime | None = None) -> SiteArtifacts:
+def render_site_artifacts(
+    markdown: str,
+    generated_at: datetime | None = None,
+    asset_base_url: str = PAGES_URL,
+) -> SiteArtifacts:
     built_at = generated_at.astimezone(UTC) if generated_at is not None else None
     profile = parse_profile(markdown)
     links = sorted(extract_links(profile), key=lambda link: build_cta_priority(link.label))
@@ -2765,7 +2800,7 @@ def render_site_artifacts(markdown: str, generated_at: datetime | None = None) -
     description = summarize_description(profile, tags)
     page_title = f"{profile.title} | Research Profile"
     canonical_url = pick_primary_url(links)
-    og_image_url = urljoin(canonical_url, OG_IMAGE_FILENAME)
+    og_image_url = urljoin(asset_base_url, OG_IMAGE_FILENAME)
     og_image_alt = build_og_image_alt(profile, tags)
     keywords = build_keywords(profile, tags)
     if built_at is not None:
@@ -2903,6 +2938,7 @@ def render_site_artifacts(markdown: str, generated_at: datetime | None = None) -
         robots=robots,
         nojekyll="",
         canonical_url=canonical_url,
+        og_image_url=og_image_url,
     )
 
 

@@ -765,5 +765,33 @@ Applied researcher.
         self.assertEqual(snu["educationalLevel"], "Doctorate")
 
 
+    def test_og_image_url_uses_asset_base_not_canonical(self) -> None:
+        artifacts = MODULE.render_site_artifacts(
+            SAMPLE_MARKDOWN, generated_at=FIXED_AT, asset_base_url="https://example.org/site/"
+        )
+        self.assertEqual(artifacts.canonical_url, "https://example.com")
+        self.assertEqual(artifacts.og_image_url, "https://example.org/site/og-preview.svg")
+        self.assertIn('content="https://example.org/site/og-preview.svg"', artifacts.html)
+        self.assertIn("<image:loc>https://example.org/site/og-preview.svg</image:loc>", artifacts.sitemap)
+
+    def test_signal_grid_drops_separator_after_bold_label(self) -> None:
+        rendered = MODULE.render_signal_grid(["**Wind Engineering**: Wind pressure prediction", "Plain item"])
+        self.assertIn("<strong>Wind Engineering</strong>Wind pressure prediction", rendered)
+        self.assertNotIn("</strong>:", rendered)
+        self.assertIn("<span>Plain item</span>", rendered)
+
+    def test_summarize_names_folds_overflow_into_count(self) -> None:
+        self.assertEqual(MODULE.summarize_names(["SHM", "NDT"]), "SHM, NDT.")
+        folded = MODULE.summarize_names(
+            ["Structural Health Monitoring", "Concrete NDT", "Wind Engineering", "AI for Building Codes"]
+        )
+        self.assertEqual(folded, "Structural Health Monitoring +3 more")
+        self.assertLessEqual(len(folded), MODULE.METRIC_DETAIL_MAX_CHARS)
+        self.assertEqual(
+            MODULE.summarize_names(["Profile Site", "Google Scholar", "LinkedIn", "ORCID", "Email"]),
+            "Profile Site, Google Scholar +3 more",
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
