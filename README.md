@@ -18,7 +18,7 @@ Building practical AI tools for infrastructure: structural health monitoring, co
 
 ## News
 
-- **2026**: CoMuRAG, on retrieval for safety-sensitive Korean building codes, published at *JCDL 2026*.
+- **2026**: [CoMuRAG](https://doi.org/10.1145/3805696.3846051), on retrieval for safety-sensitive Korean building codes, published at *JCDL 2026*.
 - **2026**: Awarded the SNU AI Fellowship for the second year in a row.
 - **2025**: Journal articles published in *J. Nondestructive Evaluation*, *ACI Structural J.*, and *J. Structural Engineering*.
 
@@ -57,9 +57,9 @@ Building practical AI tools for infrastructure: structural health monitoring, co
 
 ## Patents
 
-![Granted](https://img.shields.io/badge/KR_10--2611457_B1-Granted_2023-0f766e?style=flat-square) **AI-based defect detection system inside concrete members** [[Google Patents](https://patents.google.com/patent/KR102611457B1/en)]
+![KR 10-2611457 B1, granted 2023](https://img.shields.io/badge/KR_10--2611457_B1-Granted_2023-0f766e?style=flat-square) **AI-based defect detection system inside concrete members** [[Google Patents](https://patents.google.com/patent/KR102611457B1/en)]
 
-![Granted](https://img.shields.io/badge/KR_10--2480382_B1-Granted_2022-0f766e?style=flat-square) **Wind load estimation system based on artificial intelligence** [[Google Patents](https://patents.google.com/patent/KR102480382B1/en)]
+![KR 10-2480382 B1, granted 2022](https://img.shields.io/badge/KR_10--2480382_B1-Granted_2022-0f766e?style=flat-square) **Wind load estimation system based on artificial intelligence** [[Google Patents](https://patents.google.com/patent/KR102480382B1/en)]
 
 ---
 

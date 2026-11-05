@@ -875,5 +875,32 @@ A patent line.
         self.assertEqual(widths, [6, 6, 12, 12, 6, 6, 12])
 
 
+    def test_truncate_prefers_whole_words(self) -> None:
+        text = "Building practical AI tools for infrastructure and LLM-based retrieval for building codes."
+        cut = MODULE.truncate(text, 60)
+        self.assertTrue(cut.endswith("..."))
+        self.assertLessEqual(len(cut), 60)
+        self.assertTrue(text.startswith(cut[:-3]))
+        self.assertIn(text[len(cut) - 3], " ,")
+        self.assertEqual(MODULE.truncate("Supercalifragilisticexpialidocious word", 12), "Supercali...")
+        self.assertEqual(MODULE.truncate("short text", 60), "short text")
+
+    def test_hero_heading_lists_up_to_four_research_themes(self) -> None:
+        md = """# Jane Doe
+
+Applied researcher.
+
+## Research
+- Alpha
+- Beta
+- Gamma
+- Delta
+- Epsilon
+"""
+        output = MODULE.render_site(md, generated_at=FIXED_AT)
+        self.assertIn("Alpha\u00a0· Beta\u00a0· Gamma\u00a0· Delta</h2>", output)
+        self.assertNotIn("Epsilon</h2>", output)
+
+
 if __name__ == "__main__":
     unittest.main()

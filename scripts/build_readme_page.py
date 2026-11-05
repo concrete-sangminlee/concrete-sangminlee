@@ -1389,7 +1389,13 @@ def truncate(text: str, limit: int) -> str:
         return cleaned
     if limit <= 3:
         return cleaned[:limit]
-    return cleaned[: limit - 3].rstrip() + "..."
+    cut = cleaned[: limit - 3]
+    # Prefer ending on a whole word, unless that would drop most of the text.
+    if cleaned[limit - 3] != " " and " " in cut:
+        word_cut = cut.rsplit(" ", 1)[0]
+        if len(word_cut) >= (limit - 3) * 0.6:
+            cut = word_cut
+    return cut.rstrip(" ,;:") + "..."
 
 
 def parse_blocks(lines: list[str]) -> list[Block]:
@@ -2948,7 +2954,8 @@ def render_site_artifacts(
         ).strip()
 
     if tags:
-        hero_side_heading = " · ".join(tags[:3])
+        # A no-break space keeps each separator on the line of the theme before it.
+        hero_side_heading = "\u00a0· ".join(tags[:4])
     else:
         hero_side_heading = page_title
 
