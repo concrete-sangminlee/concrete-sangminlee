@@ -47,7 +47,7 @@ Building practical AI tools for infrastructure: structural health monitoring, co
 
 | Year | Publication |
 |:----:|-------------|
-| 2026 | **S.M. Lee**, T. Kang. "CoMuRAG: Condition-Mutated Hard Negatives for Safety-Sensitive Korean Building-Code Retrieval." *JCDL 2026*. |
+| 2026 | **S.M. Lee**, T. Kang. "CoMuRAG: Condition-Mutated Hard Negatives for Safety-Sensitive Korean Building-Code Retrieval." *JCDL 2026*. [[DOI](https://doi.org/10.1145/3805696.3846051)] |
 | 2025 | **S.M. Lee**, T. Kang. "Retrieval augmented generation for assistance of using wind load design codes." *APCWE10*. |
 | 2022 | **S.M. Lee**, T. Kang. "Clustering wind pressure tap using dynamic time warping." *EACWE 2022*. |
 
