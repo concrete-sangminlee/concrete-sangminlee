@@ -34,9 +34,9 @@ OG_IMAGE_HEIGHT = 630
 AUTOLINK_RE = re.compile(r"https?://\S+|[\w.+-]+@[\w.-]+\.\w+")
 LINKED_IMAGE_RE = re.compile(r"\[!\[([^\]]*)\]\(([^)]+)\)\]\(([^)]+)\)")
 IMAGE_RE = re.compile(r"!\[([^\]]*)\]\(([^)]+)\)")
-INLINE_LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
+INLINE_LINK_RE = re.compile(r"\[([^\[\]]+)\]\(([^)]+)\)")
 INLINE_TOKEN_RE = re.compile(
-    r"(\[!\[[^\]]*\]\([^)]+\)\]\([^)]+\)|!\[[^\]]*\]\([^)]+\)|\[[^\]]+\]\([^)]+\)|`[^`]+`|\*\*.+?\*\*|__.+?__|\*[^*\n]+\*|_[^_\n]+_)",
+    r"(\[!\[[^\]]*\]\([^)]+\)\]\([^)]+\)|!\[[^\]]*\]\([^)]+\)|\[[^\[\]]+\]\([^)]+\)|`[^`]+`|\*\*.+?\*\*|__.+?__|\*[^*\n]+\*|_[^_\n]+_)",
     re.DOTALL,
 )
 LINK_ITEM_RE = re.compile(r"^(?P<label>[^:]+):\s*(?P<target>\S.+)$")
@@ -794,6 +794,7 @@ __MODIFIED_META__
       .signal-grid li {
         min-height: 100%;
         padding: 16px;
+        overflow-wrap: anywhere;
         border-radius: 22px;
         border: 1px solid var(--ink-008);
         background: var(--white-092);
@@ -818,6 +819,7 @@ __MODIFIED_META__
       .stack-grid li {
         min-height: 100%;
         padding: 18px;
+        overflow-wrap: anywhere;
         border-radius: 22px;
         border: 1px solid var(--ink-008);
         background: var(--white-090);
@@ -1126,8 +1128,56 @@ __MODIFIED_META__
 
         .md-table th,
         .md-table td {
-          padding: 10px 14px;
+          padding: 10px;
           font-size: 0.88rem;
+        }
+
+        .md-table th {
+          white-space: normal;
+          letter-spacing: 0.06em;
+        }
+
+        .md-table-stack thead {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          overflow: hidden;
+          clip: rect(0 0 0 0);
+          white-space: nowrap;
+        }
+
+        .md-table-stack,
+        .md-table-stack tbody,
+        .md-table-stack tr,
+        .md-table-stack td {
+          display: block;
+          width: 100%;
+        }
+
+        .md-table-stack tr {
+          padding: 10px 0;
+          border-bottom: 1px solid var(--line);
+        }
+
+        .md-table-stack tbody tr:last-child {
+          border-bottom: none;
+        }
+
+        .md-table-stack td {
+          padding: 3px 14px;
+          border-bottom: none;
+          text-align: left !important;
+          white-space: normal;
+        }
+
+        .md-table-stack td[data-label]::before {
+          content: attr(data-label);
+          display: block;
+          color: var(--accent);
+          font-size: 0.68rem;
+          font-weight: 800;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
         }
       }
 
@@ -1398,6 +1448,15 @@ def parse_blocks(lines: list[str]) -> list[Block]:
                     return f' style="text-align:{aligns[col_idx]}"'
                 return ""
 
+            # Tables with three or more columns stack into labeled rows on phones.
+            stack = len(header) >= 3
+            labels = [html.escape(strip_markdown(c).strip(), quote=True) for c in header]
+
+            def label_attr(col_idx: int) -> str:
+                if stack and col_idx < len(labels) and labels[col_idx]:
+                    return f' data-label="{labels[col_idx]}"'
+                return ""
+
             head_html = "".join(
                 f'<th scope="col"{align_attr(i)}>{render_inline(c)}</th>'
                 for i, c in enumerate(header)
@@ -1405,9 +1464,9 @@ def parse_blocks(lines: list[str]) -> list[Block]:
             body_html = "".join(
                 "<tr>"
                 + "".join(
-                    (f'<td scope="row"{align_attr(i)}>{render_inline(c)}</td>'
+                    (f'<td scope="row"{align_attr(i)}{label_attr(i)}>{render_inline(c)}</td>'
                      if i == 0 else
-                     f"<td{align_attr(i)}>{render_inline(c)}</td>")
+                     f"<td{align_attr(i)}{label_attr(i)}>{render_inline(c)}</td>")
                     for i, c in enumerate(r)
                 )
                 + "</tr>"
@@ -1416,7 +1475,7 @@ def parse_blocks(lines: list[str]) -> list[Block]:
             blocks.append(Block(
                 kind="html",
                 items=[
-                    f'<div class="table-wrap"><table class="md-table"><thead><tr>{head_html}</tr></thead>'
+                    f'<div class="table-wrap"><table class="md-table{" md-table-stack" if stack else ""}"><thead><tr>{head_html}</tr></thead>'
                     f"<tbody>{body_html}</tbody></table></div>"
                 ],
                 table_data=[header, *data],
@@ -2124,9 +2183,28 @@ def render_blocks(blocks: list[Block]) -> str:
     return "".join(parts)
 
 
-def render_section(section: Section, index: int) -> str:
+SPAN_WIDTHS = {"section-span-5": 5, "section-span-6": 6, "section-span-7": 7, "section-span-12": 12}
+
+
+def layout_section_spans(sections: list[Section]) -> list[str]:
+    """Pack section cards into 12-column rows and widen the last card of each row to fill it."""
+    widths = [SPAN_WIDTHS[section_span(section)] for section in sections]
+    rows: list[list[int]] = []
+    used = 12
+    for index, width in enumerate(widths):
+        if used + width > 12:
+            rows.append([])
+            used = 0
+        rows[-1].append(index)
+        used += width
+    for row in rows:
+        widths[row[-1]] += 12 - sum(widths[i] for i in row)
+    return [f"section-span-{width}" for width in widths]
+
+
+def render_section(section: Section, index: int, span_class: str | None = None) -> str:
     variant = section_variant(section)
-    classes = f"section-card {section_span(section)} section-{variant}"
+    classes = f"section-card {span_class or section_span(section)} section-{variant}"
     label = html.escape(section_label(index, section))
     title = html.escape(section.heading)
 
@@ -2841,8 +2919,10 @@ def render_site_artifacts(
     metric_html = render_metric_cards(metrics)
     section_html = textwrap.indent(
         "\n".join(
-            render_section(section, index)
-            for index, section in enumerate(profile.sections, start=1)
+            render_section(section, index, span_class)
+            for index, (section, span_class) in enumerate(
+                zip(profile.sections, layout_section_spans(profile.sections)), start=1
+            )
         ),
         "        ",
     )

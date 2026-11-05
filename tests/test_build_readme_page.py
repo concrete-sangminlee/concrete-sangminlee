@@ -169,7 +169,9 @@ Applied researcher.
         self.assertEqual(len(table_blocks), 1)
         self.assertIn('<div class="table-wrap"><table', table_blocks[0].items[0])
         self.assertIn('<th scope="col">Degree</th>', table_blocks[0].items[0])
-        self.assertIn('<td scope="row">Ph.D. in AI</td>', table_blocks[0].items[0])
+        self.assertIn('<td scope="row" data-label="Degree">Ph.D. in AI</td>', table_blocks[0].items[0])
+        self.assertIn('<td data-label="Period">2023-2027</td>', table_blocks[0].items[0])
+        self.assertIn('class="md-table md-table-stack"', table_blocks[0].items[0])
         self.assertNotIn("|-----", table_blocks[0].items[0])
 
     def test_html_blocks_pass_through_unchanged(self) -> None:
@@ -812,6 +814,65 @@ Applied researcher.
         self.assertEqual(publisher["sameAs"], "https://ascelibrary.org/doi/10.1061/JSENDH.STENG-14823")
         self.assertEqual(publisher["identifier"]["value"], "10.1061/JSENDH.STENG-14823")
         self.assertEqual(by_title["Paper two"]["identifier"]["value"], "10.14359/51746755")
+
+
+    def test_two_column_tables_do_not_stack(self) -> None:
+        md = """# Jane Doe
+
+Applied researcher.
+
+## Publications
+
+| Year | Publication |
+|:----:|-------------|
+| 2025 | Paper. |
+"""
+        profile = MODULE.parse_profile(md)
+        html_block = next(b for s in profile.sections for b in s.blocks if b.kind == "html").items[0]
+        self.assertIn('<table class="md-table">', html_block)
+        self.assertNotIn("data-label", html_block)
+
+    def test_link_inside_literal_brackets_keeps_brackets_outside(self) -> None:
+        rendered = MODULE.render_inline("Paper. [[DOI](https://doi.org/10.1/x)]")
+        self.assertIn('[<a href="https://doi.org/10.1/x" target="_blank" rel="noreferrer">DOI</a>]', rendered)
+
+    def test_layout_section_spans_fill_each_row(self) -> None:
+        md = """# Jane Doe
+
+Applied researcher.
+
+## News
+- **2026**: Item
+
+## Research
+- **Area**: Detail
+
+## Publications
+
+| Year | Publication |
+|:----:|-------------|
+| 2025 | Paper. |
+
+## Patents
+
+A patent line.
+
+## Projects
+- Project
+
+## Code
+- Repo
+
+## Background
+
+| Degree | Field | Institution | Period |
+|--------|-------|-------------|--------|
+| Ph.D. | AI | SNU | 2023 |
+"""
+        profile = MODULE.parse_profile(md)
+        spans = MODULE.layout_section_spans(profile.sections)
+        widths = [int(span.rsplit("-", 1)[1]) for span in spans]
+        self.assertEqual(widths, [6, 6, 12, 12, 6, 6, 12])
 
 
 if __name__ == "__main__":
