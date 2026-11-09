@@ -12,6 +12,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: check-dois-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   check-dois:
     runs-on: ubuntu-latest

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import re
 import sys
 import tempfile
@@ -216,7 +217,6 @@ Applied researcher.
             self.assertTrue((output_path.parent / "robots.txt").exists())
             self.assertTrue((output_path.parent / ".nojekyll").exists())
             self.assertIn("ACADEMIC RESEARCH PROFILE", (output_path.parent / "og-preview.svg").read_text(encoding="utf-8"))
-
 
     def test_table_alignment_preserved(self) -> None:
         md = """# Jane Doe
@@ -766,7 +766,6 @@ Applied researcher.
         self.assertEqual(snu["credentialCategory"], "degree")
         self.assertEqual(snu["educationalLevel"], "Doctorate")
 
-
     def test_og_image_url_uses_asset_base_not_canonical(self) -> None:
         artifacts = MODULE.render_site_artifacts(
             SAMPLE_MARKDOWN, generated_at=FIXED_AT, asset_base_url="https://example.org/site/"
@@ -794,7 +793,6 @@ Applied researcher.
             "Profile Site, Google Scholar +3 more",
         )
 
-
     def test_doi_identifier_extracted_from_publisher_url(self) -> None:
         md = """# Jane Doe
 
@@ -814,7 +812,6 @@ Applied researcher.
         self.assertEqual(publisher["sameAs"], "https://ascelibrary.org/doi/10.1061/JSENDH.STENG-14823")
         self.assertEqual(publisher["identifier"]["value"], "10.1061/JSENDH.STENG-14823")
         self.assertEqual(by_title["Paper two"]["identifier"]["value"], "10.14359/51746755")
-
 
     def test_two_column_tables_do_not_stack(self) -> None:
         md = """# Jane Doe
@@ -874,7 +871,6 @@ A patent line.
         widths = [int(span.rsplit("-", 1)[1]) for span in spans]
         self.assertEqual(widths, [6, 6, 12, 12, 6, 6, 12])
 
-
     def test_truncate_prefers_whole_words(self) -> None:
         text = "Building practical AI tools for infrastructure and LLM-based retrieval for building codes."
         cut = MODULE.truncate(text, 60)
@@ -900,6 +896,14 @@ Applied researcher.
         output = MODULE.render_site(md, generated_at=FIXED_AT)
         self.assertIn("Alpha\u00a0· Beta\u00a0· Gamma\u00a0· Delta</h2>", output)
         self.assertNotIn("Epsilon</h2>", output)
+
+    def test_person_same_as_includes_github_profile(self) -> None:
+        output = MODULE.render_site(SAMPLE_MARKDOWN, generated_at=FIXED_AT)
+        match = re.search(r'<script type="application/ld\+json">(.*?)</script>', output, re.S)
+        graph = json.loads(match.group(1))["@graph"]
+        person = next(node for node in graph if node.get("@type") == "Person" and node["@id"].endswith("#person"))
+        self.assertIn("https://github.com/concrete-sangminlee", person["sameAs"])
+        self.assertEqual(person["sameAs"].count("https://github.com/concrete-sangminlee"), 1)
 
 
 if __name__ == "__main__":

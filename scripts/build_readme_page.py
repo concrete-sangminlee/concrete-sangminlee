@@ -22,6 +22,8 @@ SITEMAP_FILENAME = "sitemap.xml"
 ROBOTS_FILENAME = "robots.txt"
 NOJEKYLL_FILENAME = ".nojekyll"
 REPO_URL = "https://github.com/concrete-sangminlee/concrete-sangminlee"
+# The README is this account's profile README, so its owner is the profile's person.
+GITHUB_PROFILE_URL = REPO_URL.rsplit("/", 1)[0]
 SITE_URL = "https://concrete-sangminlee.github.io/"
 # Where this repository's Pages build is served. The canonical URL follows the
 # README's "Profile Site" link, but generated assets only exist here.
@@ -2720,6 +2722,8 @@ def build_structured_data(
         for link in links
         if link.href.startswith("http") and link.href.rstrip("/") != canonical_url.rstrip("/")
     ]
+    if GITHUB_PROFILE_URL not in same_as:
+        same_as.append(GITHUB_PROFILE_URL)
     email = next((link.href.removeprefix("mailto:") for link in links if link.href.startswith("mailto:")), None)
     knows_about = collect_knows_about(profile, tags)
 

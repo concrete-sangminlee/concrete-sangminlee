@@ -84,6 +84,21 @@ class CheckDoisTests(unittest.TestCase):
                 MODULE.check(path, lookup=lambda doi: False)
         self.assertIn("::error file=README.md,line=3::", out.getvalue())
 
+    def test_each_doi_is_looked_up_once(self) -> None:
+        markdown = SAMPLE + "\n- [Paper one](https://doi.org/10.1007/s10921-025-01260-3) again\n"
+        calls: list[str] = []
+
+        def lookup(doi: str) -> bool:
+            calls.append(doi)
+            return True
+
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "README.md"
+            path.write_text(markdown, encoding="utf-8")
+            with contextlib.redirect_stdout(io.StringIO()), mock.patch.dict(os.environ, {"GITHUB_ACTIONS": ""}):
+                MODULE.check(path, lookup=lookup)
+        self.assertEqual(sorted(calls), ["10.1007/s10921-025-01260-3", "10.1061/JSENDH.STENG-14823"])
+
 
 if __name__ == "__main__":
     unittest.main()
