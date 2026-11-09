@@ -99,8 +99,12 @@ def report(level: str, message: str, path: Path, line: int) -> None:
 def check(path: Path, lookup: Callable[[str], bool | None] = lookup_doi) -> int:
     links = find_doi_links(path.read_text(encoding="utf-8"))
     broken = 0
+    # A DOI can be linked more than once (News and Publications); ask doi.org once per DOI.
+    answers: dict[str, bool | None] = {}
     for link in links:
-        registered = lookup(link.doi)
+        if link.doi not in answers:
+            answers[link.doi] = lookup(link.doi)
+        registered = answers[link.doi]
         if registered is None:
             report("warning", f"Could not reach doi.org to check {link.doi}.", path, link.line)
         elif link.via_doi_org and not registered:
