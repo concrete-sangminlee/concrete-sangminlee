@@ -15,6 +15,7 @@ On GitHub Actions the results are printed as workflow annotations.
 
 from __future__ import annotations
 
+import http.client
 import json
 import os
 import re
@@ -31,8 +32,9 @@ ROOT = Path(__file__).resolve().parent.parent
 README_PATH = ROOT / "README.md"
 HANDLE_API = "https://doi.org/api/handles/"
 DOI_HOSTS = {"doi.org", "dx.doi.org"}
-LINK_RE = re.compile(r"\]\((https?://[^)\s]+)\)")
-DOI_RE = re.compile(r"\b(10\.\d{4,9}/[^\s?#)]+)")
+# Link targets may contain balanced parentheses, as DOIs like 10.1061/(ASCE)ST.1943-541X.0002345 do.
+LINK_RE = re.compile(r"\]\((https?://(?:[^()\s]|\([^()\s]*\))+)\)")
+DOI_RE = re.compile(r"\b(10\.\d{4,9}/[^\s?#]+)")
 USER_AGENT = "profile-readme-doi-check/1.0"
 
 # doi.org handle API response codes: 1 = found, 100 = handle not found,
@@ -49,7 +51,8 @@ class DoiLink:
 
     @property
     def via_doi_org(self) -> bool:
-        return urllib.parse.urlsplit(self.url).netloc.lower() in DOI_HOSTS
+        host = (urllib.parse.urlsplit(self.url).hostname or "").lower().removeprefix("www.")
+        return host in DOI_HOSTS
 
 
 def find_doi_links(markdown: str) -> list[DoiLink]:
@@ -57,7 +60,8 @@ def find_doi_links(markdown: str) -> list[DoiLink]:
     for line_number, line in enumerate(markdown.splitlines(), start=1):
         for match in LINK_RE.finditer(line):
             url = match.group(1)
-            doi_match = DOI_RE.search(url)
+            # Decode first so 10.1002%2F... and %28ASCE%29 compare equal to their plain spelling.
+            doi_match = DOI_RE.search(urllib.parse.unquote(url))
             if doi_match:
                 links.append(DoiLink(url=url, doi=doi_match.group(1), line=line_number))
     return links
@@ -71,14 +75,20 @@ def lookup_doi(doi: str, timeout: float = 15.0, attempts: int = 3) -> bool | Non
         code: int | None = None
         try:
             with urllib.request.urlopen(request, timeout=timeout) as response:
-                code = json.load(response).get("responseCode")
+                body = json.load(response)
+                code = body.get("responseCode") if isinstance(body, dict) else None
         except urllib.error.HTTPError as error:
+            # Only doi.org's own JSON answer is proof of absence. A 404 page from a proxy
+            # or CDN is treated like any other failure and retried.
             if error.code == 404:
                 try:
-                    code = json.load(error).get("responseCode", 100)
-                except ValueError:
-                    code = 100
-        except (urllib.error.URLError, TimeoutError, ValueError):
+                    body = json.load(error)
+                    code = body.get("responseCode") if isinstance(body, dict) else None
+                except (ValueError, OSError, http.client.HTTPException):
+                    code = None
+        except (urllib.error.URLError, http.client.HTTPException, OSError, ValueError, AttributeError):
+            # Dropped connections (RemoteDisconnected), truncated bodies (IncompleteRead),
+            # timeouts and malformed JSON all mean "could not check", never a crash.
             code = None
         if code == FOUND:
             return True

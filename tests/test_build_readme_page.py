@@ -106,7 +106,9 @@ class BuildReadmePageTests(unittest.TestCase):
         self.assertIn("Jane Doe | Research Profile", output)
         self.assertIn('content="summary_large_image"', output)
         self.assertIn('property="og:image"', output)
-        self.assertIn("og-preview.svg", output)
+        self.assertIn("og-preview.png", output)
+        self.assertIn('<meta property="og:image:type" content="image/png" />', output)
+        self.assertNotIn("og-preview.svg", output)
         self.assertIn('"ProfilePage"', output)
         self.assertIn("preview-grid", output)
         self.assertIn("Research Themes", output)
@@ -121,10 +123,12 @@ class BuildReadmePageTests(unittest.TestCase):
         self.assertEqual(artifacts.canonical_url, "https://example.com")
         self.assertIn("<svg", artifacts.og_image)
         self.assertIn("Jane Doe profile preview", artifacts.og_image)
-        self.assertIn("<image:image>", artifacts.sitemap)
-        self.assertIn("og-preview.svg", artifacts.sitemap)
-        self.assertIn("Sitemap: https://example.com/sitemap.xml", artifacts.robots)
         self.assertEqual(artifacts.nojekyll, "")
+        # The page is served from a project path and names another URL as canonical,
+        # so it must not publish a sitemap or robots file of its own.
+        self.assertFalse(hasattr(artifacts, "sitemap"))
+        self.assertFalse(hasattr(artifacts, "robots"))
+        self.assertNotIn('rel="sitemap"', artifacts.html)
 
     def test_render_site_artifacts_are_deterministic_without_timestamp(self) -> None:
         artifacts = MODULE.render_site_artifacts(SAMPLE_MARKDOWN)
@@ -132,7 +136,7 @@ class BuildReadmePageTests(unittest.TestCase):
         self.assertNotIn("Profile snapshot", artifacts.html)
         self.assertNotIn("Build stamp", artifacts.html)
         self.assertNotIn("article:modified_time", artifacts.html)
-        self.assertNotIn("<lastmod>", artifacts.sitemap)
+        self.assertNotIn("dateModified", artifacts.html)
         self.assertIn('"ProfilePage"', artifacts.html)
 
     def test_render_site_hides_empty_section_scaffolding_for_minimal_readme(self) -> None:
@@ -170,7 +174,8 @@ Applied researcher.
         self.assertEqual(len(table_blocks), 1)
         self.assertIn('<div class="table-wrap"><table', table_blocks[0].items[0])
         self.assertIn('<th scope="col">Degree</th>', table_blocks[0].items[0])
-        self.assertIn('<td scope="row" data-label="Degree">Ph.D. in AI</td>', table_blocks[0].items[0])
+        self.assertIn('<th scope="row" data-label="Degree">Ph.D. in AI</th>', table_blocks[0].items[0])
+        self.assertNotIn("<td scope=", table_blocks[0].items[0])
         self.assertIn('<td data-label="Period">2023-2027</td>', table_blocks[0].items[0])
         self.assertIn('class="md-table md-table-stack"', table_blocks[0].items[0])
         self.assertNotIn("|-----", table_blocks[0].items[0])
@@ -213,8 +218,8 @@ Applied researcher.
             self.assertEqual(output_path.read_text(encoding="utf-8"), html)
             self.assertIn("Research Profile", html)
             self.assertTrue((output_path.parent / "og-preview.svg").exists())
-            self.assertTrue((output_path.parent / "sitemap.xml").exists())
-            self.assertTrue((output_path.parent / "robots.txt").exists())
+            self.assertFalse((output_path.parent / "sitemap.xml").exists())
+            self.assertFalse((output_path.parent / "robots.txt").exists())
             self.assertTrue((output_path.parent / ".nojekyll").exists())
             self.assertIn("ACADEMIC RESEARCH PROFILE", (output_path.parent / "og-preview.svg").read_text(encoding="utf-8"))
 
@@ -284,8 +289,12 @@ Applied researcher.
     def test_skip_link_present(self) -> None:
         output = MODULE.render_site(SAMPLE_MARKDOWN, generated_at=FIXED_AT)
         self.assertIn('class="skip-link"', output)
-        self.assertIn('href="#main-content"', output)
-        self.assertIn('id="main-content"', output)
+        # The skip link must land past the hero and navigation, not on <main>,
+        # which starts at the top of the page.
+        self.assertIn('href="#profile-sections"', output)
+        self.assertIn('id="profile-sections" tabindex="-1"', output)
+        self.assertLess(output.index('id="profile-sections"'), output.index('class="footer"'))
+        self.assertGreater(output.index('id="profile-sections"'), output.index('class="hero"'))
 
     def test_table_scope_attributes(self) -> None:
         md = """# Jane Doe
@@ -373,9 +382,8 @@ Applied researcher.
         self.assertEqual(journal["identifier"]["propertyID"], "DOI")
 
         conference = pubs[1]
-        self.assertEqual(conference["isPartOf"]["@type"], "PublicationEvent")
-        self.assertEqual(conference["isPartOf"]["name"], "EACWE 2024")
-        self.assertNotIn("issueNumber", conference["isPartOf"])
+        self.assertEqual(conference["publication"], {"@type": "PublicationEvent", "name": "EACWE 2024"})
+        self.assertNotIn("isPartOf", conference)
         self.assertNotIn("identifier", conference)
 
     def test_conference_with_location_does_not_set_issue_number(self) -> None:
@@ -394,10 +402,11 @@ Researcher.
         profile = MODULE.parse_profile(md)
         pubs = MODULE.extract_publications(profile, "https://example.com/#person")
         self.assertEqual(len(pubs), 1)
-        is_part_of = pubs[0]["isPartOf"]
-        self.assertEqual(is_part_of["@type"], "PublicationEvent")
-        self.assertEqual(is_part_of["name"], "Structures Congress")
-        self.assertNotIn("issueNumber", is_part_of)
+        event = pubs[0]["publication"]
+        self.assertEqual(event["@type"], "PublicationEvent")
+        self.assertEqual(event["name"], "Structures Congress")
+        self.assertNotIn("issueNumber", event)
+        self.assertNotIn("isPartOf", pubs[0])
 
     def test_publication_authors_link_self_to_person(self) -> None:
         md = """# Jane Doe
@@ -442,16 +451,6 @@ Applied researcher.
         self.assertTrue(first_line.startswith("<svg "),
                         f"SVG should start at column 0, got: {first_line!r}")
 
-    def test_sitemap_xml_declaration_starts_at_column_zero(self) -> None:
-        artifacts = MODULE.render_site_artifacts(SAMPLE_MARKDOWN, generated_at=FIXED_AT)
-        first_line = artifacts.sitemap.split("\n", 1)[0]
-        self.assertEqual(first_line, '<?xml version="1.0" encoding="UTF-8"?>')
-        for line in artifacts.sitemap.splitlines():
-            stripped = line.lstrip()
-            if stripped.startswith("<lastmod>"):
-                self.assertTrue(line.startswith("    <lastmod>"),
-                                f"lastmod should be indented with 4 spaces, got: {line!r}")
-
     def test_summarize_section_uses_table_content_not_trailing_paragraph(self) -> None:
         md = """# Jane Doe
 
@@ -493,15 +492,16 @@ Researcher.
         first = projects[0]
         self.assertEqual(first["@type"], "ResearchProject")
         self.assertEqual(first["name"], "Sample Project A")
-        self.assertEqual(first["startDate"], "2021")
-        self.assertEqual(first["endDate"], "2025")
+        self.assertEqual(first["foundingDate"], "2021")
+        self.assertEqual(first["dissolutionDate"], "2025")
+        self.assertNotIn("startDate", first)
         self.assertEqual(first["funder"]["name"], "NRF Korea")
         self.assertEqual(first["member"], {"@id": person_id})
 
         # Single year project should have only startDate
         single = projects[1]
-        self.assertEqual(single["startDate"], "2024")
-        self.assertNotIn("endDate", single)
+        self.assertEqual(single["foundingDate"], "2024")
+        self.assertNotIn("dissolutionDate", single)
 
     def test_patents_parsed_into_schema_org_entities(self) -> None:
         md = """# Jane Doe
@@ -518,13 +518,18 @@ Researcher.
         person_id = "https://example.com/#person"
         patents = MODULE.extract_patents(profile, person_id)
         self.assertEqual(len(patents), 2)
-        self.assertEqual(patents[0]["@type"], "Patent")
+        # schema.org has no Patent type; patents are CreativeWork nodes typed through Wikidata.
+        self.assertEqual(patents[0]["@type"], "CreativeWork")
+        self.assertEqual(patents[0]["additionalType"], "https://www.wikidata.org/wiki/Q253623")
         self.assertEqual(patents[0]["name"], "Sample patent name")
-        self.assertEqual(patents[0]["patentNumber"], "KR101234567B1")
+        self.assertEqual(
+            patents[0]["identifier"],
+            {"@type": "PropertyValue", "propertyID": "patent number", "value": "KR101234567B1"},
+        )
         self.assertEqual(patents[0]["datePublished"], "2023")
-        self.assertEqual(patents[0]["sameAs"], "https://patents.google.com/patent/KR101234567B1/en")
-        self.assertEqual(patents[0]["inventor"], {"@id": person_id})
-        self.assertEqual(patents[1]["patentNumber"], "KR107654321B1")
+        self.assertEqual(patents[0]["url"], "https://patents.google.com/patent/KR101234567B1/en")
+        self.assertEqual(patents[0]["creator"], {"@id": person_id})
+        self.assertEqual(patents[1]["identifier"]["value"], "KR107654321B1")
         self.assertEqual(patents[1]["datePublished"], "2022")
 
     def test_person_affiliation_set_from_first_credential(self) -> None:
@@ -771,9 +776,8 @@ Applied researcher.
             SAMPLE_MARKDOWN, generated_at=FIXED_AT, asset_base_url="https://example.org/site/"
         )
         self.assertEqual(artifacts.canonical_url, "https://example.com")
-        self.assertEqual(artifacts.og_image_url, "https://example.org/site/og-preview.svg")
-        self.assertIn('content="https://example.org/site/og-preview.svg"', artifacts.html)
-        self.assertIn("<image:loc>https://example.org/site/og-preview.svg</image:loc>", artifacts.sitemap)
+        self.assertEqual(artifacts.og_image_url, "https://example.org/site/og-preview.png")
+        self.assertIn('content="https://example.org/site/og-preview.png"', artifacts.html)
 
     def test_signal_grid_drops_separator_after_bold_label(self) -> None:
         rendered = MODULE.render_signal_grid(["**Wind Engineering**: Wind pressure prediction", "Plain item"])
@@ -904,6 +908,126 @@ Applied researcher.
         person = next(node for node in graph if node.get("@type") == "Person" and node["@id"].endswith("#person"))
         self.assertIn("https://github.com/concrete-sangminlee", person["sameAs"])
         self.assertEqual(person["sameAs"].count("https://github.com/concrete-sangminlee"), 1)
+
+
+    def test_centered_title_wrapper_is_balanced_and_footer_moves_to_page_footer(self) -> None:
+        md = """<div align="center">
+
+# Jane Doe
+
+**Researcher | Somewhere University**
+
+</div>
+
+Tagline sentence.
+
+## Research
+- **Area**: Detail
+
+## Background
+
+Some text.
+
+---
+
+<div align="center">
+
+jane@example.com · [example.org](https://example.org/)
+
+</div>
+"""
+        profile = MODULE.parse_profile(md)
+        self.assertNotIn("</div>", "".join(b.items[0] for b in profile.intro_blocks))
+        background = next(s for s in profile.sections if s.heading == "Background")
+        self.assertNotIn("jane@example.com", "".join(b.items[0] for b in background.blocks))
+        self.assertTrue(profile.footer_blocks)
+        output = MODULE.render_site(md, generated_at=FIXED_AT)
+        self.assertEqual(output.count("<div"), output.count("</div>"))
+        footer = output[output.index('<footer class="footer">'):output.index("</footer>")]
+        self.assertIn("mailto:jane@example.com", footer)
+        self.assertIn('style="text-align:center"', footer)
+        self.assertNotIn('align="center"', output)
+        # A spaced pipe reads as a capital I in the display font; it becomes a middle dot.
+        self.assertIn("Researcher · Somewhere University", output)
+
+    def test_unsafe_link_schemes_are_not_rendered_as_links(self) -> None:
+        rendered = MODULE.render_inline("[click](javascript:alert(1)) and [ok](https://example.com) and [rel](#news)")
+        self.assertNotIn("javascript:", rendered)
+        self.assertIn("click", rendered)
+        self.assertIn('href="https://example.com"', rendered)
+        self.assertIn('href="#news"', rendered)
+        self.assertNotIn("data:", MODULE.render_inline("[![x](a.svg)](data:text/html;base64,AAAA)"))
+
+    def test_intraword_underscores_are_not_emphasis(self) -> None:
+        rendered = MODULE.render_inline("SNU_ArchitectureAndAI and wind_tunnel_data but _real emphasis_")
+        self.assertIn("SNU_ArchitectureAndAI", rendered)
+        self.assertIn("wind_tunnel_data", rendered)
+        self.assertIn("<em>real emphasis</em>", rendered)
+        self.assertEqual(MODULE.strip_markdown("SNU_ArchitectureAndAI"), "SNU_ArchitectureAndAI")
+
+    def test_short_heading_keywords_match_whole_words_only(self) -> None:
+        self.assertTrue(MODULE.heading_has("ip and patents", ("ip",)))
+        self.assertFalse(MODULE.heading_has("fellowships", ("ip",)))
+        self.assertTrue(MODULE.heading_has("selected works", ("work",)))
+        self.assertTrue(MODULE.heading_has("publications", ("publication",)))
+        self.assertFalse(MODULE.heading_has("network", ("work",)))
+        fellowships = MODULE.Section(heading="Fellowships", anchor="f", blocks=[MODULE.Block(kind="list", items=["A"])])
+        self.assertNotEqual(MODULE.section_label(1, fellowships), "Patents")
+
+    def test_research_themes_never_fall_back_to_news_items(self) -> None:
+        md = """# Jane Doe
+
+Applied researcher.
+
+## News
+- **2026**: Paper accepted
+
+## Interests Overview
+- Structural health monitoring
+"""
+        tags = MODULE.extract_tags(MODULE.parse_profile(md))
+        self.assertNotIn("2026: Paper accepted", tags)
+        self.assertIn("Structural health monitoring", tags)
+
+    def test_json_ld_cannot_be_closed_by_readme_text(self) -> None:
+        md = """# Jane </script><script>alert(1)</script> Doe
+
+Applied researcher.
+"""
+        output = MODULE.render_site(md, generated_at=FIXED_AT)
+        block = output[output.index('<script type="application/ld+json">'):]
+        block = block[: block.index("</script>")]
+        self.assertNotIn("<script>alert", block)
+        data = json.loads(block[len('<script type="application/ld+json">'):])
+        self.assertIn("</script>", data["@graph"][0]["name"])
+
+    def test_profile_page_points_at_person_and_credentials_nest_under_person(self) -> None:
+        md = """# Jane Doe
+
+Applied researcher.
+
+## Background
+
+| Degree | Institution | Period |
+|--------|-------------|--------|
+| **Ph.D.**, Artificial Intelligence | Seoul National University | 2023-2027 |
+| **High School**, Science | Sample Science Academy | 2013-2016 |
+"""
+        output = MODULE.render_site(md, generated_at=FIXED_AT)
+        match = re.search(r'<script type="application/ld\+json">(.*?)</script>', output, re.S)
+        graph = json.loads(match.group(1))["@graph"]
+        page = next(n for n in graph if n["@type"] == "ProfilePage")
+        person = next(n for n in graph if n["@type"] == "Person" and n["@id"].endswith("#person"))
+        self.assertEqual(page["mainEntity"], {"@id": person["@id"]})
+        self.assertFalse(any(n["@type"] == "EducationalOccupationalCredential" for n in graph))
+        phd, school = person["hasCredential"]
+        self.assertEqual(phd["name"], "Ph.D. in Artificial Intelligence")
+        self.assertEqual(phd["educationalLevel"], "Doctorate")
+        self.assertEqual(school["name"], "High School, Science")
+        self.assertEqual(school["credentialCategory"], "diploma")
+        self.assertEqual(school["recognizedBy"]["@type"], "HighSchool")
+        self.assertIn({"@type": "HighSchool", "name": "Sample Science Academy"}, person["alumniOf"])
+        self.assertEqual(person["affiliation"]["name"], "Seoul National University")
 
 
 if __name__ == "__main__":

@@ -32,6 +32,9 @@ jobs:
       - name: Validate and build profile site
         run: make check
 
+      - name: Render link preview image
+        run: python scripts/render_og_png.py --require
+
       - name: Upload site artifact
         if: always()
         uses: actions/upload-artifact@v6
