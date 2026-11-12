@@ -6,7 +6,7 @@ import html
 import json
 import re
 import textwrap
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
 from urllib.parse import urljoin
@@ -17,9 +17,10 @@ README_PATH = ROOT / "README.md"
 DOCS_DIR = ROOT / "docs"
 OUTPUT_PATH = DOCS_DIR / "index.html"
 OG_IMAGE_FILENAME = "og-preview.svg"
+# Social platforms do not render SVG previews, so pages reference a PNG that
+# scripts/render_og_png.py rasterizes from the SVG after the build.
+OG_RASTER_FILENAME = "og-preview.png"
 FAVICON_FILENAME = "favicon.svg"
-SITEMAP_FILENAME = "sitemap.xml"
-ROBOTS_FILENAME = "robots.txt"
 NOJEKYLL_FILENAME = ".nojekyll"
 REPO_URL = "https://github.com/concrete-sangminlee/concrete-sangminlee"
 # The README is this account's profile README, so its owner is the profile's person.
@@ -38,11 +39,19 @@ LINKED_IMAGE_RE = re.compile(r"\[!\[([^\]]*)\]\(([^)]+)\)\]\(([^)]+)\)")
 IMAGE_RE = re.compile(r"!\[([^\]]*)\]\(([^)]+)\)")
 INLINE_LINK_RE = re.compile(r"\[([^\[\]]+)\]\(([^)]+)\)")
 INLINE_TOKEN_RE = re.compile(
-    r"(\[!\[[^\]]*\]\([^)]+\)\]\([^)]+\)|!\[[^\]]*\]\([^)]+\)|\[[^\[\]]+\]\([^)]+\)|`[^`]+`|\*\*.+?\*\*|__.+?__|\*[^*\n]+\*|_[^_\n]+_)",
+    r"(\[!\[[^\]]*\]\([^)]+\)\]\([^)]+\)|!\[[^\]]*\]\([^)]+\)|\[[^\[\]]+\]\([^)]+\)|`[^`]+`|\*\*.+?\*\*|(?<![A-Za-z0-9])__.+?__(?![A-Za-z0-9])"
+    r"|\*[^*\n]+\*|(?<![A-Za-z0-9_])_[^_\n]+_(?![A-Za-z0-9_]))",
     re.DOTALL,
 )
 LINK_ITEM_RE = re.compile(r"^(?P<label>[^:]+):\s*(?P<target>\S.+)$")
 ORDERED_ITEM_RE = re.compile(r"^\d+\.\s+(?P<item>.+)$")
+HORIZONTAL_RULES = {"---", "***", "___"}
+WRAPPER_OPEN_RE = re.compile(r"^<(div|p|center|section)\b[^>]*>$", re.IGNORECASE)
+# Presentational align attributes are obsolete in HTML5; emit the CSS equivalent.
+ALIGN_ATTR_RE = re.compile(r'\salign="(left|center|right)"', re.IGNORECASE)
+# Link targets may be http(s), mailto, or scheme-less (relative paths and #anchors).
+URL_SCHEME_RE = re.compile(r"^([a-zA-Z][a-zA-Z0-9+.-]*):")
+SAFE_URL_SCHEMES = {"http", "https", "mailto"}
 
 
 @dataclass
@@ -65,6 +74,7 @@ class Profile:
     intro: list[str]
     intro_blocks: list[Block]
     sections: list[Section]
+    footer_blocks: list[Block] = field(default_factory=list)
 
 
 @dataclass
@@ -94,8 +104,6 @@ class SiteArtifacts:
     html: str
     og_image: str
     favicon: str
-    sitemap: str
-    robots: str
     nojekyll: str
     canonical_url: str
     og_image_url: str
@@ -122,7 +130,7 @@ HTML_TEMPLATE = """<!doctype html>
     <meta property="og:site_name" content="__TITLE__" />
     <meta property="og:locale" content="__SITE_LOCALE__" />
     <meta property="og:image" content="__OG_IMAGE_URL__" />
-    <meta property="og:image:type" content="image/svg+xml" />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="__OG_IMAGE_ALT__" />
@@ -134,7 +142,6 @@ __MODIFIED_META__
     <meta name="twitter:image:alt" content="__OG_IMAGE_ALT__" />
     <link rel="canonical" href="__CANONICAL_URL__" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-    <link rel="sitemap" type="application/xml" href="__SITEMAP_URL__" />
     <link rel="dns-prefetch" href="https://img.shields.io" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -151,6 +158,7 @@ __MODIFIED_META__
         --muted: #556762;
         --line: rgba(16, 37, 34, 0.12);
         --accent: #ca5a3f;
+        --accent-text: #a8452d;
         --accent-soft: rgba(202, 90, 63, 0.14);
         --teal: #0f766e;
         --teal-soft: rgba(15, 118, 110, 0.14);
@@ -193,6 +201,7 @@ __MODIFIED_META__
           --muted: #8fa69e;
           --line: rgba(248, 242, 234, 0.12);
           --accent: #e07050;
+          --accent-text: #f29a7f;
           --accent-soft: rgba(224, 112, 80, 0.16);
           --teal: #2dd4bf;
           --teal-soft: rgba(45, 212, 191, 0.14);
@@ -242,6 +251,7 @@ __MODIFIED_META__
         --muted: #8fa69e;
         --line: rgba(248, 242, 234, 0.12);
         --accent: #e07050;
+        --accent-text: #f29a7f;
         --accent-soft: rgba(224, 112, 80, 0.16);
         --teal: #2dd4bf;
         --teal-soft: rgba(45, 212, 191, 0.14);
@@ -541,7 +551,7 @@ __MODIFIED_META__
 
       .button-primary {
         background: var(--ink);
-        color: #f8f2ea;
+        color: var(--bg);
         box-shadow: 0 16px 30px var(--ink-016);
       }
 
@@ -590,7 +600,7 @@ __MODIFIED_META__
       .metric-card {
         padding: 16px 18px;
         border-radius: 22px;
-        background: var(--white-008);
+        background: rgba(255, 255, 255, 0.08);
       }
 
       .metric-card strong,
@@ -671,8 +681,8 @@ __MODIFIED_META__
         font-weight: 700;
       }
 
-      .preview-kicker {
-        color: var(--accent);
+      .preview-card .preview-kicker {
+        color: var(--accent-text);
       }
 
       .nav-wrap {
@@ -739,7 +749,7 @@ __MODIFIED_META__
       }
 
       .section-label {
-        color: var(--accent);
+        color: var(--accent-text);
       }
 
       .section-title {
@@ -942,6 +952,7 @@ __MODIFIED_META__
         align-items: center;
         margin-top: 24px;
         padding: 18px 6px 0;
+        margin-bottom: 64px;
         color: var(--muted);
         font-size: 0.92rem;
       }
@@ -952,8 +963,17 @@ __MODIFIED_META__
         text-decoration: none;
       }
 
+      .footer-contact {
+        flex-basis: 100%;
+        text-align: center;
+      }
+
+      .footer-contact p {
+        margin: 0;
+      }
+
       .footer-note {
-        color: var(--accent);
+        color: var(--accent-text);
       }
 
       .skip-link {
@@ -977,7 +997,6 @@ __MODIFIED_META__
       :focus-visible {
         outline: 2px solid var(--accent);
         outline-offset: 3px;
-        border-radius: 4px;
       }
 
       .theme-toggle:focus-visible,
@@ -1045,17 +1064,18 @@ __MODIFIED_META__
         border-bottom: 1px solid var(--line);
       }
 
-      .md-table th {
+      .md-table thead th {
         font-size: 0.76rem;
         font-weight: 800;
         letter-spacing: 0.14em;
         text-transform: uppercase;
-        color: var(--accent);
+        color: var(--accent-text);
         background: var(--ink-004);
         white-space: nowrap;
       }
 
-      .md-table tbody tr:last-child td {
+      .md-table tbody tr:last-child td,
+      .md-table tbody tr:last-child th {
         border-bottom: none;
       }
 
@@ -1063,7 +1083,7 @@ __MODIFIED_META__
         background: var(--ink-003);
       }
 
-      .md-table td:first-child {
+      .md-table tbody th {
         font-weight: 700;
         white-space: nowrap;
       }
@@ -1134,7 +1154,7 @@ __MODIFIED_META__
           font-size: 0.88rem;
         }
 
-        .md-table th {
+        .md-table thead th {
           white-space: normal;
           letter-spacing: 0.06em;
         }
@@ -1151,6 +1171,7 @@ __MODIFIED_META__
         .md-table-stack,
         .md-table-stack tbody,
         .md-table-stack tr,
+        .md-table-stack tbody th,
         .md-table-stack td {
           display: block;
           width: 100%;
@@ -1165,6 +1186,7 @@ __MODIFIED_META__
           border-bottom: none;
         }
 
+        .md-table-stack tbody th,
         .md-table-stack td {
           padding: 3px 14px;
           border-bottom: none;
@@ -1172,11 +1194,12 @@ __MODIFIED_META__
           white-space: normal;
         }
 
+        .md-table-stack tbody th[data-label]::before,
         .md-table-stack td[data-label]::before {
           content: attr(data-label);
           display: block;
-          color: var(--accent);
-          font-size: 0.68rem;
+          color: var(--accent-text);
+          font-size: 0.72rem;
           font-weight: 800;
           letter-spacing: 0.12em;
           text-transform: uppercase;
@@ -1279,7 +1302,7 @@ __MODIFIED_META__
     <script type="application/ld+json">__STRUCTURED_DATA__</script>
   </head>
   <body>
-    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <a class="skip-link" href="#profile-sections">Skip to profile sections</a>
     <main class="page" id="main-content">
       <section class="hero">
         <div class="hero-main">
@@ -1308,14 +1331,29 @@ __CONTENT_SECTION__
         <svg class="theme-toggle-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
         <svg class="theme-toggle-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
-      <footer class="footer">
-        <span>Maintained in <a href="__REPO_URL__">the profile repository</a> and published as static output.</span>__BUILD_STAMP_HTML__
+      <footer class="footer">__FOOTER_CONTACT_HTML__
+        <span>Maintained in <a href="__REPO_URL__" target="_blank" rel="noreferrer">the profile repository</a> and published as static output.</span>__BUILD_STAMP_HTML__
       </footer>
     </main>
     <script>(function(){var b=document.getElementById('theme-toggle');b&&b.addEventListener('click',function(){var r=document.documentElement,c=r.getAttribute('data-theme'),d=c==='dark'||(c!=='light'&&window.matchMedia('(prefers-color-scheme:dark)').matches);var n=d?'light':'dark';r.setAttribute('data-theme',n);localStorage.setItem('theme',n);});})()</script>
   </body>
 </html>
 """
+
+
+def heading_has(heading: str, tokens: tuple[str, ...]) -> bool:
+    """True if a token starts a word in the lower-cased heading.
+
+    Plain substring tests misfire on short tokens: "ip" is inside "Fellowships" and
+    "work" is inside "Network". Tokens of three letters or fewer must be whole words.
+    """
+    for token in tokens:
+        pattern = r"(?<![a-z0-9])" + re.escape(token)
+        if len(token) <= 3:
+            pattern += r"(?![a-z0-9])"
+        if re.search(pattern, heading):
+            return True
+    return False
 
 
 def slugify(text: str) -> str:
@@ -1328,9 +1366,10 @@ def strip_markdown(text: str) -> str:
     output = IMAGE_RE.sub(lambda match: match.group(1), output)
     output = INLINE_LINK_RE.sub(lambda match: match.group(1), output)
     output = re.sub(r"`([^`]+)`", r"\1", output)
-    output = re.sub(r"(\*\*|__)(.+?)\1", r"\2", output)
+    output = re.sub(r"\*\*(.+?)\*\*", r"\1", output)
+    output = re.sub(r"(?<![A-Za-z0-9])__(.+?)__(?![A-Za-z0-9])", r"\1", output)
     output = re.sub(r"(?<!\*)\*([^*\n]+)\*(?!\*)", r"\1", output)
-    output = re.sub(r"(?<!_)_([^_\n]+)_(?!_)", r"\1", output)
+    output = re.sub(r"(?<![A-Za-z0-9_])_([^_\n]+)_(?![A-Za-z0-9_])", r"\1", output)
     return " ".join(output.split())
 
 
@@ -1472,7 +1511,7 @@ def parse_blocks(lines: list[str]) -> list[Block]:
             body_html = "".join(
                 "<tr>"
                 + "".join(
-                    (f'<td scope="row"{align_attr(i)}{label_attr(i)}>{render_inline(c)}</td>'
+                    (f'<th scope="row"{align_attr(i)}{label_attr(i)}>{render_inline(c)}</th>'
                      if i == 0 else
                      f"<td{align_attr(i)}{label_attr(i)}>{render_inline(c)}</td>")
                     for i, c in enumerate(r)
@@ -1500,7 +1539,7 @@ def parse_blocks(lines: list[str]) -> list[Block]:
 
     for line in [*lines, ""]:
         stripped = line.strip()
-        if stripped in {"---", "***", "___"}:
+        if stripped in HORIZONTAL_RULES:
             flush_all()
             continue
         if not stripped:
@@ -1572,6 +1611,22 @@ def parse_profile(markdown: str) -> Profile:
             body_start = index + 1
             break
 
+    # A wrapper such as <div align="center"> that opens before the title is dropped
+    # together with the title line, so its closing tag has to go too. Otherwise a
+    # stray </div> reaches the page and closes the hero markup early.
+    body_lines = lines[body_start:]
+    for line in lines[: max(body_start - 1, 0)]:
+        opener = WRAPPER_OPEN_RE.match(line.strip())
+        if not opener:
+            continue
+        closer = f"</{opener.group(1).lower()}>"
+        for index, candidate in enumerate(body_lines):
+            if candidate.startswith("## "):
+                break
+            if candidate.strip().lower() == closer:
+                del body_lines[index]
+                break
+
     intro_lines: list[str] = []
     sections: list[Section] = []
     current_heading: str | None = None
@@ -1604,12 +1659,24 @@ def parse_profile(markdown: str) -> Profile:
                 )
         current_lines = []
 
-    for line in lines[body_start:]:
+    for line in body_lines:
         if line.startswith("## "):
             flush()
             current_heading = line[3:].strip()
             continue
         current_lines.append(line)
+
+    # Whatever follows the last horizontal rule of the last section is the README's
+    # closing footer (for example a contact line), not part of that section.
+    footer_lines: list[str] = []
+    if current_heading is not None:
+        rules = [index for index, line in enumerate(current_lines) if line.strip() in HORIZONTAL_RULES]
+        if rules:
+            last_rule = rules[-1]
+            tail = current_lines[last_rule + 1:]
+            if any(line.strip() for line in tail) and any(line.strip() for line in current_lines[:last_rule]):
+                footer_lines = tail
+                current_lines = current_lines[:last_rule]
     flush()
 
     intro_blocks = parse_blocks(intro_lines)
@@ -1618,7 +1685,13 @@ def parse_profile(markdown: str) -> Profile:
         for block in intro_blocks
         if block.kind == "paragraph" and not is_media_only_text(block.items[0])
     ]
-    return Profile(title=title, intro=intro, intro_blocks=intro_blocks, sections=sections)
+    return Profile(
+        title=title,
+        intro=intro,
+        intro_blocks=intro_blocks,
+        sections=sections,
+        footer_blocks=parse_blocks(footer_lines),
+    )
 
 
 def normalize_href(target: str) -> str:
@@ -1628,6 +1701,12 @@ def normalize_href(target: str) -> str:
     if "@" in stripped and " " not in stripped:
         return f"mailto:{stripped}"
     return stripped
+
+
+def is_safe_href(href: str) -> bool:
+    """Reject script-bearing schemes such as javascript: and data: in link targets."""
+    scheme = URL_SCHEME_RE.match(href.strip())
+    return scheme is None or scheme.group(1).lower() in SAFE_URL_SCHEMES
 
 
 def parse_link_item(item: str) -> Link | None:
@@ -1652,7 +1731,7 @@ def parse_link_item(item: str) -> Link | None:
 
 def is_link_section(section: Section) -> bool:
     heading = section.heading.lower()
-    return any(token in heading for token in ("link", "contact", "connect"))
+    return heading_has(heading, ("link", "contact", "connect"))
 
 
 def extract_links(profile: Profile) -> list[Link]:
@@ -1718,6 +1797,9 @@ def describe_link(href: str) -> str:
     return href.removeprefix("https://").removeprefix("http://").rstrip("/")
 
 
+NEWS_HEADING_TOKENS = ("highlight", "news", "update")
+
+
 def collect_focus_items(profile: Profile, limit: int = 6) -> list[str]:
     keyword_groups = (
         ("research area", "research areas", "focus", "theme", "interest", "expertise"),
@@ -1729,7 +1811,7 @@ def collect_focus_items(profile: Profile, limit: int = 6) -> list[str]:
         items: list[str] = []
         for section in profile.sections:
             heading = section.heading.lower()
-            if not any(token in heading for token in keywords):
+            if not heading_has(heading, keywords):
                 continue
             for block in section.blocks:
                 if block.kind in {"list", "ordered_list"}:
@@ -1738,7 +1820,7 @@ def collect_focus_items(profile: Profile, limit: int = 6) -> list[str]:
             return items[:limit]
 
     for section in profile.sections:
-        if is_link_section(section):
+        if is_link_section(section) or heading_has(section.heading.lower(), NEWS_HEADING_TOKENS):
             continue
         for block in section.blocks:
             if block.kind in {"list", "ordered_list"}:
@@ -1819,11 +1901,11 @@ def section_variant(section: Section) -> str:
         return "links"
     if any(block.kind == "ordered_list" for block in section.blocks):
         return "timeline"
-    if any(token in heading for token in ("timeline", "experience", "journey", "selected", "featured", "work")):
+    if heading_has(heading, ("timeline", "experience", "journey", "selected", "featured", "work")):
         return "timeline"
-    if any(token in heading for token in ("research", "focus", "theme", "interest", "expertise")):
+    if heading_has(heading, ("research", "focus", "theme", "interest", "expertise")):
         return "focus"
-    if any(token in heading for token in ("collaboration", "services", "approach", "offer")):
+    if heading_has(heading, ("collaboration", "services", "approach", "offer")):
         return "collaboration"
     if section.blocks and all(block.kind in {"list", "ordered_list"} for block in section.blocks):
         return "stack"
@@ -1856,25 +1938,25 @@ def section_label(index: int, section: Section) -> str:
     heading = section.heading.lower()
     if "github" in heading:
         return "GitHub Profile"
-    if any(token in heading for token in ("contribution", "activity")):
+    if heading_has(heading, ("contribution", "activity")):
         return "Activity"
-    if any(token in heading for token in ("research agenda", "research interests", "current directions", "focus", "theme")):
+    if heading_has(heading, ("research agenda", "research interests", "current directions", "focus", "theme")):
         return "Research Agenda"
-    if any(token in heading for token in ("highlight", "news", "update")):
+    if heading_has(heading, NEWS_HEADING_TOKENS):
         return "Recent Signals"
-    if any(token in heading for token in ("publication", "paper", "output")):
+    if heading_has(heading, ("publication", "paper", "output")):
         return "Research Outputs"
-    if any(token in heading for token in ("project", "funding", "grant")):
+    if heading_has(heading, ("project", "funding", "grant")):
         return "Projects & Funding"
-    if any(token in heading for token in ("education", "training")):
+    if heading_has(heading, ("education", "training")):
         return "Training"
-    if any(token in heading for token in ("recognition", "award", "service", "membership")):
+    if heading_has(heading, ("recognition", "award", "service", "membership")):
         return "Recognition"
-    if any(token in heading for token in ("patent", "intellectual property", "ip")):
+    if heading_has(heading, ("patent", "intellectual property", "ip")):
         return "Patents"
-    if any(token in heading for token in ("code", "repository", "software", "tool", "open source")):
+    if heading_has(heading, ("code", "repository", "software", "tool", "open source")):
         return "Open Source"
-    if any(token in heading for token in ("background", "bio", "about", "profile")):
+    if heading_has(heading, ("background", "bio", "biography", "about", "profile")):
         return "Background"
 
     labels = {
@@ -1944,7 +2026,7 @@ def count_items_for_sections(profile: Profile, keywords: tuple[str, ...]) -> int
     count = 0
     for section in profile.sections:
         heading = section.heading.lower()
-        if any(token in heading for token in keywords):
+        if heading_has(heading, keywords):
             count += section_item_count(section)
     return count
 
@@ -1980,7 +2062,7 @@ def build_metric_cards(profile: Profile, links: list[Link], tags: list[str]) -> 
     output_section_names = [
         section.heading
         for section in profile.sections
-        if any(token in section.heading.lower() for token in output_keywords)
+        if heading_has(section.heading.lower(), output_keywords)
     ]
     if output_section_names:
         selected_outputs_detail = ", ".join(output_section_names) + "."
@@ -2053,6 +2135,9 @@ def render_anchor(href: str, label: str) -> str:
 
 
 def autolink_plain_text(text: str) -> str:
+    # In the display font a "|" between words reads as a capital I ("AI | Seoul"),
+    # so show spaced pipes as the middle dot the page already uses as a separator.
+    text = text.replace(" | ", " \u00b7 ")
     parts: list[str] = []
     last_index = 0
 
@@ -2095,6 +2180,10 @@ def render_inline(text: str) -> str:
         image_match = IMAGE_RE.fullmatch(token)
         if linked_image_match:
             alt, src, href = linked_image_match.groups()
+            if not is_safe_href(normalize_href(href)):
+                parts.append(render_image(src, alt))
+                last_index = match.end()
+                continue
             safe_href = html.escape(normalize_href(href), quote=True)
             attrs = ' target="_blank" rel="noreferrer"' if href.startswith("http") else ""
             kind = classify_image_kind(src, alt)
@@ -2105,8 +2194,12 @@ def render_inline(text: str) -> str:
         elif token.startswith("["):
             label, target = INLINE_LINK_RE.fullmatch(token).groups()
             href = normalize_href(target)
-            safe_href = html.escape(href, quote=True)
             inner = render_inline(label)
+            if not is_safe_href(href):
+                parts.append(inner)
+                last_index = match.end()
+                continue
+            safe_href = html.escape(href, quote=True)
             link_attrs = ' target="_blank" rel="noreferrer"' if href.startswith("http") else ""
             parts.append(f'<a href="{safe_href}"{link_attrs}>{inner}</a>')
         elif token.startswith("`"):
@@ -2187,7 +2280,7 @@ def render_blocks(blocks: list[Block]) -> str:
         elif block.kind == "ordered_list":
             parts.append(render_timeline(block.items))
         elif block.kind == "html":
-            parts.append(block.items[0])
+            parts.append(ALIGN_ATTR_RE.sub(lambda m: f' style="text-align:{m.group(1).lower()}"', block.items[0]))
     return "".join(parts)
 
 
@@ -2446,13 +2539,15 @@ DEGREE_LEVELS: dict[str, str] = {
     "bachelor": "Bachelors",
     "bachelors": "Bachelors",
 }
+# A degree cell may carry the field too: "**Ph.D.**, Artificial Intelligence".
+DEGREE_CELL_RE = re.compile(r"^\*\*(?P<degree>[^*]+)\*\*\s*(?:,|:|\bin\b)?\s*(?P<field>.*)$")
 
 
 def extract_credentials(profile: Profile) -> list[dict[str, object]]:
     credentials: list[dict[str, object]] = []
     for section in profile.sections:
         heading = section.heading.lower()
-        if not any(token in heading for token in ("background", "education", "training")):
+        if not heading_has(heading, ("background", "education", "training")):
             continue
         for block in section.blocks:
             if not block.table_data or len(block.table_data) < 2:
@@ -2469,11 +2564,21 @@ def extract_credentials(profile: Profile) -> list[dict[str, object]]:
                 institution = strip_markdown(row[inst_idx]).strip()
                 if not institution:
                     continue
-                degree = strip_markdown(row[degree_idx]).strip() if degree_idx is not None and degree_idx < len(row) else ""
+                degree_cell = row[degree_idx].strip() if degree_idx is not None and degree_idx < len(row) else ""
                 field = strip_markdown(row[field_idx]).strip() if field_idx is not None and field_idx < len(row) else ""
+                combined = DEGREE_CELL_RE.match(degree_cell) if field_idx is None else None
+                if combined:
+                    degree = strip_markdown(combined.group("degree")).strip()
+                    field = strip_markdown(combined.group("field")).strip()
+                else:
+                    degree = strip_markdown(degree_cell).strip()
+
+                normalized = degree.lower().strip()
+                level = DEGREE_LEVELS.get(normalized) or DEGREE_LEVELS.get(normalized.replace(".", ""))
+                is_high_school = "high school" in normalized
 
                 if degree and field:
-                    name = f"{degree} in {field}"
+                    name = f"{degree} in {field}" if level else f"{degree}, {field}"
                 elif degree:
                     name = degree
                 elif field:
@@ -2481,21 +2586,26 @@ def extract_credentials(profile: Profile) -> list[dict[str, object]]:
                 else:
                     name = "Studies"
 
+                if is_high_school:
+                    category = "diploma"
+                elif degree:
+                    category = "degree"
+                else:
+                    category = "training"
+
                 cred: dict[str, object] = {
                     "@type": "EducationalOccupationalCredential",
-                    "credentialCategory": "degree" if degree else "training",
+                    "credentialCategory": category,
                     "name": name,
                     "recognizedBy": {
-                        "@type": "CollegeOrUniversity",
+                        "@type": "HighSchool" if is_high_school else "CollegeOrUniversity",
                         "name": institution,
                     },
                 }
-                normalized = degree.lower().strip()
-                no_dots = normalized.replace(".", "")
-                if normalized in DEGREE_LEVELS:
-                    cred["educationalLevel"] = DEGREE_LEVELS[normalized]
-                elif no_dots in DEGREE_LEVELS:
-                    cred["educationalLevel"] = DEGREE_LEVELS[no_dots]
+                if level:
+                    cred["educationalLevel"] = level
+                elif is_high_school:
+                    cred["educationalLevel"] = "High School"
                 credentials.append(cred)
     return credentials
 
@@ -2532,7 +2642,7 @@ def extract_publications(profile: Profile, person_id: str) -> list[dict[str, obj
     publications: list[dict[str, object]] = []
     for section in profile.sections:
         heading = section.heading.lower()
-        if not any(token in heading for token in ("publication", "paper")):
+        if not heading_has(heading, ("publication", "paper")):
             continue
         current_subheading = ""
         for block in section.blocks:
@@ -2569,8 +2679,11 @@ def extract_publications(profile: Profile, person_id: str) -> list[dict[str, obj
                 if not title or not venue:
                     continue
 
+                publication_event: dict[str, object] | None = None
+                is_part_of: dict[str, object] | None = None
                 if is_conference:
-                    is_part_of: dict[str, object] = {
+                    # isPartOf expects a CreativeWork; an event belongs under "publication".
+                    publication_event = {
                         "@type": "PublicationEvent",
                         "name": venue,
                     }
@@ -2605,8 +2718,11 @@ def extract_publications(profile: Profile, person_id: str) -> list[dict[str, obj
                     "headline": title,
                     "name": title,
                     "author": authors,
-                    "isPartOf": is_part_of,
                 }
+                if is_part_of is not None:
+                    article["isPartOf"] = is_part_of
+                if publication_event is not None:
+                    article["publication"] = publication_event
                 if year:
                     article["datePublished"] = year
                 if doi_url:
@@ -2622,6 +2738,9 @@ def extract_publications(profile: Profile, person_id: str) -> list[dict[str, obj
     return publications
 
 
+# schema.org defines no Patent type, so patents are CreativeWork nodes that point
+# at the Wikidata item for "patent" through additionalType.
+PATENT_ADDITIONAL_TYPE = "https://www.wikidata.org/wiki/Q253623"
 PATENT_NUMBER_RE = re.compile(r"/patent/([A-Z0-9]+)(?:/|$)")
 PATENT_BADGE_YEAR_RE = re.compile(r"Granted[_\s]*(\d{4})")
 PATENT_NAME_RE = re.compile(r"\*\*([^*]+)\*\*")
@@ -2635,7 +2754,7 @@ def extract_research_projects(profile: Profile, person_id: str) -> list[dict[str
     projects: list[dict[str, object]] = []
     for section in profile.sections:
         heading = section.heading.lower()
-        if not any(token in heading for token in ("project", "funding", "grant")):
+        if not heading_has(heading, ("project", "funding", "grant")):
             continue
         for block in section.blocks:
             if block.kind not in {"list", "ordered_list"}:
@@ -2657,10 +2776,10 @@ def extract_research_projects(profile: Profile, person_id: str) -> list[dict[str
                 # Parse period like "2021-2027" or "2024"
                 period_parts = period.split("-")
                 if len(period_parts) == 2 and period_parts[0].strip().isdigit() and period_parts[1].strip().isdigit():
-                    project["startDate"] = period_parts[0].strip()
-                    project["endDate"] = period_parts[1].strip()
+                    project["foundingDate"] = period_parts[0].strip()
+                    project["dissolutionDate"] = period_parts[1].strip()
                 elif period_parts[0].strip().isdigit():
-                    project["startDate"] = period_parts[0].strip()
+                    project["foundingDate"] = period_parts[0].strip()
                 if funder:
                     project["funder"] = {
                         "@type": "Organization",
@@ -2686,16 +2805,21 @@ def extract_patents(profile: Profile, person_id: str) -> list[dict[str, object]]
                 continue
             name = name_m.group(1).strip()
             patent: dict[str, object] = {
-                "@type": "Patent",
+                "@type": "CreativeWork",
+                "additionalType": PATENT_ADDITIONAL_TYPE,
                 "name": name,
-                "inventor": {"@id": person_id},
+                "creator": {"@id": person_id},
             }
             if link_m:
                 url = link_m.group(2)
-                patent["sameAs"] = url
+                patent["url"] = url
                 num_m = PATENT_NUMBER_RE.search(url)
                 if num_m:
-                    patent["patentNumber"] = num_m.group(1)
+                    patent["identifier"] = {
+                        "@type": "PropertyValue",
+                        "propertyID": "patent number",
+                        "value": num_m.group(1),
+                    }
             year_m = PATENT_BADGE_YEAR_RE.search(text)
             if year_m:
                 patent["datePublished"] = year_m.group(1)
@@ -2746,6 +2870,7 @@ def build_structured_data(
             "inLanguage": "en",
             "isPartOf": {"@id": website_id},
             "about": {"@id": person_id},
+            "mainEntity": {"@id": person_id},
             "primaryImageOfPage": {"@id": image_id},
         },
         {
@@ -2781,7 +2906,7 @@ def build_structured_data(
 
     credentials = extract_credentials(profile)
     if credentials:
-        graph.extend(credentials)
+        person["hasCredential"] = credentials
         seen_institutions: set[str] = set()
         alumni_of: list[dict[str, str]] = []
         for cred in credentials:
@@ -2790,7 +2915,7 @@ def build_structured_data(
                 continue
             seen_institutions.add(institution_name)
             alumni_of.append({
-                "@type": "CollegeOrUniversity",
+                "@type": cred["recognizedBy"]["@type"],  # type: ignore[index]
                 "name": institution_name,
             })
         if alumni_of:
@@ -2843,40 +2968,10 @@ def build_structured_data(
     if generated_at is not None:
         graph[1]["dateModified"] = generated_at.date().isoformat()
 
-    return json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False)
-
-
-def build_sitemap(canonical_url: str, og_image_url: str, profile: Profile, generated_at: datetime | None) -> str:
-    lines = [
-        '<?xml version="1.0" encoding="UTF-8"?>',
-        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">',
-        '  <url>',
-        f'    <loc>{html.escape(canonical_url)}</loc>',
-    ]
-    if generated_at is not None:
-        lines.append(f'    <lastmod>{generated_at.date().isoformat()}</lastmod>')
-    lines.extend([
-        '    <image:image>',
-        f'      <image:loc>{html.escape(og_image_url)}</image:loc>',
-        f'      <image:title>{html.escape(profile.title)}</image:title>',
-        '    </image:image>',
-        '  </url>',
-        '</urlset>',
-        '',
-    ])
-    return "\n".join(lines)
-
-
-def build_robots(canonical_url: str) -> str:
-    sitemap_url = urljoin(canonical_url, SITEMAP_FILENAME)
-    return textwrap.dedent(
-        f"""\
-        User-agent: *
-        Allow: /
-
-        Sitemap: {sitemap_url}
-        """
-    )
+    payload = json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False)
+    # The JSON sits inside a <script> element, where "</script>" or "<!--" in any
+    # README-derived string would end or corrupt the block. Escaping "<" prevents that.
+    return payload.replace("<", "\\u003c")
 
 
 def render_site_artifacts(
@@ -2891,7 +2986,7 @@ def render_site_artifacts(
     description = summarize_description(profile, tags)
     page_title = f"{profile.title} | Research Profile"
     canonical_url = pick_primary_url(links)
-    og_image_url = urljoin(asset_base_url, OG_IMAGE_FILENAME)
+    og_image_url = urljoin(asset_base_url, OG_RASTER_FILENAME)
     og_image_alt = build_og_image_alt(profile, tags)
     keywords = build_keywords(profile, tags)
     if built_at is not None:
@@ -2906,6 +3001,10 @@ def render_site_artifacts(
     intro_html = render_blocks(profile.intro_blocks)
     if not intro_html:
         intro_html = "<p>Profile content is maintained in README.md.</p>"
+
+    footer_contact_html = ""
+    if profile.footer_blocks:
+        footer_contact_html = f'\n        <div class="footer-contact">{render_blocks(profile.footer_blocks)}</div>'
 
     tag_html = "".join(f'<span class="tag">{render_inline(tag)}</span>' for tag in tags)
     if not tag_html:
@@ -2951,7 +3050,7 @@ def render_site_artifacts(
         nav_section_html = f'<div class="nav-wrap"><nav class="nav" aria-label="Section navigation">{nav_html}</nav></div>'
         content_section_html = textwrap.dedent(
             f"""
-            <section class="content-grid">
+            <section class="content-grid" id="profile-sections" tabindex="-1">
 {section_html}
             </section>
             """
@@ -2971,8 +3070,6 @@ def render_site_artifacts(
         profile_last_name = ""
         profile_first_name = profile.title
 
-    sitemap = build_sitemap(canonical_url, og_image_url, profile, built_at)
-    robots = build_robots(canonical_url)
     og_image = render_og_image(profile, description, tags, metrics, canonical_url)
     structured_data = build_structured_data(
         profile=profile,
@@ -2995,7 +3092,6 @@ def render_site_artifacts(
         "__SITE_LOCALE__": SITE_LOCALE,
         "__OG_IMAGE_URL__": html.escape(og_image_url, quote=True),
         "__OG_IMAGE_ALT__": html.escape(og_image_alt, quote=True),
-        "__SITEMAP_URL__": html.escape(urljoin(canonical_url, SITEMAP_FILENAME), quote=True),
         "__MODIFIED_META__": (
             f'    <meta property="article:modified_time" content="{built_at.replace(microsecond=0).isoformat().replace("+00:00", "Z")}" />'
             if built_at is not None
@@ -3011,6 +3107,7 @@ def render_site_artifacts(
         "__CONTENT_SECTION__": content_section_html,
         "__GENERATED_AT__": generated_label,
         "__BUILD_STAMP_HTML__": build_stamp_html,
+        "__FOOTER_CONTACT_HTML__": footer_contact_html,
         "__HERO_SIDE_HEADING__": html.escape(hero_side_heading),
         "__PROFILE_FIRST_NAME__": html.escape(profile_first_name, quote=True),
         "__PROFILE_LAST_NAME__": html.escape(profile_last_name, quote=True),
@@ -3028,8 +3125,6 @@ def render_site_artifacts(
         html=output,
         og_image=og_image,
         favicon=favicon,
-        sitemap=sitemap,
-        robots=robots,
         nojekyll="",
         canonical_url=canonical_url,
         og_image_url=og_image_url,
@@ -3065,8 +3160,6 @@ def build(
     output_path.write_text(artifacts.html, encoding="utf-8")
     (output_dir / OG_IMAGE_FILENAME).write_text(artifacts.og_image, encoding="utf-8")
     (output_dir / FAVICON_FILENAME).write_text(artifacts.favicon, encoding="utf-8")
-    (output_dir / SITEMAP_FILENAME).write_text(artifacts.sitemap, encoding="utf-8")
-    (output_dir / ROBOTS_FILENAME).write_text(artifacts.robots, encoding="utf-8")
     (output_dir / NOJEKYLL_FILENAME).write_text(artifacts.nojekyll, encoding="utf-8")
 
     return artifacts.html
