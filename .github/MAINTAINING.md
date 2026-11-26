@@ -36,7 +36,6 @@ The main academic site at https://concrete-sangminlee.github.io/ is built from a
 
 `make lint` fails, with the line number, when README.md drifts from the shapes the site relies on: a missing title or "Profile Site" link, an em or en dash, an image without alt text, News items without a bold year or out of order, Research items not written as `**Area**: description`, publication rows that do not parse, Background rows without a bold degree, an institution and a period, Projects items not written as `**Name** (period): funder`, or patents without a bold name, a granted-year badge and a link.
 
-
 | Command | What it does | When CI runs it |
 |---------|--------------|-----------------|
 | `make check` | Lints `README.md` (`make lint`), builds the site into `docs/`, and runs the unit tests. | Every pull request and every push to `main` |
