@@ -2628,6 +2628,37 @@ DEGREE_LEVELS: dict[str, str] = {
 DEGREE_CELL_RE = re.compile(r"^\*\*(?P<degree>[^*]+)\*\*\s*(?:,|:|\bin\b)?\s*(?P<field>.*)$")
 
 
+# "**Ph.D. Candidate in AI | Seoul National University**": the role before the bar.
+JOB_LINE_RE = re.compile(r"^\*\*(?P<role>[^*|]+?)\s*\|\s*[^*]+\*\*$")
+# "SNU AI Fellowship (2025, 2026)": an award is a name followed by its years.
+AWARD_RE = re.compile(r"^(?P<name>[^()]+?)\s*\((?P<years>\d{4}(?:\s*,\s*\d{4})*)\)$")
+AWARD_HEADING_TOKENS = ("background", "award", "honor", "honour", "recognition")
+
+
+def extract_job_title(profile: Profile) -> str | None:
+    for paragraph in profile.intro:
+        match = JOB_LINE_RE.match(paragraph.strip())
+        if match:
+            return match.group("role").strip()
+    return None
+
+
+def extract_awards(profile: Profile) -> list[str]:
+    """Award bullets such as "**SNU AI Fellowship** (2025, 2026) · Outstanding TA Award (2022)"."""
+    awards: list[str] = []
+    for section in profile.sections:
+        if not heading_has(section.heading.lower(), AWARD_HEADING_TOKENS):
+            continue
+        for block in section.blocks:
+            if block.kind != "list":
+                continue
+            for item in block.items:
+                parts = [strip_markdown(part).strip() for part in re.split(r"\s+\u00b7\s+", item)]
+                if parts and all(AWARD_RE.match(part) for part in parts):
+                    awards.extend(part for part in parts if part not in awards)
+    return awards
+
+
 def extract_credentials(profile: Profile) -> list[dict[str, object]]:
     credentials: list[dict[str, object]] = []
     for section in profile.sections:
@@ -2988,6 +3019,12 @@ def build_structured_data(
         person["email"] = email
     if knows_about:
         person["knowsAbout"] = knows_about
+    job_title = extract_job_title(profile)
+    if job_title:
+        person["jobTitle"] = job_title
+    awards = extract_awards(profile)
+    if awards:
+        person["award"] = awards
 
     credentials = extract_credentials(profile)
     if credentials:
