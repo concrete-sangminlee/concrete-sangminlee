@@ -1121,5 +1121,36 @@ Applied researcher.
             self.assertIn("flex-wrap: wrap", rule, selector)
 
 
+    def test_person_gets_job_title_and_awards_from_the_readme(self) -> None:
+        md = """# Jane Doe
+
+**Research Scientist | Somewhere University**
+
+Applied researcher.
+
+## Background
+
+| Degree | Institution | Period |
+|--------|-------------|--------|
+| **Ph.D.**, AI | Somewhere University | 2020-2024 |
+
+- **Best Paper Award** (2024) · Teaching Award (2022, 2023)
+- Not an award line without years
+
+Member of a society.
+"""
+        output = MODULE.render_site(md, generated_at=FIXED_AT)
+        match = re.search(r'<script type="application/ld\+json">(.*?)</script>', output, re.S)
+        graph = json.loads(match.group(1))["@graph"]
+        person = next(n for n in graph if n["@type"] == "Person" and n["@id"].endswith("#person"))
+        self.assertEqual(person["jobTitle"], "Research Scientist")
+        self.assertEqual(person["award"], ["Best Paper Award (2024)", "Teaching Award (2022, 2023)"])
+
+    def test_no_job_title_or_awards_without_matching_lines(self) -> None:
+        profile = MODULE.parse_profile(SAMPLE_MARKDOWN)
+        self.assertIsNone(MODULE.extract_job_title(profile))
+        self.assertEqual(MODULE.extract_awards(profile), [])
+
+
 if __name__ == "__main__":
     unittest.main()
