@@ -486,6 +486,12 @@ __MODIFIED_META__
         background: transparent;
       }
 
+      .section-body p .markdown-image-badge {
+        display: inline-block;
+        margin-right: 8px;
+        vertical-align: -4px;
+      }
+
       .markdown-image-stats {
         width: min(100%, 420px);
         box-shadow: var(--shadow-md);
@@ -635,9 +641,13 @@ __MODIFIED_META__
       }
 
       .preview-grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        display: flex;
+        flex-wrap: wrap;
         gap: 16px;
+      }
+
+      .preview-grid > * {
+        flex: 1 1 260px;
       }
 
       .preview-card {
@@ -801,15 +811,15 @@ __MODIFIED_META__
       }
 
       .signal-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        display: flex;
+        flex-wrap: wrap;
         gap: 12px;
       }
 
       .signal-grid li {
-        min-height: 100%;
+        flex: 1 1 170px;
         padding: 16px;
-        overflow-wrap: anywhere;
+        overflow-wrap: break-word;
         border-radius: 22px;
         border: 1px solid var(--ink-008);
         background: var(--white-092);
@@ -826,20 +836,25 @@ __MODIFIED_META__
       }
 
       .stack-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        display: flex;
+        flex-wrap: wrap;
         gap: 14px;
       }
 
       .stack-grid li {
-        min-height: 100%;
+        flex: 1 1 220px;
         padding: 18px;
-        overflow-wrap: anywhere;
+        overflow-wrap: break-word;
         border-radius: 22px;
         border: 1px solid var(--ink-008);
         background: var(--white-090);
         color: var(--ink);
-        font-weight: 700;
+        font-weight: 500;
+      }
+
+      /* Card text is regular weight so the README's own bold still stands out. */
+      .stack-grid li strong {
+        font-weight: 800;
       }
 
       .detail-list {
@@ -850,6 +865,10 @@ __MODIFIED_META__
       .detail-list li {
         position: relative;
         padding-left: 18px;
+      }
+
+      .detail-list + p {
+        margin-top: 14px;
       }
 
       .detail-list li::before {
@@ -1107,9 +1126,6 @@ __MODIFIED_META__
           grid-template-columns: 1fr;
         }
 
-        .preview-grid {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
       }
 
       @media (max-width: 940px) {
@@ -1135,8 +1151,8 @@ __MODIFIED_META__
           border-radius: 24px;
         }
 
-        .preview-grid {
-          grid-template-columns: 1fr;
+        .preview-grid > * {
+          flex-basis: 100%;
         }
 
         .hero-title {
@@ -1441,7 +1457,7 @@ def truncate(text: str, limit: int) -> str:
         word_cut = cut.rsplit(" ", 1)[0]
         if len(word_cut) >= (limit - 3) * 0.6:
             cut = word_cut
-    return cut.rstrip(" ,;:") + "..."
+    return cut.rstrip(" ,;:.") + "..."
 
 
 def parse_blocks(lines: list[str]) -> list[Block]:
@@ -1958,10 +1974,12 @@ def section_label(index: int, section: Section) -> str:
     if heading_has(heading, ("recognition", "award", "service", "membership")):
         return "Recognition"
     if heading_has(heading, ("patent", "intellectual property", "ip")):
-        return "Patents"
+        return "Intellectual Property"
     if heading_has(heading, ("code", "repository", "software", "tool", "open source")):
         return "Open Source"
-    if heading_has(heading, ("background", "bio", "biography", "about", "profile")):
+    if heading_has(heading, ("background",)):
+        return "Education & Recognition"
+    if heading_has(heading, ("bio", "biography", "about", "profile")):
         return "Background"
 
     labels = {
@@ -2274,8 +2292,25 @@ def render_signal_grid(items: list[str]) -> str:
     return f'<ul class="signal-grid">{rendered_items}</ul>'
 
 
+LONG_WORD_RE = re.compile(r"[A-Za-z0-9_]{18,}")
+
+
+def soft_wrap_long_words(rendered: str) -> str:
+    """Offer line breaks inside long identifiers such as WindTimeHistoryReconstruction.
+
+    Breaks go before inner capitals and after underscores, so a narrow card
+    wraps "WindTimeHistory" / "Reconstruction" instead of cutting mid-word.
+    """
+
+    def wrap(word: re.Match[str]) -> str:
+        text = re.sub(r"(?<=[a-z0-9])(?=[A-Z])", "<wbr>", word.group(0))
+        return text.replace("_", "_<wbr>")
+
+    return re.sub(r">([^<]+)<", lambda m: ">" + LONG_WORD_RE.sub(wrap, m.group(1)) + "<", rendered)
+
+
 def render_stack_grid(items: list[str]) -> str:
-    rendered_items = "".join(f"<li>{render_inline(item)}</li>" for item in items)
+    rendered_items = "".join(f"<li>{soft_wrap_long_words(render_inline(item))}</li>" for item in items)
     return f'<ul class="stack-grid">{rendered_items}</ul>'
 
 
