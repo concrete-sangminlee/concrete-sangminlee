@@ -278,7 +278,12 @@ Applied researcher.
         code_section = next(s for s in profile.sections if s.heading == "Code")
         bg_section = next(s for s in profile.sections if s.heading == "Background")
         self.assertEqual(MODULE.section_label(5, code_section), "Open Source")
-        self.assertEqual(MODULE.section_label(6, bg_section), "Background")
+        # A label that only repeats the title says nothing; Background holds degrees and awards.
+        self.assertEqual(MODULE.section_label(6, bg_section), "Education & Recognition")
+        about = MODULE.Section(heading="About", anchor="about", blocks=[MODULE.Block(kind="paragraph", items=["x"])])
+        self.assertEqual(MODULE.section_label(7, about), "Background")
+        patents = MODULE.Section(heading="Patents", anchor="patents", blocks=[MODULE.Block(kind="paragraph", items=["x"])])
+        self.assertEqual(MODULE.section_label(8, patents), "Intellectual Property")
 
     def test_signal_grid_uses_focus_label(self) -> None:
         result = MODULE.render_signal_grid(["Item one", "Item two"])
@@ -1091,6 +1096,29 @@ Applied researcher.
         self.assertIn('alt="KR 1, granted 2023" height="20"', output)
         self.assertIn('height="28"', MODULE.render_image("https://img.shields.io/badge/A-b?style=for-the-badge", "A"))
         self.assertNotIn("height=", MODULE.render_image("https://example.org/photo.png", "Photo"))
+
+
+    def test_long_identifiers_wrap_at_word_joins(self) -> None:
+        rendered = MODULE.render_stack_grid(
+            ["[**WindTimeHistoryReconstruction**](https://example.org/w): tool", "[**SNU_ArchitectureAndAI**](https://example.org/s): course"]
+        )
+        self.assertIn("Wind<wbr>Time<wbr>History<wbr>Reconstruction", rendered)
+        self.assertIn("SNU_<wbr>Architecture<wbr>And<wbr>AI", rendered)
+        self.assertIn('href="https://example.org/w"', rendered)
+        self.assertIn("<strong>", rendered)
+        self.assertEqual(MODULE.soft_wrap_long_words("<li>short words only</li>"), "<li>short words only</li>")
+
+    def test_truncation_never_ends_with_four_dots(self) -> None:
+        cut = MODULE.truncate('Testing of concrete structures." J. Nondestructive Evaluation 44(4).', 40)
+        self.assertTrue(cut.endswith("..."))
+        self.assertNotIn("....", cut)
+
+    def test_card_grids_let_a_last_odd_card_fill_its_row(self) -> None:
+        output = MODULE.render_site(SAMPLE_MARKDOWN, generated_at=FIXED_AT)
+        for selector in (".stack-grid {", ".signal-grid {", ".preview-grid {"):
+            rule = output[output.index(selector):]
+            rule = rule[: rule.index("}")]
+            self.assertIn("flex-wrap: wrap", rule, selector)
 
 
 if __name__ == "__main__":
