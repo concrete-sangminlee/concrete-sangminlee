@@ -5,6 +5,7 @@ on:
     paths:
       - README.md
       - scripts/check_dois.py
+      - .github/workflows/check-publication-dois.yml
   schedule:
     - cron: "17 3 * * 1"
   workflow_dispatch:
@@ -29,4 +30,5 @@ jobs:
           python-version: "3.13"
 
       - name: Check README DOIs against doi.org
-        run: python scripts/check_dois.py
+        # The weekly run also fails when a publisher link can switch to doi.org, so the owner hears about it.
+        run: python scripts/check_dois.py ${{ github.event_name == 'schedule' && '--fail-on-action' || '' }}
