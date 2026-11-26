@@ -782,8 +782,11 @@ __MODIFIED_META__
 
       .subheading {
         margin: 20px 0 10px;
+        color: var(--muted);
+        font-family: inherit;
         font-size: 1rem;
         font-weight: 800;
+        line-height: 1.8;
         letter-spacing: -0.02em;
       }
 
@@ -1298,12 +1301,13 @@ __MODIFIED_META__
         }
       }
     </style>
-    <script>(function(){var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})()</script>
+    <script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})()</script>
     <script type="application/ld+json">__STRUCTURED_DATA__</script>
   </head>
   <body>
     <a class="skip-link" href="#profile-sections">Skip to profile sections</a>
-    <main class="page" id="main-content">
+    <div class="page">
+    <main id="main-content">
       <section class="hero">
         <div class="hero-main">
           <div class="hero-copy">
@@ -1326,16 +1330,17 @@ __PREVIEW_SECTION__
 __NAV_SECTION__
 
 __CONTENT_SECTION__
+    </main>
 
-      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode">
-        <svg class="theme-toggle-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-        <svg class="theme-toggle-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Dark mode" aria-pressed="false">
+        <svg class="theme-toggle-sun" aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="theme-toggle-moon" aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
       <footer class="footer">__FOOTER_CONTACT_HTML__
         <span>Maintained in <a href="__REPO_URL__" target="_blank" rel="noreferrer">the profile repository</a> and published as static output.</span>__BUILD_STAMP_HTML__
       </footer>
-    </main>
-    <script>(function(){var b=document.getElementById('theme-toggle');b&&b.addEventListener('click',function(){var r=document.documentElement,c=r.getAttribute('data-theme'),d=c==='dark'||(c!=='light'&&window.matchMedia('(prefers-color-scheme:dark)').matches);var n=d?'light':'dark';r.setAttribute('data-theme',n);localStorage.setItem('theme',n);});})()</script>
+    </div>
+    <script>(function(){var b=document.getElementById('theme-toggle');if(!b)return;var r=document.documentElement;function dark(){var c=r.getAttribute('data-theme');return c==='dark'||(c!=='light'&&window.matchMedia('(prefers-color-scheme:dark)').matches);}function sync(){b.setAttribute('aria-pressed',dark()?'true':'false');}sync();b.addEventListener('click',function(){var n=dark()?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem('theme',n);}catch(e){}sync();});})()</script>
   </body>
 </html>
 """
@@ -1513,7 +1518,7 @@ def parse_blocks(lines: list[str]) -> list[Block]:
                 + "".join(
                     (f'<th scope="row"{align_attr(i)}{label_attr(i)}>{render_inline(c)}</th>'
                      if i == 0 else
-                     f"<td{align_attr(i)}{label_attr(i)}>{render_inline(c)}</td>")
+                     f"<td{align_attr(i)}{label_attr(i)}>{add_link_context(render_inline(c), c)}</td>")
                     for i, c in enumerate(r)
                 )
                 + "</tr>"
@@ -2159,14 +2164,44 @@ def autolink_plain_text(text: str) -> str:
     return "".join(parts)
 
 
+def badge_height(src: str) -> int | None:
+    """shields.io badges are 28px tall in for-the-badge style and 20px otherwise."""
+    if not src.startswith("https://img.shields.io/"):
+        return None
+    return 28 if "style=for-the-badge" in src else 20
+
+
 def render_image(src: str, alt: str) -> str:
     kind = classify_image_kind(src, alt)
     safe_src = html.escape(src.strip(), quote=True)
     safe_alt = html.escape((alt or "image").strip(), quote=True)
+    height = badge_height(src.strip())
+    size = f' height="{height}"' if height else ""
     return (
         f'<img class="markdown-image markdown-image-{kind}" src="{safe_src}" '
-        f'alt="{safe_alt}" loading="lazy" decoding="async" />'
+        f'alt="{safe_alt}"{size} loading="lazy" decoding="async" />'
     )
+
+
+GENERIC_LINK_RE = re.compile(
+    r'<a (?![^>]*aria-label)([^>]*)>(DOI|PDF|Code|Slides|Link|Google Patents)</a>'
+)
+QUOTED_TITLE_RE = re.compile(r'"([^"]{4,})"')
+BOLD_NAME_RE = re.compile(r"\*\*([^*]{4,})\*\*")
+
+
+def add_link_context(rendered: str, source: str) -> str:
+    """Give links named only "DOI" or "Google Patents" an accessible name with their item.
+
+    Several links with the same name are indistinguishable in a screen reader's
+    link list, so name each after the quoted title, or else the bold name, in
+    the same row or paragraph.
+    """
+    match = QUOTED_TITLE_RE.search(source) or BOLD_NAME_RE.search(source)
+    if not match or not GENERIC_LINK_RE.search(rendered):
+        return rendered
+    context = html.escape(strip_markdown(match.group(1)).strip().rstrip("."), quote=True)
+    return GENERIC_LINK_RE.sub(lambda m: f'<a {m.group(1)} aria-label="{m.group(2)}: {context}">{m.group(2)}</a>', rendered)
 
 
 def render_inline(text: str) -> str:
@@ -2263,16 +2298,29 @@ def render_timeline(items: list[str]) -> str:
     return f'<ol class="timeline-list">{rendered_items}</ol>'
 
 
-def render_blocks(blocks: list[Block]) -> str:
+TABLE_OPEN = '<div class="table-wrap"><table '
+
+
+def label_table(table_html: str, label_id: str | None) -> str:
+    """Name a rendered table after the heading that introduces it."""
+    if not label_id or not table_html.startswith(TABLE_OPEN):
+        return table_html
+    return table_html.replace(TABLE_OPEN, f'{TABLE_OPEN}aria-labelledby="{label_id}" ', 1)
+
+
+def render_blocks(blocks: list[Block], id_prefix: str = "", default_label_id: str | None = None) -> str:
     parts: list[str] = []
+    label_id = default_label_id
     for block in blocks:
         if block.kind == "paragraph":
             if is_media_only_text(block.items[0]):
                 parts.append(f'<div class="{media_group_class(block.items[0])}">{render_inline(block.items[0])}</div>')
             else:
-                parts.append(f"<p>{render_inline(block.items[0])}</p>")
+                parts.append(f"<p>{add_link_context(render_inline(block.items[0]), block.items[0])}</p>")
         elif block.kind == "subheading":
-            parts.append(f'<p class="subheading">{html.escape(block.items[0])}</p>')
+            heading_id = "-".join(part for part in (id_prefix, slugify(block.items[0])) if part)
+            parts.append(f'<h3 class="subheading" id="{heading_id}">{html.escape(block.items[0])}</h3>')
+            label_id = heading_id
         elif block.kind == "quote":
             parts.append(f'<blockquote class="quote-block"><p>{render_inline(block.items[0])}</p></blockquote>')
         elif block.kind == "list":
@@ -2280,7 +2328,8 @@ def render_blocks(blocks: list[Block]) -> str:
         elif block.kind == "ordered_list":
             parts.append(render_timeline(block.items))
         elif block.kind == "html":
-            parts.append(ALIGN_ATTR_RE.sub(lambda m: f' style="text-align:{m.group(1).lower()}"', block.items[0]))
+            rendered = ALIGN_ATTR_RE.sub(lambda m: f' style="text-align:{m.group(1).lower()}"', block.items[0])
+            parts.append(label_table(rendered, label_id))
     return "".join(parts)
 
 
@@ -2308,6 +2357,7 @@ def render_section(section: Section, index: int, span_class: str | None = None) 
     classes = f"section-card {span_class or section_span(section)} section-{variant}"
     label = html.escape(section_label(index, section))
     title = html.escape(section.heading)
+    title_id = f"{section.anchor}-title"
 
     if variant == "links":
         link_cards: list[str] = []
@@ -2339,7 +2389,7 @@ def render_section(section: Section, index: int, span_class: str | None = None) 
             for item in block.items
         ]
         non_list_blocks = [block for block in section.blocks if block.kind not in {"list", "ordered_list"}]
-        body_html = render_blocks(non_list_blocks)
+        body_html = render_blocks(non_list_blocks, section.anchor, title_id)
         if list_items:
             body_html += render_signal_grid(list_items)
     elif variant == "timeline":
@@ -2350,7 +2400,7 @@ def render_section(section: Section, index: int, span_class: str | None = None) 
             if block.kind in {"ordered_list", "list"}
             for item in block.items
         ]
-        body_html = render_blocks(intro_blocks)
+        body_html = render_blocks(intro_blocks, section.anchor, title_id)
         if timeline_items:
             body_html += render_timeline(timeline_items)
     elif variant == "stack":
@@ -2360,15 +2410,15 @@ def render_section(section: Section, index: int, span_class: str | None = None) 
             if block.kind in {"list", "ordered_list"}
             for item in block.items
         ]
-        body_html = render_stack_grid(stack_items) if stack_items else render_blocks(section.blocks)
+        body_html = render_stack_grid(stack_items) if stack_items else render_blocks(section.blocks, section.anchor, title_id)
     else:
-        body_html = render_blocks(section.blocks)
+        body_html = render_blocks(section.blocks, section.anchor, title_id)
 
     return textwrap.dedent(
         f"""
         <article class="{classes}" id="{section.anchor}">
           <p class="section-label">{label}</p>
-          <h2 class="section-title">{title}</h2>
+          <h2 class="section-title" id="{title_id}">{title}</h2>
           <div class="section-body">{body_html}</div>
         </article>"""
     ).strip()
@@ -2998,7 +3048,15 @@ def render_site_artifacts(
     metrics = build_metric_cards(profile, links, tags)
     previews = build_preview_cards(profile)
 
-    intro_html = render_blocks(profile.intro_blocks)
+    cta_hrefs = {link.href for link in links[:5]}
+
+    def duplicates_cta(block: Block) -> bool:
+        if block.kind != "paragraph" or not is_media_only_text(block.items[0]):
+            return False
+        hrefs = {normalize_href(match[2]) for match in LINKED_IMAGE_RE.findall(block.items[0])}
+        return bool(hrefs) and hrefs <= cta_hrefs
+
+    intro_html = render_blocks([block for block in profile.intro_blocks if not duplicates_cta(block)])
     if not intro_html:
         intro_html = "<p>Profile content is maintained in README.md.</p>"
 

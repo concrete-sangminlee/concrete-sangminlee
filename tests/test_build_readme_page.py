@@ -1030,5 +1030,68 @@ Applied researcher.
         self.assertEqual(person["affiliation"]["name"], "Seoul National University")
 
 
+    def test_subheadings_are_h3_and_name_the_table_after_them(self) -> None:
+        md = """# Jane Doe
+
+Applied researcher.
+
+## Publications
+
+### Journal Articles
+
+| Year | Publication |
+|:----:|-------------|
+| 2025 | **J. Doe**. "A paper." *J. X* 1(1). [[DOI](https://doi.org/10.1234/a)] |
+
+## Background
+
+| Degree | Institution | Period |
+|--------|-------------|--------|
+| **Ph.D.**, AI | Somewhere University | 2023-2027 |
+"""
+        output = MODULE.render_site(md, generated_at=FIXED_AT)
+        self.assertIn('<h3 class="subheading" id="publications-journal-articles">Journal Articles</h3>', output)
+        self.assertIn('<table aria-labelledby="publications-journal-articles" class="md-table">', output)
+        self.assertIn('<h2 class="section-title" id="background-title">Background</h2>', output)
+        self.assertIn('<table aria-labelledby="background-title" class="md-table md-table-stack">', output)
+        self.assertNotIn('<p class="subheading">', output)
+
+    def test_generic_link_names_get_their_item(self) -> None:
+        row = '**J. Doe**. "A paper on things." *J. X* 1(1). [[DOI](https://doi.org/10.1234/a)]'
+        rendered = MODULE.add_link_context(MODULE.render_inline(row), row)
+        self.assertIn('aria-label="DOI: A paper on things"', rendered)
+        patent = "![KR 1](https://img.shields.io/badge/KR_1-Granted_2023-0f766e) **A patent name** [[Google Patents](https://patents.google.com/patent/KR1/en)]"
+        rendered = MODULE.add_link_context(MODULE.render_inline(patent), patent)
+        self.assertIn('aria-label="Google Patents: A patent name"', rendered)
+        plain = "See [the site](https://example.org)."
+        self.assertNotIn("aria-label", MODULE.add_link_context(MODULE.render_inline(plain), plain))
+
+    def test_footer_is_outside_main_and_toggle_exposes_state(self) -> None:
+        output = MODULE.render_site(SAMPLE_MARKDOWN, generated_at=FIXED_AT)
+        self.assertLess(output.index("</main>"), output.index('<footer class="footer">'))
+        self.assertIn('aria-pressed="false"', output)
+        self.assertEqual(output.count('aria-hidden="true" focusable="false"'), 2)
+        self.assertIn("setAttribute('aria-pressed'", output)
+
+    def test_hero_drops_badges_that_repeat_the_buttons(self) -> None:
+        md = """# Jane Doe
+
+[![Profile Site](https://img.shields.io/badge/Site-blue?style=for-the-badge)](https://example.org/) [![Scholar](https://img.shields.io/badge/Scholar-blue?style=for-the-badge)](https://scholar.example.org/)
+
+Applied researcher.
+
+## Patents
+
+![KR 1, granted 2023](https://img.shields.io/badge/KR_1-Granted_2023-0f766e?style=flat-square) **A patent** [[Google Patents](https://patents.google.com/patent/KR1/en)]
+"""
+        output = MODULE.render_site(md, generated_at=FIXED_AT)
+        hero = output[output.index('<div class="hero-main">'):output.index('<aside class="hero-side">')]
+        self.assertNotIn("<img", hero)
+        self.assertIn('class="button button-primary" href="https://example.org/"', hero)
+        self.assertIn('alt="KR 1, granted 2023" height="20"', output)
+        self.assertIn('height="28"', MODULE.render_image("https://img.shields.io/badge/A-b?style=for-the-badge", "A"))
+        self.assertNotIn("height=", MODULE.render_image("https://example.org/photo.png", "Photo"))
+
+
 if __name__ == "__main__":
     unittest.main()
