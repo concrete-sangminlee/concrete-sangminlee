@@ -74,7 +74,7 @@ Building practical AI tools for infrastructure: structural health monitoring, co
 ## Code
 
 - [**paperfactory**](https://github.com/concrete-sangminlee/paperfactory): AI agent for civil engineering research papers (15 journals, 18 utilities, CLI + Web UI + Docker)
-- [**WindTimeHistoryReconstruction**](https://github.com/concrete-sangminlee/WindTimeHistoryReconstruction): Wind time history reconstruction
+- [**WindTimeHistoryReconstruction**](https://github.com/concrete-sangminlee/WindTimeHistoryReconstruction): Scripts for inspecting and analyzing wind tunnel MATLAB datasets for wind time history reconstruction
 - [**SNU_ArchitectureAndAI**](https://github.com/concrete-sangminlee/SNU_ArchitectureAndAI): "Architecture and AI" graduate course materials, SNU
 - [**academic-cv-template**](https://github.com/concrete-sangminlee/academic-cv-template): LaTeX academic CV template for graduate students
 
