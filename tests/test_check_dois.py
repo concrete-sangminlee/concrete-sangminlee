@@ -143,5 +143,64 @@ class CheckDoisTests(unittest.TestCase):
         self.assertIsNone(self._lookup_with([self._http_error(503, b"busy")] * 2))
 
 
+    def run_titled(self, registered_title: str | None, *, registered: bool = True, fail_on_action: bool = False,
+                   url: str = "https://doi.org/10.14359/51746755") -> tuple[int, str]:
+        markdown = f'| 2025 | **A. B**. "Lightweight model for crack image classification." *J. X* 1(1). [[DOI]({url})] |\n'
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "README.md"
+            path.write_text(markdown, encoding="utf-8")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out), mock.patch.dict(os.environ, {"GITHUB_ACTIONS": ""}):
+                code = MODULE.check(
+                    path,
+                    lookup=lambda doi: registered,
+                    fetch_title=lambda doi: registered_title,
+                    fail_on_action=fail_on_action,
+                )
+        return code, out.getvalue()
+
+    def test_title_is_read_from_the_same_row(self) -> None:
+        links = MODULE.find_doi_links('| 2025 | A. "Some paper title here." *J* 1(1). [[DOI](https://doi.org/10.1234/x)] |')
+        self.assertEqual(links[0].title, "Some paper title here")
+
+    def test_matching_title_passes(self) -> None:
+        code, out = self.run_titled("Lightweight Model for Crack Image Classification")
+        self.assertEqual(code, 0)
+        self.assertIn("ok: 10.14359/51746755", out)
+
+    def test_doi_of_a_different_work_fails(self) -> None:
+        code, out = self.run_titled("Effect of Connections on Performance of Precast Coupled Structural Walls")
+        self.assertEqual(code, 1)
+        self.assertIn("registered for a different work", out)
+
+    def test_moderately_different_title_warns(self) -> None:
+        code, out = self.run_titled("Lightweight alternative model for concrete crack image classification")
+        self.assertEqual(code, 0)
+        self.assertIn("WARNING", out)
+        self.assertIn("differs from the title registered", out)
+
+    def test_unavailable_title_is_not_an_error(self) -> None:
+        code, out = self.run_titled(None)
+        self.assertEqual(code, 0)
+        self.assertIn("ok:", out)
+
+    def test_fail_on_action_turns_a_switchable_publisher_link_into_a_failure(self) -> None:
+        url = "https://ascelibrary.org/doi/10.14359/51746755"
+        title = "Lightweight Model for Crack Image Classification"
+        code, out = self.run_titled(title, url=url)
+        self.assertEqual(code, 0)
+        self.assertIn("NOTICE", out)
+        code, out = self.run_titled(title, url=url, fail_on_action=True)
+        self.assertEqual(code, 1)
+        self.assertIn("ERROR", out)
+        self.assertIn("1 link(s) to update", out)
+
+    def test_normalize_title_ignores_case_markup_and_punctuation(self) -> None:
+        self.assertEqual(
+            MODULE.normalize_title("<i>Deep</i> SVDD: Multi-class &amp; Robust!"),
+            "deep svdd multi class robust",
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
